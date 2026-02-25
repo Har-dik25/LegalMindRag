@@ -1,0 +1,18 @@
+./venv
+./__pycache__
+./env
+env
+venv
+__pycache__
+.env
+# Python
+__pycache__/
+*.py[cod]
+
+# Logs
+logs/
+*.log
+
+# Data & Databases (Large files)
+data/
+LegalAI Dataset/

@@ -1,0 +1,226 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+
+  /* Premium Dark Mode */
+  body {
+    @apply bg-[#030303] text-zinc-300 antialiased transition-colors duration-500;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    letter-spacing: -0.01em;
+  }
+
+  /* Premium Light Mode Overrides */
+  body.light-mode {
+    @apply bg-[#FDFDFD] text-[#111111];
+  }
+}
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .chat-scroll::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  .chat-scroll::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .chat-scroll::-webkit-scrollbar-thumb {
+    @apply bg-zinc-800 rounded-full hover:bg-zinc-700 transition-colors;
+  }
+
+  /* Palantir Foundry Data Pane */
+  .sys-panel {
+    @apply bg-[#000000] border border-white/10;
+  }
+
+  .sys-accent {
+    @apply text-amber-500;
+  }
+
+  .sys-text {
+    @apply text-zinc-400;
+  }
+
+  /* ──────────────────────────────────────────────────────────
+     Premium State-of-the-Art Utilities
+     ────────────────────────────────────────────────────────── */
+
+  /* Glassmorphism */
+  .glass-panel {
+    @apply bg-black/40 backdrop-blur-xl border border-white/10 shadow-2xl;
+  }
+
+  .light-mode .glass-panel {
+    @apply bg-white/70 backdrop-blur-xl border border-white/60;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+  }
+
+  /* Animated Mesh Background */
+  .mesh-bg {
+    background-color: #030303;
+    background-image:
+      radial-gradient(at 0% 0%, rgba(30, 58, 138, 0.15) 0px, transparent 50%),
+      radial-gradient(at 100% 0%, rgba(88, 28, 135, 0.15) 0px, transparent 50%);
+    animation: pulseGlow 15s ease-in-out infinite alternate;
+  }
+
+  .light-mode .mesh-bg {
+    background-color: #FDFDFD;
+    background-image:
+      radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.08) 0px, transparent 50%),
+      radial-gradient(at 100% 0%, rgba(139, 92, 246, 0.08) 0px, transparent 50%);
+  }
+
+  @keyframes pulseGlow {
+    0% {
+      opacity: 0.8;
+    }
+
+    100% {
+      opacity: 1;
+    }
+  }
+
+  .bw-glass {
+    @apply bg-black/80 backdrop-blur-md border-b border-white/5;
+  }
+
+  .light-mode .bw-glass {
+    @apply bg-white/80 backdrop-blur-md border-zinc-200;
+  }
+
+  .shimmer {
+    background: linear-gradient(90deg, #111 25%, #222 50%, #111 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s ease-in-out infinite;
+  }
+
+  .light-mode .shimmer {
+    background: linear-gradient(90deg, #eee 25%, #f5f5f5 50%, #eee 75%);
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: -200% 0;
+    }
+
+    100% {
+      background-position: 200% 0;
+    }
+  }
+
+  .legal-serif {
+    font-family: 'IBM Plex Serif', serif;
+  }
+}
+
+/* ── Mission Critical Data Typography ── */
+.legal-pro.sys-text {
+  @apply font-sans tracking-normal;
+}
+
+/* User Message Bubble */
+.user-bubble {
+  @apply bg-blue-600 text-white rounded-2xl rounded-tr-sm shadow-md px-5 py-3.5 max-w-[85%] font-sans text-[15px] leading-relaxed ml-auto;
+}
+
+.light-mode .user-bubble {
+  @apply bg-blue-600 text-white shadow-sm;
+}
+
+/* Assistant Message Area */
+.assistant-area {
+  @apply bg-zinc-900/40 border border-white/5 rounded-2xl p-6 shadow-sm w-full font-sans max-w-[90%];
+}
+
+.light-mode .assistant-area {
+  @apply bg-white border border-zinc-100 shadow-md shadow-black/5;
+}
+
+/* ──────────────────────────────────────────────────────────
+   Soft Legal Prose Formatting (Markdown overwrites)
+   ────────────────────────────────────────────────────────── */
+.legal-prose {
+  @apply text-[15px] leading-relaxed text-zinc-300 font-sans;
+}
+
+.light-mode .legal-prose {
+  @apply text-zinc-700;
+}
+
+.legal-prose p {
+  @apply mb-5;
+}
+
+.legal-prose h3 {
+  @apply text-lg font-semibold text-white mt-8 mb-4 tracking-tight border-b border-white/10 pb-2;
+}
+
+.light-mode .legal-prose h3 {
+  @apply text-zinc-900 border-zinc-200;
+}
+
+.legal-prose ul {
+  @apply list-none pl-0 space-y-3 my-6;
+}
+
+.legal-prose li {
+  @apply relative pl-6 text-zinc-300;
+}
+
+.light-mode .legal-prose li {
+  @apply text-zinc-700;
+}
+
+.legal-prose li::before {
+  content: '→';
+  @apply absolute left-0 text-blue-500 font-medium;
+}
+
+.legal-prose blockquote {
+  @apply border-l-4 pl-4 py-2 my-6 bg-zinc-800/30 border-blue-500/50 text-zinc-400 italic rounded-r-lg;
+}
+
+.light-mode .legal-prose blockquote {
+  @apply bg-blue-50/50 border-blue-400 text-zinc-600;
+}
+
+.legal-prose code {
+  @apply bg-zinc-800 text-blue-300 px-1.5 py-0.5 rounded-md text-[13px] font-mono border border-white/5;
+}
+
+.light-mode .legal-prose code {
+  @apply bg-zinc-100 text-blue-600 border-zinc-200;
+}
+
+/* ──────────────────────────────────────────────────────────
+   Approach Toggle Glow Effects
+   ────────────────────────────────────────────────────────── */
+.approach-active-lc {
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.15), 0 4px 15px rgba(59, 130, 246, 0.1);
+}
+
+.approach-active-py {
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.15), 0 4px 15px rgba(16, 185, 129, 0.1);
+}
+
+.light-mode .approach-active-lc {
+  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.08);
+}
+
+.light-mode .approach-active-py {
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.08);
+}

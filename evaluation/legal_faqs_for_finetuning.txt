@@ -1,0 +1,318 @@
+================================================================================
+LEGAL FAQs — CURATED Q&A PAIRS FOR EVALUATION & FINE-TUNING
+================================================================================
+Purpose: Quick-reference legal knowledge covering common public queries.
+Can be used for: RAG evaluation, chatbot fine-tuning, retrieval benchmarking.
+================================================================================
+
+---
+FAQ-001
+Category: Criminal Law
+Q: Can police arrest without a warrant?
+A: Yes, but ONLY for cognizable offences (listed in the First Schedule of
+BNSS). For non-cognizable offences, police need a warrant from a Magistrate.
+Even for cognizable offences, per Arnesh Kumar v. State of Bihar (2014),
+arrest is not mandatory and should be the last resort for offences punishable
+up to 7 years. The police officer must record reasons for arrest.
+
+---
+FAQ-002
+Category: Constitutional Law
+Q: Can fundamental rights be suspended during an Emergency?
+A: Under Article 358, rights under Article 19 are automatically suspended
+during a National Emergency proclaimed on grounds of war or external
+aggression. Under Article 359, the President may suspend the right to move
+courts for enforcement of fundamental rights (except Articles 20 and 21,
+which can NEVER be suspended — 44th Amendment, 1978).
+
+---
+FAQ-003
+Category: Family Law
+Q: What is the legal age of marriage in India?
+A: For men: 21 years. For women: 18 years.This is governed by the Prohibition
+of Child Marriage Act, 2006. A child marriage is VOIDABLE (not void ab initio)
+at the option of the contracting party who was a child at the time. The
+Prohibition of Child Marriage (Amendment) Bill, 2021 proposed raising the age
+for women to 21, but as of 2025, it has not been enacted.
+
+---
+FAQ-004
+Category: Consumer Law
+Q: How do I file a consumer complaint?
+A: Under the Consumer Protection Act, 2019: (1) Complaints can be filed at
+the District Commission (claims up to Rs. 50 lakh), State Commission (Rs. 50
+lakh to Rs. 2 crore), or National Commission (above Rs. 2 crore). (2) Can be
+filed online through e-daakhil portal (edaakhil.nic.in). (3) No lawyer is
+required — consumer can appear in person. (4) Must be filed within 2 years of
+the cause of action. (5) Court fee is nominal (Rs. 100-5000 depending on
+claim value).
+
+---
+FAQ-005
+Category: Property Law
+Q: What is the difference between a Sale Deed and an Agreement to Sell?
+A: A Sale Deed (Section 54, Transfer of Property Act) is a COMPLETED transfer
+of ownership — title passes immediately upon execution and registration. An
+Agreement to Sell (Section 54, Indian Contract Act) is a PROMISE to sell at a
+future date — title does NOT pass, only a personal right to purchase is
+created. An Agreement to Sell creates no interest or charge on the property.
+If the seller breaches, the buyer can only claim specific performance through
+court, not automatic ownership.
+
+---
+FAQ-006
+Category: Labour Law
+Q: What is the maximum working hours permitted under Indian law?
+A: Under the Occupational Safety, Health and Working Conditions Code, 2020
+(when fully enforced), the maximum is 8 hours per day. Under the Factories
+Act, 1948 (still applicable in many states): 48 hours per week, maximum 9
+hours per day. Overtime pay must be at TWICE the ordinary rate of wages.
+The Code on Wages, 2019 also mandates that no worker shall be required to
+work for more than the prescribed hours in any day.
+
+---
+FAQ-007
+Category: Cyber Law
+Q: Is sharing someone's private photos without consent a crime?
+A: Yes, under multiple provisions: (1) Section 66E of IT Act — imprisonment
+up to 3 years and fine up to Rs. 2 lakh for publishing private images without
+consent; (2) Under BNS, 2023 — Section 77 (voyeurism) punishes watching or
+capturing private acts, imprisonment up to 3 years for first offence and up
+to 7 years for repeat offence; (3) Section 67/67A of IT Act — publishing
+obscene/sexually explicit material; (4) POCSO Act if victim is a minor.
+
+---
+FAQ-008
+Category: RTI
+Q: Can I file an RTI application to get information about a private company?
+A: Generally NO — RTI Act, 2005 applies only to "public authorities" (Section
+2(h)): government bodies, bodies established by Constitution/statute, bodies
+owned/controlled/substantially financed by government. However, a private
+company can be compelled to provide information INDIRECTLY if: (a) the
+information is held by a public authority that regulates the company, or
+(b) the private company receives substantial government funding (Section 2(h)).
+
+---
+FAQ-009
+Category: Tax Law
+Q: Is agricultural income taxable in India?
+A: Agricultural income is EXEMPT from income tax under Section 10(1) of the
+Income Tax Act, 1961, as per the constitutional division of powers (Entry 82,
+Union List excludes agricultural income). However: (1) Agricultural income is
+used for RATE PURPOSES if non-agricultural income exceeds the basic exemption
+limit; (2) State governments can levy agricultural income tax; (3) Income from
+agricultural land sold within city limits may attract capital gains tax; (4)
+Processing of agricultural produce resulting in a marketable commodity may be
+treated as business income, not agricultural income.
+
+---
+FAQ-010
+Category: Criminal Law
+Q: What is anticipatory bail and how is it different from regular bail?
+A: Anticipatory bail (Section 482 BNSS / old Section 438 CrPC) is bail
+granted BEFORE arrest — a person who apprehends arrest can apply to the
+Sessions Court or High Court for a direction that if arrested, he shall be
+released on bail. Regular bail (Section 483 BNSS / old Section 439 CrPC) is
+applied for AFTER arrest. Key differences: (1) Anticipatory bail is pre-arrest;
+regular bail is post-arrest; (2) Anticipatory bail can be granted by Sessions
+Court or High Court only; regular bail can be granted by any court; (3)
+Anticipatory bail may be conditional and limited in duration; (4) Not available
+in all offences (e.g., some states restrict it for certain BNS offences).
+
+---
+FAQ-011
+Category: Family Law
+Q: Who gets custody of children after divorce?
+A: Indian courts apply the "BEST INTERESTS OF THE CHILD" principle. Generally:
+(1) Children below 5 years — mother gets custody (Guardians and Wards Act,
+Section 6); (2) Above 5 years — courts consider child's welfare holistically;
+(3) Child above 9 years — court gives weight to child's preference; (4) Father
+typically gets visitation rights; (5) Non-custodial parent usually pays
+maintenance. Under Hindu Minority and Guardianship Act: natural guardian of
+minor Hindu boy/girl below 5 is mother; above 5 is father.
+
+---
+FAQ-012
+Category: Property Law
+Q: Can an NRI buy property in India?
+A: Yes, an NRI (Non-Resident Indian) can buy: (1) Residential property — no
+limit on number; (2) Commercial property — no limit; (3) Agricultural land,
+farmhouse, plantation property — CANNOT be purchased (requires RBI approval).
+An NRI can inherit any property including agricultural land. Payment must be
+made through NRE/NRO account or FCNR account. The property can be sold — if
+to a resident Indian, proceeds can be repatriated; if residential property,
+up to 2 properties' sale proceeds can be repatriated.
+
+---
+FAQ-013
+Category: Arbitration
+Q: Can an arbitration award be challenged in court?
+A: Yes, under Section 34 of the Arbitration Act, 1996, an arbitral award can
+be challenged within 3 MONTHS (extendable by 30 days) on limited grounds:
+(1) Party was under incapacity; (2) Arbitration agreement was invalid; (3)
+No proper notice was given; (4) Award deals with disputes beyond scope; (5)
+Tribunal composition not as agreed; (6) Subject-matter not arbitrable; (7)
+Award conflicts with public policy of India (including patent illegality for
+domestic awards). Courts cannot review the merits of the award. The scope of
+"public policy" has been narrowed after the 2015 Amendment.
+
+---
+FAQ-014
+Category: Constitutional Law
+Q: What is Public Interest Litigation (PIL)?
+A: PIL is a legal action initiated in a court of law for the enforcement of
+public interest or general interest, where the public or a class of the
+community has a legal interest. Key features: (1) Any person can file, not
+just the aggrieved party; (2) Can be filed in High Court (Article 226) or
+Supreme Court (Article 32); (3) Even a postcard/letter can be treated as a
+PIL; (4) Court fee is minimal; (5) Originated in Hussainara Khatoon v. Bihar
+(1979); (6) Cannot be used for personal gain — frivolous PILs attract costs;
+(7) PIL is a tool for social justice and judicial activism.
+
+---
+FAQ-015
+Category: Insolvency
+Q: What happens when a company goes through insolvency proceedings?
+A: Under IBC, 2016: (1) CIRP (Corporate Insolvency Resolution Process) is
+initiated when a default of Rs. 1 crore or more occurs; (2) An Interim
+Resolution Professional (IRP) is appointed; (3) A MORATORIUM is declared —
+no suits can be filed against the company; (4) A Committee of Creditors (CoC)
+is formed; (5) Resolution plans are invited — must be completed within 330
+DAYS; (6) If no resolution plan is approved → liquidation; (7) During CIRP,
+the management is vested in the IRP/RP; (8) Existing management is suspended.
+
+---
+FAQ-016
+Category: RERA
+Q: What should a homebuyer check before buying a flat under RERA?
+A: (1) RERA Registration Number — verify on State RERA website; (2) Approved
+layout plan and building plan; (3) Carpet area as defined under RERA (not
+built-up or super built-up); (4) Delivery timeline committed by developer;
+(5) Agreement should be as per RERA model agreement; (6) Check for any pending
+complaints against the developer on RERA portal; (7) Land title and
+encumbrance certificate; (8) Environmental clearances; (9) Escrow account
+details (70% of collections must be in separate account); (10) Track record
+of the developer for previous projects.
+
+---
+FAQ-017
+Category: Domestic Violence
+Q: Can a man file a domestic violence case?
+A: Under the Protection of Women from Domestic Violence Act, 2005, ONLY
+WOMEN can file a complaint as "aggrieved person." A man cannot file under
+the DV Act. However, a man can seek remedies under: (1) Section 498A
+BNS — if his parents are subjected to cruelty by his wife; (2) Section 323
+BNS — for causing hurt; (3) Civil remedies — injunction, damages; (4) Section
+125 CrPC/Section 144 BNSS — maintenance. The law has been critiqued for not
+being gender-neutral. Some High Courts have recommended gender-neutral DV law.
+
+---
+FAQ-018
+Category: GST
+Q: Who needs to register for GST?
+A: Registration is mandatory if: (1) Annual aggregate turnover exceeds Rs. 40
+lakh (Rs. 20 lakh for special category states); (2) For service providers:
+Rs. 20 lakh (Rs. 10 lakh for special category states); (3) MANDATORY regardless
+of turnover for: inter-state suppliers, casual taxable persons, persons liable
+to pay tax under reverse charge, e-commerce operators, input service
+distributors, non-resident taxable persons, TDS/TCS deductors, and agents of
+suppliers. Composition scheme is available for turnover up to Rs. 1.5 crore
+(services up to Rs. 50 lakh).
+
+---
+FAQ-019
+Category: Evidence Law
+Q: Is a confession given to a police officer admissible?
+A: Under Section 22 of BSA, 2023 (formerly Section 25 of Evidence Act), a
+confession made to a police officer is NOT ADMISSIBLE. Under Section 23 of
+BSA (formerly Section 26), a confession made while in police custody is also
+not admissible UNLESS made in the immediate presence of a Magistrate. However:
+(1) Information leading to discovery of facts during investigation IS
+admissible under Section 24 BSA (formerly Section 27); (2) Confession recorded
+by a Magistrate under Section 183 BNSS (formerly Section 164 CrPC) is
+admissible; (3) Under Section 15 of TADA/MCOCA, confessions to senior police
+officers are admissible (special statutes).
+
+---
+FAQ-020
+Category: Data Protection
+Q: What are my rights as a data principal under the DPDP Act, 2023?
+A: Under the DPDP Act, 2023, you have the following rights: (1) RIGHT TO
+INFORMATION — know what personal data is being processed, purpose, and with
+whom it's shared (Section 11(a)); (2) RIGHT TO CORRECTION AND ERASURE —
+request correction of inaccurate data and erasure of data (Section 11(b));
+(3) RIGHT TO GRIEVANCE REDRESSAL — approach the Data Fiduciary's grievance
+redressal mechanism and then the Data Protection Board (Section 11(c)); (4)
+RIGHT TO NOMINATE — nominate any person to exercise rights in case of your
+death or incapacity (Section 11(d)). You also have duties: not to file false
+complaints and to provide only authentic information.
+
+---
+FAQ-021
+Category: Motor Vehicle Law
+Q: What compensation can accident victims claim under the Motor Vehicles Act?
+A: Under Section 163A of the Motor Vehicles Act, 1988, compensation is
+determined by the Multiplier Method: Annual income × Multiplier (based on
+age) + conventional amounts for pain/suffering, loss of consortium, funeral
+expenses. No-fault liability under Section 163A provides up to Rs. 50,000
+for death and Rs. 25,000 for permanent disablement WITHOUT proving fault.
+Claims are filed before the Motor Accident Claims Tribunal (MACT). In
+National Insurance Co. v. Pranay Sethi (2017), SC standardized the amounts.
+
+---
+FAQ-022
+Category: Criminal Procedure
+Q: What is the procedure when someone dies in police custody?
+A: Under Section 176 BNSS (formerly Section 176 CrPC): (1) Judicial Magistrate
+or Metropolitan Magistrate must conduct an INQUIRY; (2) The inquiry is
+MANDATORY — not discretionary; (3) The body must be sent for post-mortem;
+(4) The National Human Rights Commission (NHRC) must be informed within 24
+hours; (5) Videography of the post-mortem is mandatory; (6) An FIR under
+Section 103 BNS (murder) / 105 BNS (culpable homicide) should be considered;
+(7) D.K. Basu v. State of West Bengal (1997) guidelines must be followed:
+arrest memo, medical examination, right to inform family, etc.
+
+---
+FAQ-023
+Category: Environmental Law
+Q: What approvals are needed before starting a construction project?
+A: (1) Environmental Clearance from SEIAA/MoEFCC under EIA Notification, 2006
+for listed projects; (2) CTE (Consent to Establish) and CTO (Consent to
+Operate) from State Pollution Control Board under Air Act & Water Act; (3)
+RERA Registration if residential project >500 sq.m or >8 apartments; (4)
+Building plan approval from local municipal authority; (5) Fire NOC; (6)
+Airport Authority NOC (if near airport); (7) CRZ clearance if in Coastal
+Regulation Zone; (8) Forest clearance under Forest Conservation Act if forest
+land involved; (9) National Green Tribunal compliance certificate.
+
+---
+FAQ-024
+Category: Contract Law
+Q: When can a contract be considered "void"?
+A: A contract is void under the Indian Contract Act, 1872 if: (1) Both parties
+are under mistake of fact (Section 20); (2) Consideration or object is
+unlawful — immoral, opposed to public policy, or forbidden by law (Section
+23); (3) Agreement without consideration (Section 25, with exceptions); (4)
+Agreement in restraint of marriage (Section 26); (5) Agreement in restraint of
+trade (Section 27, with exceptions); (6) Agreement in restraint of legal
+proceedings (Section 28, with exceptions); (7) Agreement the meaning of which
+is uncertain (Section 29); (8) Wagering agreement (Section 30); (9) Agreement
+to do impossible act (Section 56 — supervening impossibility).
+
+---
+FAQ-025
+Category: Cross-Domain
+Q: If someone files a false FIR against me, what legal remedies do I have?
+A: (1) QUASHING of FIR under Section 528 BNSS (formerly Section 482 CrPC) —
+approach the High Court to quash the FIR if it discloses no cognizable
+offence; (2) File COUNTER-FIR under Section 211 BNS (false charge of offence)
+— imprisonment up to 2 years; (3) File DEFAMATION case under Section 356 BNS
+(criminal defamation) — imprisonment up to 2 years; (4) File CIVIL SUIT for
+damages (malicious prosecution); (5) File complaint under Section 182 BNS
+(false information to public servant) — imprisonment up to 6 months; (6)
+Approach the NATIONAL/STATE HUMAN RIGHTS COMMISSION if police harassment; (7)
+Seek ANTICIPATORY BAIL under Section 482 BNSS to avoid arrest.
+
+================================================================================
+END OF DOCUMENT — Legal FAQs (25 Q&A Pairs)
+================================================================================

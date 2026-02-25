@@ -1,0 +1,199 @@
+================================================================================
+GOLDEN QA EVALUATION SET — RAG SYSTEM FOR INDIAN LEGAL AI
+================================================================================
+This file contains a curated set of question-answer pairs for evaluating the
+accuracy and quality of the Legal RAG system's retrieval and generation.
+
+Format: Each entry contains:
+- ID: Unique identifier
+- Category: Legal domain
+- Difficulty: Easy / Medium / Hard
+- Question: User query
+- Expected Answer: Ground truth answer
+- Source Documents: Which documents should be retrieved
+- Key Concepts: Important legal concepts involved
+================================================================================
+
+---
+ID: GQ-001
+Category: Constitutional Law
+Difficulty: Easy
+Question: What are the fundamental rights guaranteed by the Indian Constitution?
+Expected Answer: The fundamental rights are grouped into six categories under Part III (Articles 12-35) of the Constitution: (1) Right to Equality (Articles 14-18), (2) Right to Freedom (Articles 19-22), (3) Right against Exploitation (Articles 23-24), (4) Right to Freedom of Religion (Articles 25-28), (5) Cultural and Educational Rights (Articles 29-30), and (6) Right to Constitutional Remedies (Article 32). The Right to Property (Article 31) was removed by the 44th Amendment in 1978 and is now a legal right under Article 300A.
+Source Documents: Constitution_of_India_English.pdf
+Key Concepts: Fundamental Rights, Part III, Article 32
+
+---
+ID: GQ-002
+Category: New Criminal Laws
+Difficulty: Medium
+Question: What are the key differences between Section 302 of the IPC and its equivalent in the Bharatiya Nyaya Sanhita (BNS), 2023?
+Expected Answer: Section 302 of the IPC (punishment for murder) maps to Section 101 of the BNS, 2023. Both prescribe death or life imprisonment as punishment, plus fine. The BNS retains the same punishment structure but the section numbering has changed. The definition of murder (IPC Section 300 → BNS Section 99) now includes additional provisions for organized crime (Section 109 BNS) and terrorist acts (Section 111 BNS) as separate, aggravated offences. Community service has been introduced as a new form of punishment in the BNS for certain minor offences.
+Source Documents: Bharatiya_Nyaya_Sanhita_2023.txt, IPC.pdf
+Key Concepts: BNS Section 101, IPC Section 302, Murder, Punishment
+
+---
+ID: GQ-003
+Category: Criminal Procedure
+Difficulty: Medium
+Question: What is a Zero FIR under the BNSS, 2023 and how does it differ from a regular FIR?
+Expected Answer: Under the BNSS, 2023, a Zero FIR (Section 173(1)) allows any police station to register an FIR regardless of the jurisdiction where the offence occurred. Unlike a regular FIR which must be filed at the police station having jurisdiction, a Zero FIR can be registered at ANY police station. After registration, the Zero FIR must be transferred to the police station having jurisdiction within 24 hours. This provisions ensures that victims don't face delays in FIR registration because of jurisdictional issues. The BNSS also mandates that FIR information must be given electronically to the informant within 14 days.
+Source Documents: Bharatiya_Nagarik_Suraksha_Sanhita_2023.txt
+Key Concepts: Zero FIR, Section 173 BNSS, Jurisdiction, FIR Registration
+
+---
+ID: GQ-004
+Category: Evidence Law
+Difficulty: Hard
+Question: How does the BSA, 2023 treat WhatsApp messages as evidence? What authentication is required?
+Expected Answer: Under the BSA, 2023, WhatsApp messages are explicitly admissible as evidence under Section 58 which specifically covers electronic messages from social media platforms including WhatsApp, Telegram, Instagram, and Facebook. For authentication, the BSA provides multiple methods under Section 58(2): (a) Certificate under Section 57 identifying the electronic record and describing how it was produced; (b) Hash value verification; (c) Metadata analysis; (d) Digital signature verification; (e) Any other method approved by the Court. Without a Section 57 certificate, WhatsApp messages admitted as secondary evidence are INADMISSIBLE. However, if the original device containing the messages is produced in court, it amounts to primary evidence and no certificate is needed.
+Source Documents: Bharatiya_Sakshya_Adhiniyam_2023.txt
+Key Concepts: Section 57 BSA, Section 58 BSA, Electronic Evidence, Social Media
+
+---
+ID: GQ-005
+Category: Constitutional Law
+Difficulty: Hard
+Question: What is the Basic Structure Doctrine and which case established it?
+Expected Answer: The Basic Structure Doctrine holds that Parliament cannot amend the Constitution so as to destroy its basic structure or essential features. It was established in Kesavananda Bharati v. State of Kerala (1973) by a 13-judge bench (7:6 majority). The basic structure includes: supremacy of the Constitution, republican and democratic form of government, secular character, separation of powers, federal character, sovereignty and integrity of India, individual freedom and dignity, rule of law, judicial review, harmony between fundamental rights and directive principles, free and fair elections, and limited amending power. This doctrine limits Parliament's power under Article 368.
+Source Documents: Constitution_of_India_English.pdf, Kesavananda_Bharati_1973.pdf, Legal_Maxims_Principles_Doctrines.txt
+Key Concepts: Basic Structure, Kesavananda Bharati, Article 368, Amendment Power
+
+---
+ID: GQ-006
+Category: Family Law
+Difficulty: Medium
+Question: What are the grounds for divorce under the Hindu Marriage Act, 1955?
+Expected Answer: Under Section 13(1) of the Hindu Marriage Act, 1955, either spouse can seek divorce on these grounds: (i) Adultery, (i-a) Cruelty, (i-b) Desertion for 2+ years, (ii) Conversion to another religion, (iii) Unsoundness of mind for 3+ years, (iv) Virulent and incurable leprosy, (v) Not heard alive for 7+ years, (vi) Renunciation (entering religious order), (vii) Non-resumption of cohabitation for 1+ year after judicial separation. Additional grounds for wife under Section 13(2): husband guilty of rape/sodomy/bestiality, non-resumption after maintenance order for 1+ year, repudiation of child marriage. Mutual consent divorce is available under Section 13-B with 1-year separation and 6-18 month cooling period.
+Source Documents: Indian_Family_Personal_Law_Compilation.txt
+Key Concepts: Section 13 HMA, Divorce Grounds, Mutual Consent, Section 13-B
+
+---
+ID: GQ-007
+Category: Property Law
+Difficulty: Medium
+Question: What is RERA and what protections does it offer to homebuyers?
+Expected Answer: RERA (Real Estate Regulation and Development Act, 2016) protects homebuyers by: (1) Requiring all real estate projects (>500 sq.m or >8 apartments) to be registered before advertising or selling (Section 3); (2) Mandating that 70% of amounts collected from buyers must be kept in a separate escrow account for construction costs (Section 11(2)); (3) Prohibiting any changes to sanctioned plans without buyer consent (Section 14); (4) Entitling buyers to full refund with interest if the developer fails to deliver on time, OR interest for each month of delay if buyer chooses to continue (Section 18); (5) Creating Real Estate Regulatory Authorities and Appellate Tribunals for dispute resolution; (6) Imposing penalties up to 10% of project cost for non-registration.
+Source Documents: Indian_Property_Law_Compilation.txt
+Key Concepts: RERA 2016, Section 3, Section 11, Section 18, Homebuyer Protection
+
+---
+ID: GQ-008
+Category: Tax Law
+Difficulty: Easy
+Question: What is the difference between the old and new income tax regimes in India?
+Expected Answer: The New Tax Regime (Section 115BAC, default from AY 2024-25) has lower tax rates but no major deductions: Up to Rs. 3L = Nil, 3-7L = 5%, 7-10L = 10%, 10-12L = 15%, 12-15L = 20%, Above 15L = 30%, with only Rs. 75,000 standard deduction. The Old Tax Regime (optional) has higher rates but allows deductions: Up to Rs. 2.5L = Nil, 2.5-5L = 5%, 5-10L = 20%, Above 10L = 30%, with deductions under Section 80C (Rs. 1.5L), 80D (medical insurance), 80E (education loan interest), HRA exemption, home loan interest (Rs. 2L), NPS (additional Rs. 50K), etc. Taxpayers must explicitly opt for the old regime; otherwise the new regime applies by default.
+Source Documents: Indian_Tax_Financial_Law_Compilation.txt
+Key Concepts: Section 115BAC, Old vs New Regime, 80C, 80D, Standard Deduction
+
+---
+ID: GQ-009
+Category: Cyber Law
+Difficulty: Hard
+Question: What are the penalties under the Digital Personal Data Protection Act, 2023 for a data breach?
+Expected Answer: Under the DPDP Act, 2023, penalties for data breach-related violations include: (1) Failure to take reasonable security safeguards to prevent a data breach → up to Rs. 250 CRORE (Section 33(a)); (2) Failure to notify the Data Protection Board and the Data Principal of the breach → up to Rs. 200 CRORE (Section 33(b)); (3) Non-compliance with children's data obligations → up to Rs. 200 CRORE (Section 33(c)); (4) Non-compliance by Significant Data Fiduciary with additional obligations (DPO, audit, impact assessment) → up to Rs. 150 CRORE (Section 33(d)). The Data Fiduciary must also inform the Board and affected individuals in case of any personal data breach under Section 8(c).
+Source Documents: DPDP_Act_2023_and_IT_Act_Compilation.txt
+Key Concepts: DPDP Act 2023, Section 33, Data Breach, Penalties
+
+---
+ID: GQ-010
+Category: Criminal Law
+Difficulty: Easy
+Question: What is the difference between cognizable and non-cognizable offences?
+Expected Answer: Cognizable offences are serious offences where the police can: (1) Arrest without warrant, (2) Start investigation without Magistrate's order, (3) Register FIR mandatorily. Examples: murder, robbery, kidnapping, sexual assault. Non-cognizable offences are less serious where police: (1) Cannot arrest without warrant, (2) Cannot investigate without Magistrate's permission, (3) Register NCR (Non-Cognizable Report) instead of FIR. Examples: assault, cheating, defamation, forgery. Under BNSS, 2023, the classification continues with the First Schedule specifying which offences are cognizable and which are non-cognizable.
+Source Documents: Bharatiya_Nagarik_Suraksha_Sanhita_2023.txt, Criminal_Procedure_Code.pdf
+Key Concepts: Cognizable, Non-cognizable, FIR, NCR, BNSS First Schedule
+
+---
+ID: GQ-011
+Category: Arbitration/ADR
+Difficulty: Medium
+Question: Within what time frame must an arbitral award be made under Indian law?
+Expected Answer: Under Section 29A of the Arbitration and Conciliation Act, 1996 (as amended), the arbitral award must be made within 12 MONTHS from the date the tribunal enters upon the reference. The parties may extend this by an additional 6 months by mutual consent (total 18 months). Beyond 18 months, only the Court may grant extension on sufficient cause being shown. If the award is made within 6 months, the arbitrator may receive additional fees. If delayed beyond 12 months, the arbitrator's fees shall be reduced by at least 5% per month of delay. For the new Mediation Act, 2023, mediation must be completed within 180 days (extendable by 180 days by consent).
+Source Documents: Arbitration_Mediation_ADR_India.txt
+Key Concepts: Section 29A, 12 months, Extension, Fee Reduction
+
+---
+ID: GQ-012
+Category: Constitutional Law
+Difficulty: Medium
+Question: What writs can be issued by the Supreme Court under Article 32?
+Expected Answer: Under Article 32, the Supreme Court can issue five types of writs: (1) Habeas Corpus — to produce a detained person before court and examine legality of detention; (2) Mandamus — directing a public authority to perform its legal duty; (3) Certiorari — quashing an order of a lower court or tribunal acting without jurisdiction or in violation of natural justice; (4) Prohibition — preventing a lower court/tribunal from exceeding its jurisdiction (issued before order); (5) Quo Warranto — questioning the legal authority by which a person holds a public office. Article 32 itself is a fundamental right (right to constitutional remedies). High Courts can also issue these writs under Article 226.
+Source Documents: Constitution_of_India_English.pdf
+Key Concepts: Article 32, Article 226, Five Writs, Constitutional Remedies
+
+---
+ID: GQ-013
+Category: Property Law
+Difficulty: Hard
+Question: What are the different types of mortgages under the Transfer of Property Act?
+Expected Answer: Section 58 of the Transfer of Property Act, 1882 defines six types of mortgages: (1) Simple Mortgage — mortgagor binds personally to pay; on default, mortgagee can cause property to be sold (no possession transfer); (2) Mortgage by Conditional Sale — ostensible sale with condition to reconvey on payment; (3) Usufructuary Mortgage — possession transferred; mortgagee retains profits in lieu of interest until repayment; (4) English Mortgage — absolute transfer with promise to retransfer on repayment by a fixed date; (5) Mortgage by Deposit of Title Deeds (Equitable Mortgage) — delivery of title deeds with intent to create security (no registered instrument needed in certain cities); (6) Anomalous Mortgage — any mortgage not falling into the above five categories. Section 60 provides the fundamental right of redemption — "once a mortgage, always a mortgage."
+Source Documents: Indian_Property_Law_Compilation.txt
+Key Concepts: Section 58 TPA, Six Types, Right of Redemption, Section 60
+
+---
+ID: GQ-014
+Category: Criminal Law - BNS
+Difficulty: Medium
+Question: What punishment does the BNS prescribe for organized crime?
+Expected Answer: Section 109 of the BNS, 2023 introduces ORGANIZED CRIME as a NEW separate offence (not present in IPC). It covers continuing unlawful activity by organized crime syndicates including extortion, land grabbing, contract killing, cybercrimes, economic offences, human trafficking, and kidnapping for ransom. Punishment: (1) If the organized crime results in death → Death penalty or life imprisonment plus fine of minimum Rs. 10 lakh; (2) In other cases → imprisonment of minimum 5 years extending to life imprisonment plus fine of minimum Rs. 5 lakh. Any person who is a member of an organized crime syndicate → imprisonment of minimum 5 years extending to life plus fine. Attempting, abetting, or conspiring organized crime also carries severe penalties. This is one of the landmark additions in BNS addressing modern criminal threats.
+Source Documents: Bharatiya_Nyaya_Sanhita_2023.txt
+Key Concepts: Section 109 BNS, Organized Crime, New Offence, Severe Penalties
+
+---
+ID: GQ-015
+Category: Landmark Judgments
+Difficulty: Hard
+Question: What did the Supreme Court hold in the Electoral Bonds case (2024)?
+Expected Answer: In Association for Democratic Reforms v. Union of India (2024), a 5-judge Constitution Bench unanimously struck down the Electoral Bond Scheme as UNCONSTITUTIONAL. Key holdings: (1) The scheme violated voters' right to information under Article 19(1)(a) — voters have the right to know who funds political parties; (2) Unlimited corporate funding distorts the level playing field, violating Article 14; (3) Anonymity of donors was not justified as a reasonable restriction; (4) SBI was directed to disclose ALL electoral bond details to the Election Commission within 3 weeks; (5) Amendments to the Income Tax Act, Companies Act, RBI Act, and Representation of People Act that facilitated the scheme were struck down. This is one of the most significant judgments on electoral transparency.
+Source Documents: Recent_SC_Judgments_2024_2026.txt
+Key Concepts: Electoral Bonds, Article 19(1)(a), Right to Information, Electoral Transparency
+
+---
+ID: GQ-016
+Category: Legal Maxims
+Difficulty: Easy
+Question: What does the maxim "Audi Alteram Partem" mean and how is it applied in Indian law?
+Expected Answer: "Audi Alteram Partem" means "hear the other side." It is a fundamental principle of natural justice requiring that no person shall be condemned unheard. Every party to a dispute must be given a reasonable opportunity to present their case before an adverse decision is made. In Indian law, this principle was expanded in Maneka Gandhi v. Union of India (1978), where the Supreme Court held that Article 21 (right to life and personal liberty) includes the right to procedural fairness. Any administrative or judicial action taken without giving the affected party an opportunity to be heard is VOID. This applies to: court proceedings, administrative decisions, disciplinary proceedings, quasi-judicial proceedings, and any action affecting a person's rights.
+Source Documents: Legal_Maxims_Principles_Doctrines.txt
+Key Concepts: Natural Justice, Fair Hearing, Maneka Gandhi, Article 21
+
+---
+ID: GQ-017
+Category: GST
+Difficulty: Medium
+Question: What is Input Tax Credit (ITC) under GST, and when is it NOT available?
+Expected Answer: Input Tax Credit (Section 16, CGST Act) allows registered persons to claim credit of tax paid on purchases (inputs) used for business against their output tax liability. Conditions: possession of tax invoice, receipt of goods/services, tax paid to government, return filed, and supplier has filed return. ITC is BLOCKED (Section 17) for: motor vehicles (with exceptions), food and beverages/outdoor catering, beauty treatment/health services, club memberships, travel benefits to employees (LTC), works contract for immovable property construction, goods/services for personal consumption, and goods lost/stolen/destroyed/gifted. The composition scheme taxpayers (Section 10) are also NOT eligible for ITC.
+Source Documents: Indian_Tax_Financial_Law_Compilation.txt
+Key Concepts: Section 16 CGST, ITC, Section 17 Blocked Credits, Composition Scheme
+
+---
+ID: GQ-018
+Category: Domestic Violence
+Difficulty: Medium
+Question: What reliefs can a woman seek under the Protection of Women from Domestic Violence Act, 2005?
+Expected Answer: Under the DV Act, 2005, an aggrieved woman can seek the following reliefs from the Magistrate: (1) Protection Orders (Section 18) — prohibiting the respondent from committing domestic violence, communicating with the aggrieved person, or entering her workplace; (2) Residence Orders (Section 19) — directing respondent to remove himself from shared household or provide alternate accommodation; (3) Monetary Relief (Section 20) — compensation for loss of earnings, medical expenses, property damage, and maintenance; (4) Custody Orders (Section 21) — temporary custody of children; (5) Compensation Orders (Section 22) — damages for mental torture and emotional distress. The Court can pass ex-parte orders under Section 23. Breach of protection order is cognizable and non-bailable (Section 31: up to 1 year imprisonment or Rs. 20,000 fine or both).
+Source Documents: Indian_Family_Personal_Law_Compilation.txt
+Key Concepts: DV Act 2005, Sections 18-22, Protection Order, Residence Order
+
+---
+ID: GQ-019
+Category: Insolvency
+Difficulty: Hard
+Question: What is the waterfall mechanism under the IBC, 2016?
+Expected Answer: The waterfall mechanism under Section 53 of the Insolvency and Bankruptcy Code, 2016, determines the priority of claims during liquidation: (1) FIRST — Insolvency resolution process costs and liquidation costs; (2) SECOND — Workmen's dues for preceding 24 months and secured creditors (pari passu, meaning equal ranking); (3) THIRD — Employee dues (other than workmen) for preceding 12 months; (4) FOURTH — Financial debts owed to unsecured creditors; (5) FIFTH — Government dues (Central, State, and Local Authority); (6) SIXTH — Remaining debts and dues; (7) SEVENTH — Preference shareholders; (8) EIGHTH — Equity shareholders. Notably, Government dues rank BELOW unsecured financial creditors, which was a significant departure from previous insolvency law. The minimum default threshold for initiating CIRP is Rs. 1 crore (increased from Rs. 1 lakh in 2020).
+Source Documents: Indian_Tax_Financial_Law_Compilation.txt
+Key Concepts: Section 53 IBC, Waterfall, Priority of Claims, Liquidation
+
+---
+ID: GQ-020
+Category: Cross-Domain
+Difficulty: Hard
+Question: If a person is arrested under the BNS for an offence punishable with 3 years imprisonment, what are their bail rights under the BNSS, and can electronic evidence (CCTV footage) be used against them under the BSA?
+Expected Answer: Under BNSS, 2023, for offences punishable up to 3 years (Category A per Satender Kumar Antil guidelines), the accused has strong bail rights — arrest is generally not warranted and notice to appear may be sufficient. If arrested, bail should be the default position. Under Section 479 BNSS, if the accused has been in custody for half the maximum sentence (i.e., 1.5 years), they MUST be released on default bail. The accused must be produced before Magistrate within 24 hours (Section 167 BNSS). Regarding CCTV footage as evidence under BSA, 2023: it is admissible under Section 63 (electronic records from automated systems) provided: (a) the system was operating correctly at the material time, (b) was not subjected to unauthorized interference, and (c) proper maintenance procedures were followed. The CCTV footage must be accompanied by a Section 57 certificate. If the original recording device is produced, no certificate is needed.
+Source Documents: Bharatiya_Nagarik_Suraksha_Sanhita_2023.txt, Bharatiya_Sakshya_Adhiniyam_2023.txt, Recent_SC_Judgments_2024_2026.txt
+Key Concepts: Bail Rights, Default Bail, Section 479 BNSS, Section 63 BSA, Section 57 BSA, CCTV Evidence
+
+================================================================================
+END OF GOLDEN QA SET — 20 Questions Across Legal Domains
+================================================================================

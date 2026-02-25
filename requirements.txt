@@ -1,0 +1,40 @@
+# ── PDF & Text Processing ──
+pypdf==4.3.1
+pdfplumber==0.11.4
+PyMuPDF==1.25.3
+
+# ── Embeddings ──
+sentence-transformers==3.4.1
+
+# ── Vector Store ──
+chromadb==0.6.3
+
+# ── Sparse Retrieval ──
+rank-bm25==0.2.2
+
+# ── LLM Provider (Ollama — installed separately) ──
+ollama==0.4.7
+requests==2.32.3
+
+# ── API Framework ──
+fastapi==0.115.8
+uvicorn[standard]==0.34.0
+
+# ── Data & Utilities ──
+python-dotenv==1.0.1
+pydantic==2.10.6
+numpy==2.2.3
+tqdm==4.67.1
+structlog==25.1.0
+
+# ── Evaluation ──
+scikit-learn==1.6.1
+rouge-score==0.1.2
+
+# ── LangChain Ecosystem ──
+langchain==0.3.18
+langchain-core==0.3.36
+langchain-community==0.3.17
+langchain-chroma==0.2.2
+langchain-huggingface==0.1.2
+langchain-ollama==0.2.3
