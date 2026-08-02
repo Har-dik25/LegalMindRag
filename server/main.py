@@ -1,5 +1,5 @@
 """
-Legal RAG Terminal — Interactive CLI for the Legal AI Assistant.
+Samvidhan AI Terminal — Interactive CLI for the Samvidhan AI Assistant.
 Run the complete RAG pipeline from your terminal.
 
 Usage: python main.py
@@ -31,7 +31,7 @@ logger = logging.getLogger(__name__)
 BANNER = r"""
 ╔══════════════════════════════════════════════════════════════╗
 ║                                                              ║
-║     ⚖️   LEGAL AI — RAG Assistant for Indian Law   ⚖️       ║
+║     ⚖️   SAMVIDHAN AI — RAG Assistant for Indian Law   ⚖️       ║
 ║                                                              ║
 ║     Powered by: ChromaDB + BM25 + Ollama (Local LLM)        ║
 ║     Dataset: 65 legal documents | Indian Law Corpus          ║
@@ -75,7 +75,7 @@ class LegalRAG:
 
     def initialize(self):
         """Load all components."""
-        print("\n🔄 Initializing Legal RAG system...\n")
+        print("\n🔄 Initializing Samvidhan AI system...\n")
 
         # 1. Load embedder
         print("   [1/5] Loading embedding model...", end=" ", flush=True)

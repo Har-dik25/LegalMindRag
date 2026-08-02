@@ -1,5 +1,5 @@
 """
-Prompt Builder — Constructs LangChain prompt templates for legal RAG generation.
+Prompt Builder — Constructs LangChain prompt templates for Samvidhan AI generation.
 """
 import logging
 import config

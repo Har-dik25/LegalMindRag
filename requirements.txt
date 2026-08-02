@@ -26,6 +26,12 @@ pydantic==2.10.6
 numpy==2.2.3
 tqdm==4.67.1
 structlog==25.1.0
+dvc==3.33.1
+dvc-gdrive==3.0.1
+apscheduler==3.10.4
+datasets==2.19.1
+beautifulsoup4==4.12.2
+kaggle==2.0.0
 
 # ── Evaluation ──
 scikit-learn==1.6.1

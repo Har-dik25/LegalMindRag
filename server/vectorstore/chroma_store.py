@@ -10,7 +10,7 @@ from langchain_core.documents import Document
 logger = logging.getLogger(__name__)
 
 class ChromaStore:
-    """LangChain Chroma DB wrapper for the legal RAG vector store."""
+    """LangChain Chroma DB wrapper for the Samvidhan AI vector store."""
 
     def __init__(self, persist_dir: str, collection_name: str, embedding_function=None):
         logger.info(f"Initializing LangChain Chroma at: {persist_dir}")
@@ -68,6 +68,17 @@ class ChromaStore:
             batch = documents[i:i + batch_size]
             self.vectorstore.add_documents(documents=batch)
             logger.info(f"Upserted batch {i // batch_size + 1} ({len(batch)} chunks)")
+
+    def delete(self, chunk_ids: list[str]):
+        """Delete chunks from ChromaDB by their IDs."""
+        if not chunk_ids:
+            return
+        batch_size = 5000
+        for i in range(0, len(chunk_ids), batch_size):
+            batch = chunk_ids[i:i + batch_size]
+            self._collection.delete(ids=batch)
+            logger.info(f"Deleted batch {i // batch_size + 1} ({len(batch)} chunks from ChromaDB)")
+
 
     def search(
         self,

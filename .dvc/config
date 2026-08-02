@@ -1,0 +1,10 @@
+[core]
+    remote = gdrive
+['remote "myremote"']
+    url = ../data/dvc-remote
+['remote "s3remote"']
+    url = s3://legalmind-rag-dvc-store/data
+['remote "gdrive"']
+    url = gdrive://1C4YUbaAufOkvJv09whz0VkFAvNfRTS7A
+    gdrive_use_service_account = false
+    gdrive_acknowledge_abuse = true

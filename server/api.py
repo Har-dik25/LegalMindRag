@@ -1,4 +1,4 @@
-# api.py — Dual-Approach Legal RAG API
+# api.py — Dual-Approach Samvidhan AI API
 # Supports Approach 1 (LangChain) and Approach 2 (Core Python)
 import logging
 import time
@@ -38,10 +38,10 @@ logging.basicConfig(
         logging.StreamHandler(),
     ],
 )
-logger = logging.getLogger("LegalAI-API")
+logger = logging.getLogger("SamvidhanAI-API")
 
 # ─── App Setup ───
-app = FastAPI(title="Legal AI API", version="2.0.0")
+app = FastAPI(title="Samvidhan AI API", version="2.0.0")
 
 # CORS for React Frontend
 app.add_middleware(
@@ -75,7 +75,7 @@ rag = RAGState()
 
 @app.on_event("startup")
 def startup_event():
-    logger.info("🚀 Starting Legal AI API (Dual Approach)...")
+    logger.info("🚀 Starting Samvidhan AI API (Dual Approach)...")
     
     # 1. Load shared Embedder
     rag.embedder = Embedder(config.EMBEDDING_MODEL)

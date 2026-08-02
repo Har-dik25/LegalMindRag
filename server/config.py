@@ -1,5 +1,5 @@
 """
-Central configuration for the Legal RAG Pipeline.
+Central configuration for the Samvidhan AI Pipeline.
 All constants, paths, model settings, and runtime options live here.
 """
 import os
@@ -10,9 +10,10 @@ load_dotenv()
 
 # ─── Paths ───────────────────────────────────────────────────
 BASE_DIR = Path(__file__).resolve().parent
-DATASET_PATH = BASE_DIR / os.getenv("DATASET_PATH", "LegalAI Dataset")
-INDEX_PATH = BASE_DIR / os.getenv("INDEX_PATH", "data")
-LOG_PATH = BASE_DIR / os.getenv("LOG_PATH", "logs")
+ROOT_DIR = BASE_DIR.parent
+DATASET_PATH = ROOT_DIR / os.getenv("DATASET_PATH", "SamvidhanAI Dataset")
+INDEX_PATH = ROOT_DIR / os.getenv("INDEX_PATH", "data")
+LOG_PATH = ROOT_DIR / os.getenv("LOG_PATH", "logs")
 CHUNKS_DIR = INDEX_PATH / "chunks"
 BM25_DIR = INDEX_PATH / "bm25_index"
 METADATA_DB = INDEX_PATH / "metadata.db"
@@ -21,12 +22,15 @@ METADATA_DB = INDEX_PATH / "metadata.db"
 for d in [INDEX_PATH, LOG_PATH, CHUNKS_DIR, BM25_DIR]:
     d.mkdir(parents=True, exist_ok=True)
 
+# ─── Ingestion Pipeline ──────────────────────────────────────
+INGESTION_BATCH_LIMIT = 60000  # Number of files to ingest per source per run
+
 # ─── Embedding ───────────────────────────────────────────────
 EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL", "all-MiniLM-L6-v2")
 EMBEDDING_BATCH_SIZE = 64
 
 # ─── ChromaDB ────────────────────────────────────────────────
-CHROMA_PERSIST_DIR = str(BASE_DIR / os.getenv("CHROMA_PERSIST_DIR", "data/chroma_db"))
+CHROMA_PERSIST_DIR = str(ROOT_DIR / os.getenv("CHROMA_PERSIST_DIR", "data/chroma_db"))
 CHROMA_COLLECTION = os.getenv("CHROMA_COLLECTION", "legal_chunks")
 
 # ─── Chunking ────────────────────────────────────────────────

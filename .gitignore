@@ -14,5 +14,8 @@ logs/
 *.log
 
 # Data & Databases (Large files)
-data/
-LegalAI Dataset/
+data/*
+!data/*.dvc
+!data/.gitignore
+SamvidhanAI Dataset/
+/SamvidhanAI Dataset
