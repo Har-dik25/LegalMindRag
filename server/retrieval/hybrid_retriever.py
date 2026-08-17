@@ -3,6 +3,7 @@ Hybrid Retriever — Combines dense (ChromaDB) and sparse (BM25) retrieval
 using LangChain's EnsembleRetriever (RRF), then re-ranks with a cross-encoder.
 """
 import logging
+import re
 from dataclasses import dataclass, field
 from sentence_transformers import CrossEncoder
 
@@ -137,9 +138,12 @@ class HybridRetriever:
                 # Section match bonus: if query specifically targets Section/Article X
                 if target_section:
                     sec_ref = meta.get("section_ref", "") or ""
-                    content_start = doc.page_content[:150] if hasattr(doc, "page_content") else ""
-                    if target_section.lower() in sec_ref.lower() or target_section.lower() in content_start.lower():
-                        base_score *= 1.8  # Strong bonus for exact section match
+                    full_content = doc.page_content if hasattr(doc, "page_content") else str(doc)
+                    sec_pat = re.compile(rf'\b{re.escape(target_section)}\b', re.IGNORECASE)
+                    if sec_pat.search(sec_ref) or sec_pat.search(full_content[:250]):
+                        base_score *= 2.5  # Header match
+                    elif sec_pat.search(full_content):
+                        base_score *= 1.8  # Body match anywhere in chunk
                 
                 scores[cid] = scores.get(cid, 0) + base_score
                 
