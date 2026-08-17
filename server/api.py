@@ -231,6 +231,22 @@ def stream_rag(query: str, category: Optional[str] = None, approach: Optional[st
     )
 
 
+# ─── Config & Health Endpoints ───
+@app.get("/health")
+def health_check():
+    return {"status": "ok", "version": "3.0.0", "mode": "extractive_ai_overview"}
+
+
+@app.get("/config/approach")
+def get_approach():
+    return {"approach": "extractive", "available": ["extractive"]}
+
+
+@app.post("/config/approach")
+def set_approach(data: dict = None):
+    return {"status": "ok", "approach": "extractive"}
+
+
 # ─── Auth Endpoints ───
 @app.post("/auth/register")
 def register(req: AuthRequest):

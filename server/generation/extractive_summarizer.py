@@ -276,8 +276,8 @@ def _build_analytical_answer(query: str, target_ref: str | None,
         )
 
     # 6. General synthesis from matched provisions
-    if relevant_provisions:
-        primary = relevant_provisions[0]
+    if provisions:
+        primary = provisions[0]
         header = primary.get("header", "Statutory Provision")
         title = primary.get("title", "")
         statute = primary.get("statute", "Indian Legal Enactment")
