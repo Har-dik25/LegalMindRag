@@ -17,12 +17,56 @@ export default function ArgumentBuilder() {
     const body = pinnedArguments
       .map((a, i) => `## Argument ${i + 1}\n*Pinned: ${a.timestamp}*\n\n${a.text}\n\n---`)
       .join('\n\n');
-    const md = `# Legal Brief — LegalMindRag\n*Generated: ${new Date().toLocaleString()}*\n\n${body}`;
+    const md = `# Legal Research Brief — Samvidhan AI\n*Generated: ${new Date().toLocaleString()}*\n\n${body}`;
     const blob = new Blob([md], { type: 'text/markdown' });
     const url  = URL.createObjectURL(blob);
     const a    = document.createElement('a');
-    a.href = url; a.download = 'legalmindrag_brief.md'; a.click();
+    a.href = url; a.download = 'samvidhan_legal_brief.md'; a.click();
     URL.revokeObjectURL(url);
+  };
+
+  const exportCourtPDF = () => {
+    if (!pinnedArguments.length) return;
+    const printWin = window.open('', '_blank');
+    if (!printWin) return;
+    const argsHtml = pinnedArguments.map((a, i) => `
+      <div class="argument-card">
+        <h3>ARGUMENT ${i + 1}</h3>
+        <p class="timestamp">Pinned to Record: ${a.timestamp}</p>
+        <div class="body-text">${a.text.replace(/\n/g, '<br/>')}</div>
+      </div>
+    `).join('');
+
+    printWin.document.write(`
+      <html>
+        <head>
+          <title>Samvidhan AI — Court Submission Brief</title>
+          <style>
+            body { font-family: 'Times New Roman', Times, serif; padding: 40px; color: #111; line-height: 1.6; }
+            .court-header { text-align: center; border-bottom: 2px solid #8A6B38; padding-bottom: 15px; margin-bottom: 30px; }
+            h2 { margin: 0 0 5px 0; color: #111; letter-spacing: 1px; font-size: 20px; }
+            h3 { color: #8A6B38; margin: 15px 0 5px 0; font-size: 15px; text-transform: uppercase; }
+            .timestamp { font-size: 11px; color: #666; font-style: italic; margin-bottom: 10px; }
+            .argument-card { page-break-inside: avoid; border-left: 3px solid #8A6B38; padding-left: 15px; margin-bottom: 25px; }
+            .body-text { text-align: justify; font-size: 14px; }
+            .footer { margin-top: 40px; border-top: 1px solid #ccc; padding-top: 10px; font-size: 11px; text-align: center; color: #777; }
+          </style>
+        </head>
+        <body>
+          <div class="court-header">
+            <h2>IN THE HIGH COURT OF JUDICATURE</h2>
+            <p><strong>MEMORANDUM OF ARGUMENTS & STATUTORY GROUNDS</strong></p>
+            <p style="font-size: 12px; color: #555;">Generated via Samvidhan AI Pure Extractive Intelligence · ${new Date().toLocaleDateString()}</p>
+          </div>
+          ${argsHtml}
+          <div class="footer">
+            <p>Advocate on Record · Samvidhan AI Chambers</p>
+          </div>
+        </body>
+      </html>
+    `);
+    printWin.document.close();
+    printWin.print();
   };
 
   return (
@@ -109,7 +153,15 @@ export default function ArgumentBuilder() {
                   className="btn-brass-outline flex items-center gap-1.5 px-3 py-1.5 text-xs"
                 >
                   <Download className="w-3.5 h-3.5" />
-                  Export
+                  Markdown
+                </button>
+                {/* Export Court PDF */}
+                <button
+                  onClick={e => { e.stopPropagation(); exportCourtPDF(); }}
+                  className="btn-brass flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold"
+                >
+                  <FileText className="w-3.5 h-3.5" />
+                  Court PDF
                 </button>
               </motion.div>
             )}

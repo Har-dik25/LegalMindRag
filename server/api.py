@@ -86,6 +86,7 @@ class QueryRequest(BaseModel):
     query: str
     category: Optional[str] = None
     approach: Optional[str] = "extractive"
+    devils_advocate: Optional[bool] = False
 
 
 class AuthRequest(BaseModel):
@@ -178,7 +179,9 @@ def query_rag(request: QueryRequest):
         }
 
     # Synthesize Gemini / Google AI Overview response
-    answer = generate_extractive_summary(raw_query, results)
+    answer = generate_extractive_summary(
+        raw_query, results, devils_advocate=bool(request.devils_advocate)
+    )
 
     # Format sources
     sources = []
@@ -202,11 +205,17 @@ def query_rag(request: QueryRequest):
 
 
 @app.get("/stream")
-def stream_rag(query: str, category: Optional[str] = None, approach: Optional[str] = None):
+def stream_rag(
+    query: str,
+    category: Optional[str] = None,
+    approach: Optional[str] = None,
+    devils_advocate: Optional[str] = None,
+):
     """Streaming endpoint delivering live tokens and source records via Server-Sent Events (SSE)."""
     raw_query = query.strip()
     processed_query = preprocess_query(raw_query)
     filters = {"category": category} if category else None
+    is_da = str(devils_advocate).lower() in ("true", "1", "yes")
 
     def event_generator():
         start_time = time.time()
@@ -233,7 +242,7 @@ def stream_rag(query: str, category: Optional[str] = None, approach: Optional[st
         # Yield sources event
         yield f"data: {json.dumps({'type': 'sources', 'data': sources_data})}\n\n"
 
-        answer = generate_extractive_summary(raw_query, results)
+        answer = generate_extractive_summary(raw_query, results, devils_advocate=is_da)
 
         # Stream words smoothly
         words = answer.split(" ")

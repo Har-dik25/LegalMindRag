@@ -32,7 +32,7 @@ PENALTY_RE = re.compile(
 )
 
 
-def generate_extractive_summary(query: str, results: list) -> str:
+def generate_extractive_summary(query: str, results: list, devils_advocate: bool = False) -> str:
     """
     Main entry point: Analyzes query intent and generates an adaptively styled,
     ultra-clean Gemini/Claude/ChatGPT-grade response.
@@ -54,15 +54,43 @@ def generate_extractive_summary(query: str, results: list) -> str:
 
     # 2. Dispatch to the corresponding specialized formatting generator
     if style == "PROBLEM_SOLVING":
-        return _format_irac_problem(query, results)
+        answer = _format_irac_problem(query, results)
     elif style == "COMPARATIVE":
-        return _format_comparative_overview(query, results, parsed_provisions)
+        answer = _format_comparative_overview(query, results, parsed_provisions)
     elif style == "PROCEDURAL":
-        return _format_procedural_guide(query, results, parsed_provisions)
+        answer = _format_procedural_guide(query, results, parsed_provisions)
     elif style == "STATUTORY_SECTION":
-        return _format_statutory_section(query, results, parsed_provisions)
+        answer = _format_statutory_section(query, results, parsed_provisions)
     else:
-        return _format_doctrinal_overview(query, results, parsed_provisions)
+        answer = _format_doctrinal_overview(query, results, parsed_provisions)
+
+    # 3. Append Devil's Advocate Counter-Arguments if requested
+    if devils_advocate:
+        answer = _append_devils_advocate(answer, query, results)
+
+    return answer
+
+
+def _append_devils_advocate(base_answer: str, query: str, results: list) -> str:
+    """Appends aggressive opposing counsel counter-arguments and procedural pitfalls."""
+    counter_section = [
+        "\n\n---\n",
+        "### ⚔️ Devil's Advocate — Adversarial Counter-Analysis & Vulnerabilities",
+        "> **OPPOSING COUNSEL MEMORANDUM**: The following vulnerabilities, statutory exceptions, and counter-arguments can be weaponized against this position in court:\n",
+        "1. **Burden of Proof & Evidentiary Threshold**:",
+        "   - Under **Section 105 of the Indian Evidence Act, 1872** (Section 108 of the Bharatiya Sakshya Adhiniyam, 2023), the burden of establishing general exceptions or affirmative defenses rests *strictly on the party claiming it*.",
+        "   - The Court shall presume the absence of such circumstances unless proved beyond reasonable doubt.",
+        "",
+        "2. **Strict Judicial Standard & Rebuttal Precedents**:",
+        "   - Opposing counsel will cite ***Dahyabhai Chhaganbhai Thakkar v. State of Gujarat (1964)*** and ***Sharad Birdhichand Sarda (1984)*** to argue that mere assertion without contemporaneous medical or documentary proof is fatal.",
+        "   - Any gap in the chain of custodial records or electronic certificates under **Section 63 BSA 2023** creates an adverse inference against admissibility.",
+        "",
+        "3. **Procedural & Jurisdictional Challenges**:",
+        "   - Failure to comply strictly with mandatory arrest notices (Section 35 BNSS / S. 41A CrPC) or search seizure panchnama requirements can be exploited to seek quashing under Section 528 BNSS (S. 482 CrPC).",
+        "",
+        "> **💡 Chamber Recommendation**: Secure contemporaneous forensic certifications, prepare for Section 105 IEA presumption challenges, and preserve secondary digital hash chains immediately.",
+    ]
+    return base_answer + "\n".join(counter_section)
 
 
 # ─── Style Detection ────────────────────────────────────────────────
