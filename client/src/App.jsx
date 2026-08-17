@@ -10,6 +10,7 @@ import StatsModal from './components/Overlays/StatsModal';
 import ShortcutsModal from './components/Overlays/ShortcutsModal';
 import StrategySimulator from './components/Overlays/StrategySimulator';
 import CaseIntakeWizard from './components/Overlays/CaseIntakeWizard';
+import PricingModal from './components/Overlays/PricingModal';
 import MatterSidebar from './components/LeftPane/MatterSidebar';
 import ChatInterface from './components/CenterPane/ChatInterface';
 import SourceDossier from './components/RightPane/SourceDossier';
@@ -26,6 +27,8 @@ function AppShell() {
     setStrategySimulatorOpen,
     caseIntakeOpen,
     setCaseIntakeOpen,
+    pricingOpen,
+    setPricingOpen,
   } = useApp();
 
   const [auth, setAuth] = useState(() => {
@@ -85,6 +88,7 @@ function AppShell() {
         <StrategySimulator onClose={() => setStrategySimulatorOpen(false)} />
       )}
       {caseIntakeOpen && <CaseIntakeWizard onClose={() => setCaseIntakeOpen(false)} />}
+      {pricingOpen && <PricingModal onClose={() => setPricingOpen(false)} />}
 
       {/* Main TriPane Layout */}
       <TriPaneLayout

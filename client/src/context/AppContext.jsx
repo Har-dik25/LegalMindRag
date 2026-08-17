@@ -36,18 +36,9 @@ export function AppProvider({ children }) {
   useEffect(() => { localStorage.setItem('lmr_lang', language); }, [language]);
 
   // ─── Engine ──────────────────────────────────────────────────
-  const [engine, setEngineState] = useState('langchain');
+  const [engine, setEngineState] = useState('extractive');
   const setEngine = useCallback((e) => {
-    setEngineState(e);
-    fetch('http://localhost:8000/config/approach', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ approach: e }),
-    }).catch(() => {});
-    toast.success(
-      e === 'langchain' ? 'LangChain engine active' : 'Core Python engine active',
-      { duration: 2000 }
-    );
+    setEngineState('extractive');
   }, []);
 
   // ─── Sidebar collapsed state ──────────────────────────────────
@@ -110,6 +101,7 @@ export function AppProvider({ children }) {
   const [shortcutsOpen,         setShortcutsOpen]         = useState(false);
   const [strategySimulatorOpen, setStrategySimulatorOpen] = useState(false);
   const [caseIntakeOpen,        setCaseIntakeOpen]        = useState(false);
+  const [pricingOpen,           setPricingOpen]           = useState(false);
 
   // ─── Devil's Advocate mode ────────────────────────────────────
   const [isDevilsAdvocate, setIsDevilsAdvocate] = useState(false);
@@ -175,6 +167,7 @@ export function AppProvider({ children }) {
       shortcutsOpen,         setShortcutsOpen,
       strategySimulatorOpen, setStrategySimulatorOpen,
       caseIntakeOpen,        setCaseIntakeOpen,
+      pricingOpen,           setPricingOpen,
       // Modes
       isDevilsAdvocate, toggleDevilsAdvocate,
       // Dossier

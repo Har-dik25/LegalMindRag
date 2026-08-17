@@ -41,6 +41,7 @@ export default function ChatInterface({ onOpenSource }) {
   const [isLoading, setIsLoading] = useState(false);
   const [isListening, setIsListening] = useState(false);
   const [activeNavTab, setActiveNavTab] = useState('research');
+  const [selectedCategory, setSelectedCategory] = useState('ALL');
   const [currentRetrievalStep, setCurrentRetrievalStep] = useState(0); // 0: Searching, 1: Reranking, 2: Drafting
 
   const bottomRef = useRef(null);
@@ -101,6 +102,7 @@ export default function ChatInterface({ onOpenSource }) {
       ]);
 
       const qs = new URLSearchParams({ query, approach: engine });
+      if (selectedCategory !== 'ALL') qs.append('category', selectedCategory);
       if (isDevilsAdvocate) qs.append('devils_advocate', 'true');
       const t0 = Date.now();
 
@@ -134,7 +136,11 @@ export default function ChatInterface({ onOpenSource }) {
           fetch(`${API_URL}/query`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ query, approach: engine }),
+            body: JSON.stringify({
+              query,
+              approach: engine,
+              category: selectedCategory !== 'ALL' ? selectedCategory : undefined,
+            }),
           })
             .then((r) => r.json())
             .then((d) => {
@@ -532,7 +538,31 @@ export default function ChatInterface({ onOpenSource }) {
         </div>
 
         {/* ══ BOTTOM INPUT AREA ═══════════════════════════════════ */}
-        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-brass/10 bg-surface/80 backdrop-blur-xl z-20">
+        <div className="absolute bottom-0 left-0 right-0 p-3 md:p-4 border-t border-brass/10 bg-[#0E0F12]/90 backdrop-blur-xl z-20">
+          <div className="max-w-4xl mx-auto mb-2 flex items-center gap-1.5 overflow-x-auto scrollbar-none pb-1">
+            {[
+              { id: 'ALL', label: 'All Statutory Acts' },
+              { id: 'BNS', label: 'BNS 2023' },
+              { id: 'BNSS', label: 'BNSS 2023' },
+              { id: 'BSA', label: 'BSA 2023' },
+              { id: 'IPC', label: 'IPC 1860' },
+              { id: 'CrPC', label: 'CrPC 1973' },
+              { id: 'Constitution', label: 'Constitution' },
+            ].map((cat) => (
+              <button
+                key={cat.id}
+                onClick={() => setSelectedCategory(cat.id)}
+                className={`px-2.5 py-1 rounded-md text-[11px] font-mono whitespace-nowrap transition-all ${
+                  selectedCategory === cat.id
+                    ? 'bg-[#B08D57] text-[#0E0F12] font-bold shadow-[0_0_8px_rgba(176,141,87,0.3)]'
+                    : 'bg-[#16181D] text-[#8A8778] hover:text-[#E9E6DD] border border-[#B08D57]/15'
+                }`}
+              >
+                {cat.label}
+              </button>
+            ))}
+          </div>
+
           <div className="max-w-4xl mx-auto relative flex items-end bg-surface-container-high rounded-lg border border-brass/10 focus-within:border-brass/40 focus-within:shadow-[0_0_12px_rgba(176,141,87,0.15)] transition-all p-2">
             <button
               onClick={toggleVoice}
