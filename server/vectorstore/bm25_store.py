@@ -18,7 +18,9 @@ LEGAL_KEEP_WORDS = {
     "plaintiff", "defendant", "appellant", "respondent", "petitioner",
     "bail", "fir", "charge", "summons", "warrant", "judgment", "decree",
     "appeal", "revision", "writ", "habeas", "corpus", "mandamus",
-    "certiorari", "prohibition", "quo", "warranto",
+    "certiorari", "prohibition", "quo", "warranto", "bns", "bnss", "bsa",
+    "ipc", "crpc", "cpc", "iea", "tpa", "hma", "rera", "ibc", "dpdp",
+    "murder", "homicide", "theft", "arrest", "zero", "evidence", "custody",
 }
 
 GENERIC_STOPWORDS = {
@@ -31,13 +33,15 @@ GENERIC_STOPWORDS = {
 }
 
 def _tokenize(text: str) -> list[str]:
-    """Legal-aware tokenization."""
+    """Legal-aware tokenization keeping statutory markers, acronyms, and section numbers."""
     text = text.lower()
-    text = re.sub(r"section\s+(\d+[a-z]?)", r"section_\1", text)
-    text = re.sub(r"article\s+(\d+[a-z]?)", r"article_\1", text)
-    text = re.sub(r"rule\s+(\d+)", r"rule_\1", text)
+    # Normalize section/article/rule tokens
+    text = re.sub(r"\b(?:section|sec|s)\.?\s*(\d+[a-z]?)", r"section_\1 \1", text)
+    text = re.sub(r"\b(?:article|art)\.?\s*(\d+[a-z]?)", r"article_\1 \1", text)
+    text = re.sub(r"\b(?:rule|r)\.?\s*(\d+)", r"rule_\1 \1", text)
+    text = re.sub(r"\b(?:order|o)\.?\s*([ivxlcdm\d]+)", r"order_\1 \1", text)
     tokens = re.findall(r"\b[\w_]+\b", text)
-    return [t for t in tokens if t in LEGAL_KEEP_WORDS or t not in GENERIC_STOPWORDS]
+    return [t for t in tokens if t in LEGAL_KEEP_WORDS or (t not in GENERIC_STOPWORDS and len(t) > 1)]
 
 class BM25Store:
     """BM25 sparse LangChain retriever wrapper."""
@@ -56,21 +60,31 @@ class BM25Store:
             return []
 
     def build(self, chunks: list[dict]):
-        """Build LangChain BM25 index from chunk dicts."""
+        """Build LangChain BM25 index from chunk dicts preserving full metadata."""
         logger.info(f"Building LangChain BM25 index from {len(chunks)} chunks...")
         
         docs = []
         for c in chunks:
+            meta = {
+                "chunk_id": c["chunk_id"],
+                "doc_id": c.get("doc_id", ""),
+                "doc_title": c.get("metadata", {}).get("title", ""),
+                "doc_type": c.get("metadata", {}).get("doc_type", "Document"),
+                "year": c.get("metadata", {}).get("year", 0),
+                "category": c.get("metadata", {}).get("category", ""),
+                "section_ref": c.get("section_ref") or "",
+                "file_name": c.get("metadata", {}).get("file_name", ""),
+            }
             docs.append(Document(
                 page_content=c["text"],
-                metadata={"chunk_id": c["chunk_id"]}
+                metadata=meta
             ))
             
         self.retriever = BM25Retriever.from_documents(docs, preprocess_func=_tokenize)
         logger.info("BM25 LangChain index built successfully")
 
     def search(self, query: str, top_k: int = 15) -> list[dict]:
-        """Search the BM25 index using LangChain."""
+        """Search the BM25 index using LangChain, returning full metadata."""
         if self.retriever is None:
             logger.error("BM25 index not built. Call build() first.")
             return []
@@ -78,13 +92,12 @@ class BM25Store:
         self.retriever.k = top_k
         docs = self.retriever.invoke(query)
         
-        # LangChain's BM25 wrapper does not expose raw scores easily via invoke()
-        # but the results are already sorted. We'll return dummy scores for interface compatibility.
         results = []
         for i, doc in enumerate(docs):
             results.append({
                 "chunk_id": doc.metadata.get("chunk_id", ""),
                 "text": doc.page_content,
+                "metadata": doc.metadata,
                 "score": 1.0 / (i + 1), # Reciprocal rank as dummy score
             })
         return results

@@ -1,0 +1,47 @@
+DOCUMENT: Indian Penal Code 1860 & Code of Criminal Procedure 1973 (Cross-Comparison to BNS & BNSS 2023)
+ACT NAME: IPC 1860 and CrPC 1973 Comparative Legal Reference
+CATEGORY: criminal_law
+JURISDICTION: India
+YEAR: 1860 / 1973 / 2023
+
+SECTION MAPPING: INDIAN PENAL CODE (IPC) TO BHARATIYA NYAYA SANHITA (BNS 2023)
+1. Section 302 IPC (Punishment for Murder) → Maps to Section 103 BNS 2023.
+   Punishment: Death or imprisonment for life, and fine. Section 103(2) BNS adds distinct death/life imprisonment for mob lynching by 5 or more persons.
+2. Section 300 IPC (Definition of Murder) → Maps to Section 101 BNS 2023.
+3. Section 299 IPC (Culpable Homicide) → Maps to Section 100 BNS 2023.
+4. Section 304 IPC (Punishment for Culpable Homicide not amounting to murder) → Maps to Section 105 BNS 2023.
+5. Section 304A IPC (Causing death by rash/negligent act) → Maps to Section 106 BNS 2023 (Includes 106(2) aggravated 10-year penalty for hit-and-run without reporting).
+6. Section 304B IPC (Dowry Death) → Maps to Section 80 BNS 2023 (Punishment: Imprisonment not less than 7 years extending to life).
+7. Section 375 & 376 IPC (Rape & Punishment) → Maps to Section 63 & 64 BNS 2023 (Minimum 10 years extending to life).
+8. Section 377 IPC (Unnatural Offences) → Omitted in BNS 2023 (Consensual acts between adults decriminalized per Navtej Singh Johar).
+9. Section 498A IPC (Cruelty by Husband or Relatives) → Maps to Section 85 & 86 BNS 2023 (Up to 3 years imprisonment and fine).
+10. Section 354 IPC (Outraging modesty of woman) → Maps to Section 74 BNS 2023.
+11. Section 354C IPC (Voyeurism) → Maps to Section 77 BNS 2023.
+12. Section 354D IPC (Stalking) → Maps to Section 78 BNS 2023.
+13. Section 378 & 379 IPC (Theft & Punishment) → Maps to Section 303 BNS 2023 (Includes community service for theft < Rs 5000 first offence).
+14. Section 420 IPC (Cheating and dishonestly inducing delivery) → Maps to Section 318(4) BNS 2023 (Imprisonment up to 7 years and fine).
+15. Section 405 & 406 IPC (Criminal Breach of Trust) → Maps to Section 316 BNS 2023.
+16. Section 499 & 500 IPC (Defamation & Punishment) → Maps to Section 356 BNS 2023 (Simple imprisonment up to 2 years, fine, or community service).
+17. Section 506 IPC (Criminal Intimidation) → Maps to Section 351 BNS 2023.
+18. Section 124A IPC (Sedition) → Repealed and replaced by Section 152 BNS 2023 (Acts endangering sovereignty, unity and integrity of India).
+19. New BNS Offences without direct IPC counterpart:
+    - Section 69 BNS: Sexual intercourse by deceitful means / false promise of marriage (up to 10 years).
+    - Section 109 BNS: Organized Crime (Death/Life and minimum Rs 10 Lakh fine).
+    - Section 111 BNS: Terrorist Acts incorporated into general criminal code.
+    - Section 112 BNS: Petty Organized Crime (1 to 7 years).
+    - Section 4(f) BNS: Community Service as a statutory sentence.
+
+SECTION MAPPING: CODE OF CRIMINAL PROCEDURE (CrPC) TO BNSS 2023
+1. Section 154 CrPC (FIR) → Maps to Section 173 BNSS 2023 (Zero FIR, electronic FIR e-FIR within 3 days, preliminary enquiry for 3-7 year offences).
+2. Section 41 CrPC (Arrest without warrant & Arnesh Kumar safeguards) → Maps to Section 35 BNSS 2023.
+3. Section 41A CrPC (Notice of Appearance) → Maps to Section 35(3) BNSS 2023.
+4. Section 57 CrPC (24-hour limit on police custody) → Maps to Section 58 BNSS 2023.
+5. Section 161 CrPC (Police examination of witnesses) → Maps to Section 180 BNSS 2023 (Audio-video electronic recording allowed).
+6. Section 164 CrPC (Statements & Confessions before Magistrate) → Maps to Section 183 BNSS 2023.
+7. Section 167 CrPC (Remand and Default Bail) → Maps to Section 187 BNSS 2023 (Police custody 15 days in whole or parts across initial 40/60 days; default bail after 60/90 days).
+8. Section 176 CrPC (Inquiry into custodial death) → Maps to Section 176 BNSS 2023 (Mandatory Judicial Magistrate inquiry, post-mortem videography, NHRC notification within 24 hours).
+9. Section 436A CrPC (Maximum undertrial detention) → Maps to Section 479 BNSS 2023 (Release on bail after one-half time served; ONE-THIRD time for first-time offenders).
+10. Section 437 CrPC (Bail in non-bailable offences) → Maps to Section 480 BNSS 2023.
+11. Section 438 CrPC (Anticipatory Bail) → Maps to Section 482 BNSS 2023.
+12. Section 439 CrPC (Special powers of Sessions Court / High Court for bail) → Maps to Section 483 BNSS 2023.
+13. Section 482 CrPC (Inherent powers of High Court / Quashing) → Maps to Section 528 BNSS 2023.

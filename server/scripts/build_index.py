@@ -125,5 +125,5 @@ def build_index(reset: bool = False):
 
 
 if __name__ == "__main__":
-    reset_flag = "--reset" in sys.argv
+    reset_flag = "--reset" in sys.argv or "--rebuild" in sys.argv
     build_index(reset=reset_flag)

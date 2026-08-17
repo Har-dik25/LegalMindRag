@@ -99,7 +99,7 @@ def run_ingestion():
             )
             
             # Record relative filepath for DB
-            rel_path = str(file_path.relative_to(config.BASE_DIR))
+            rel_path = str(file_path.relative_to(config.ROOT_DIR))
             for chunk in chunks:
                 chunk["rel_filepath"] = rel_path
                 
@@ -117,7 +117,7 @@ def run_ingestion():
     # We need to remove old chunks belonging to `modified_files` from `all_chunks.jsonl`
     # and then append the new `incremental_chunks`
     existing_chunks = []
-    modified_rel_paths = {str(p.relative_to(config.BASE_DIR)) for p in modified_files}
+    modified_rel_paths = {str(p.relative_to(config.ROOT_DIR)) for p in modified_files}
     
     if chunks_file.exists():
         with open(chunks_file, "r", encoding="utf-8") as f:

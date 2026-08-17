@@ -27,20 +27,17 @@ def build_rag_prompt(query: str, results: list) -> str:
     """
     context = format_docs_core(results)
     
-    return f"""[SYSTEM.DATALOG.INIT]
+    return f"""You have been provided with the following verified Indian legal sources:
 
-CONTEXT:
+LEGAL SOURCES:
 {context}
 
-EXTRACT LEGAL DATA FOR QUERY: {query}
+QUESTION:
+{query}
 
-[FORMAT RULES]
-1. DO NOT greet the user or say "Here is the answer".
-2. EXTRACT raw legal findings in bullet points.
-3. USE ONLY the provided context. If the context is strictly 'NO_CONTEXT_AVAILABLE', you MUST output ONLY the exact string '[ERR_NO_DATA_FOUND]' and absolutely zero other characters or words. DONT hallucinate.
-4. If there is context found, answer the query based strictly on the context.
+Provide a structured, authoritative legal answer with exact Section/Article citations, explanations of elements, punishments/remedies, and relevant historical mappings (if applicable).
 
-YOUR RAW DATA RESPONSE:"""
+LEGAL ANALYSIS & ANSWER:"""
 
 
 def format_docs_core(docs) -> str:
@@ -52,17 +49,24 @@ def format_docs_core(docs) -> str:
     total_tokens = 0
 
     for i, doc in enumerate(docs, 1):
-        # Handle both LangChain Document objects and custom RetrievalResult objects
         meta = doc.metadata if hasattr(doc, "metadata") else getattr(doc, "metadata", {})
         text = doc.page_content if hasattr(doc, "page_content") else getattr(doc, "text", "")
-        title = meta.get("doc_title", meta.get("title", ""))
+        title = meta.get("doc_title") or meta.get("title") or meta.get("file_name") or "Legal Document"
+        section_ref = meta.get("section_ref", "")
+        doc_type = meta.get("doc_type", "")
 
-        # Basic token budget check
         chunk_tokens = len(text.split()) * 1.3
-        if total_tokens + chunk_tokens > config.MAX_CONTEXT_TOKENS:
+        if total_tokens + chunk_tokens > config.MAX_CONTEXT_TOKENS and context_parts:
             break
 
-        context_parts.append(f"[{i}. {title}]\n{text}")
+        header = f'[Source {i}: {title}'
+        if section_ref:
+            header += f" | Reference: {section_ref}"
+        if doc_type:
+            header += f" | Type: {doc_type}"
+        header += "]"
+
+        context_parts.append(f"{header}\n{text}")
         total_tokens += chunk_tokens
 
     return "\n\n".join(context_parts)

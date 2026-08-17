@@ -1,0 +1,74 @@
+DOCUMENT: Bharatiya Sakshya Adhiniyam, 2023 (Act No. 47 of 2023)
+ACT NAME: Bharatiya Sakshya Adhiniyam, 2023 (BSA)
+CATEGORY: evidence_law
+JURISDICTION: India
+YEAR: 2023
+
+PART I: RELEVANCY OF FACTS
+Section 1. Short title, application and commencement.
+(1) This Act may be called the Bharatiya Sakshya Adhiniyam, 2023.
+(2) It shall come into force on the 1st day of July, 2024.
+(3) It applies to all judicial proceedings in or before any Court, including Courts-martial, and replaces the Indian Evidence Act, 1872 (IEA).
+
+Section 2. Definitions.
+(1)(c) "document" means any matter expressed or described, or otherwise recorded upon any substance by means of letters, figures or marks or any other means or by more than one of those means, intended to be used, or which may be used, for the purpose of recording that matter and includes electronic and digital records.
+(1)(e) "evidence" means and includes—
+    (i) all statements which the Court permits or requires to be made before it by witnesses (oral evidence);
+    (ii) all documents including electronic or digital records produced for the inspection of the Court (documentary evidence).
+
+Section 22. Confession to police officer not to be proved. (Equivalent to Section 25 IEA).
+No confession made to a police officer shall be proved as against a person accused of any offence.
+
+Section 23. Confession by accused while in custody of police not to be proved against him. (Equivalent to Section 26 IEA).
+No confession made by any person whilst he is in the custody of a police officer, unless it be made in the immediate presence of a Magistrate, shall be proved as against such person.
+
+Section 24. How much of information received from accused may be proved (Discovery of Fact). (Equivalent to Section 27 IEA).
+Provided that, when any fact is deposed to as discovered in consequence of information received from a person accused of any offence, in the custody of a police officer, so much of such information, whether it amounts to a confession or not, as relates distinctly to the fact thereby discovered, may be proved.
+
+Section 26. Confession made after removal of impression caused by inducement, threat or promise relevant. (Equivalent to Section 28 IEA).
+If such a confession is made after the impression caused by any such inducement, threat or promise has, in the opinion of the Court, been fully removed, it is relevant.
+
+Section 32. Dying Declaration. (Equivalent to Section 32(1) IEA).
+Statements, written or verbal, of relevant facts made by a person who is dead, or who cannot be found, or who has become incapable of giving evidence, are themselves relevant when the statement is made by a person as to the cause of his death, or as to any of the circumstances of the transaction which resulted in his death.
+
+PART II: ON PROOF (ELECTRONIC AND DIGITAL EVIDENCE)
+Section 57. Certificate for Admissibility of Electronic Records. (Equivalent to Section 65B IEA).
+(1) Any electronic record produced in court as secondary evidence shall be accompanied by a Certificate signed by a person occupying a responsible official position in relation to the operation of the relevant device or the management of the relevant activities.
+(2) The Certificate under Section 57 shall:
+    (a) Identify the electronic record containing the statement and describe the manner in which it was produced;
+    (b) Give such particulars of any device involved in the production of that electronic record;
+    (c) Deal with any of the matters mentioned in section 63;
+    (d) State that the computer/system was operating properly during the relevant period.
+(3) PRIMARY VS SECONDARY: If the original physical device (e.g. phone, laptop, hard disk) is brought and produced before the Court as primary evidence, NO Section 57 certificate is required. If printouts, copies, USB drives, or secondary exports are submitted, Section 57 Certificate is MANDATORY, failing which the electronic evidence is INADMISSIBLE.
+
+Section 58. Admissibility of Social Media and Digital Communications.
+(1) Electronic communications including text messages, multimedia messages, emails, WhatsApp messages, Telegram chats, Instagram messages, Facebook communications, and cloud-stored records are admissible as documentary evidence.
+(2) Authentication of Social Media records may be established through:
+    (a) Certificate under Section 57;
+    (b) Hash value verification (cryptographic hash matching original source);
+    (c) Metadata analysis (timestamps, sender/receiver IP addresses, IMEI, MAC address);
+    (d) Digital signature verification;
+    (e) Expert opinion under Section 39 (Cyber Forensic Expert / Examiner of Electronic Evidence).
+
+Section 61. Electronic or digital records as primary evidence.
+Electronic or digital records stored in multiple files, cloud servers, distributed systems, or backup storage shall be considered primary evidence if each storage location is created in the ordinary course of business.
+
+Section 63. Special provisions as to evidence relating to electronic record.
+Conditions for admissibility of computer output and electronic records:
+(a) Computer output was produced during the period over which the computer was used regularly to store or process information;
+(b) Information of the kind contained in the electronic record was regularly supplied to the computer;
+(c) The computer was operating properly, or if not, the defect did not affect the accuracy of the record;
+(d) The information contained in the electronic record reproduces or is derived from such information supplied to the computer in the ordinary course.
+
+PART III: PRODUCTION AND EFFECT OF EVIDENCE
+Section 104. Burden of proof. (Equivalent to Section 101 IEA).
+Whoever desires any Court to give judgment as to any legal right or liability dependent on the existence of facts which he asserts, must prove that those facts exist.
+
+Section 108. Burden of proving that case of accused comes within exceptions. (Equivalent to Section 105 IEA).
+When a person is accused of any offence, the burden of proving the existence of circumstances bringing the case within any of the General Exceptions in the Bharatiya Nyaya Sanhita, 2023, is upon him, and the Court shall presume the absence of such circumstances.
+
+Section 116. Presumption as to abetment of suicide by a married woman. (Equivalent to Section 113A IEA).
+If a married woman commits suicide within seven years from the date of her marriage and it is shown that her husband or his relative subjected her to cruelty, the Court may presume that such suicide had been abetted by her husband or relative.
+
+Section 117. Presumption as to dowry death. (Equivalent to Section 113B IEA).
+When the question is whether a person has committed the dowry death of a woman and it is shown that soon before her death such woman had been subjected by such person to cruelty or harassment for, or in connection with, any demand for dowry, the Court SHALL presume that such person had caused the dowry death.

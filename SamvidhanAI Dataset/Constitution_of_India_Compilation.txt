@@ -1,0 +1,132 @@
+DOCUMENT: The Constitution of India (Full Text & Fundamental Rights Compilation)
+ACT NAME: Constitution of India
+CATEGORY: constitutional_law
+JURISDICTION: India
+YEAR: 1950
+
+PREAMBLE
+WE, THE PEOPLE OF INDIA, having solemnly resolved to constitute India into a SOVEREIGN SOCIALIST SECULAR DEMOCRATIC REPUBLIC and to secure to all its citizens:
+JUSTICE, social, economic and political;
+LIBERTY of thought, expression, belief, faith and worship;
+EQUALITY of status and of opportunity;
+and to promote among them all FRATERNITY assuring the dignity of the individual and the unity and integrity of the Nation;
+IN OUR CONSTITUENT ASSEMBLY this twenty-sixth day of November, 1949, do HEREBY ADOPT, ENACT AND GIVE TO OURSELVES THIS CONSTITUTION.
+
+PART III: FUNDAMENTAL RIGHTS (ARTICLES 12 TO 35)
+Article 12. Definition of State.
+Includes Government and Parliament of India, Government and Legislature of each State, and all local or other authorities within the territory of India or under the control of the Government of India.
+
+Article 13. Laws inconsistent with or in derogation of the fundamental rights.
+(1) All laws in force in the territory of India immediately before the commencement of this Constitution, in so far as they are inconsistent with the provisions of this Part, shall, to the extent of such inconsistency, be void (Doctrine of Eclipse & Severability).
+(2) The State shall not make any law which takes away or abridges the rights conferred by this Part. Judicial Review is anchored in Article 13.
+
+Right to Equality (Articles 14 - 18)
+Article 14. Equality before law.
+The State shall not deny to any person equality before the law or the equal protection of the laws within the territory of India. Covers non-arbitrariness (E.P. Royappa v. State of TN) and reasonable classification test.
+Article 15. Prohibition of discrimination on grounds of religion, race, caste, sex or place of birth.
+(1) State shall not discriminate against any citizen on grounds only of religion, race, caste, sex, place of birth.
+(3) Special provisions for women and children permitted.
+(4) Special provisions for advancement of socially and educationally backward classes or SC/ST.
+(6) 10% EWS reservation (103rd Constitutional Amendment).
+Article 16. Equality of opportunity in matters of public employment.
+(4) Reservation of appointments or posts in favour of any backward class of citizens (Indra Sawhney v. UOI, 50% cap).
+Article 17. Abolition of Untouchability.
+Untouchability is abolished and its practice in any form is forbidden. Enforced through the Protection of Civil Rights Act, 1955.
+Article 18. Abolition of titles.
+
+Right to Freedom (Articles 19 - 22)
+Article 19. Protection of certain rights regarding freedom of speech, etc.
+(1) All citizens shall have the right—
+    (a) to freedom of speech and expression (includes press freedom, right to know/RTI, internet access per Anuradha Bhasin);
+    (b) to assemble peaceably and without arms;
+    (c) to form associations or unions or co-operative societies;
+    (d) to move freely throughout the territory of India;
+    (e) to reside and settle in any part of the territory of India;
+    (g) to practise any profession, or to carry on any occupation, trade or business.
+(2) Reasonable restrictions: sovereignty and integrity of India, security of the State, friendly relations with foreign States, public order, decency or morality, contempt of court, defamation or incitement to an offence.
+
+Article 20. Protection in respect of conviction for offences.
+(1) Ex post facto law protection: No person shall be convicted of any offence except for violation of a law in force at the time of the commission of the act.
+(2) Double Jeopardy: No person shall be prosecuted and punished for the same offence more than once.
+(3) Right against Self-Incrimination: No person accused of any offence shall be compelled to be a witness against himself (Selvi v. State of Karnataka — narco-analysis/polygraph involuntary testing prohibited).
+
+Article 21. Protection of life and personal liberty.
+No person shall be deprived of his life or personal liberty except according to procedure established by law.
+EXPANSION OF ARTICLE 21 (Maneka Gandhi v. UOI): Procedure must be just, fair, and reasonable (Due Process).
+Includes:
+- Right to Privacy (K.S. Puttaswamy v. UOI, 2017)
+- Right to Livelihood (Olga Tellis v. Bombay Municipal Corp)
+- Right to Clean Environment and Water (Subhash Kumar, M.C. Mehta)
+- Right to Speedy Trial (Hussainara Khatoon)
+- Right to Free Legal Aid (Hussainara Khatoon, Khatri v. State of Bihar)
+- Right to Health and Medical Care (Paschim Banga Khet Samiti)
+- Right to Die with Dignity / Passive Euthanasia (Common Cause v. UOI)
+- Right to Shelter, Dignity, and Education.
+
+Article 21A. Right to education.
+The State shall provide free and compulsory education to all children of the age of six to fourteen years (86th Amendment, 2002; Right to Education Act, 2009).
+
+Article 22. Protection against arrest and detention in certain cases.
+(1) Right to be informed of grounds of arrest as soon as may be.
+(2) Right to consult and be defended by a legal practitioner of choice.
+(3) Right to be produced before nearest Magistrate within 24 hours of arrest.
+(4) Preventive detention safeguards: Maximum 3 months unless Advisory Board confirms necessity.
+
+Right against Exploitation (Articles 23 - 24)
+Article 23. Prohibition of traffic in human beings and forced labour (Begar).
+Article 24. Prohibition of employment of children in factories, mines or hazardous employment below 14 years.
+
+Right to Freedom of Religion (Articles 25 - 28)
+Article 25. Freedom of conscience and free profession, practice and propagation of religion.
+Article 26. Freedom to manage religious affairs.
+
+Cultural and Educational Rights (Articles 29 - 30)
+Article 29. Protection of interests of minorities (conservation of distinct language, script or culture).
+Article 30. Right of minorities to establish and administer educational institutions (TMA Pai Foundation, P.A. Inamdar).
+
+Right to Constitutional Remedies (Article 32)
+Article 32. Remedies for enforcement of rights conferred by Part III.
+(1) The right to move the Supreme Court by appropriate proceedings for the enforcement of the rights conferred by this Part is guaranteed (Heart and Soul of the Constitution per Dr. B.R. Ambedkar).
+(2) The Supreme Court shall have power to issue directions or orders or writs, including writs in the nature of:
+    (a) HABEAS CORPUS: "To have the body" — commands the person detaining another to produce the body before the Court to test the legality of detention.
+    (b) MANDAMUS: "We command" — orders a public official, authority or inferior court to perform a mandatory statutory duty.
+    (c) PROHIBITION: Issued to an inferior court or tribunal to prevent it from exceeding its jurisdiction or usurping jurisdiction.
+    (d) CERTIORARI: "To be certified" — quashes an order passed by a lower court, tribunal or quasi-judicial body lacking jurisdiction or violating principles of natural justice.
+    (e) QUO WARRANTO: "By what authority" — challenges the right or title of a person to hold a public substantive office.
+
+HIGH COURT WRIT JURISDICTION (ARTICLE 226)
+Article 226. Power of High Courts to issue certain writs.
+Every High Court shall have power, throughout the territories in relation to which it exercises jurisdiction, to issue to any person or authority writs (Habeas Corpus, Mandamus, Prohibition, Quo Warranto, Certiorari) for the enforcement of Fundamental Rights (Part III) AND FOR ANY OTHER PURPOSE (wider jurisdiction than Supreme Court under Article 32).
+
+PART IV: DIRECTIVE PRINCIPLES OF STATE POLICY (DPSP, ARTICLES 36 TO 51)
+Non-justiciable principles fundamental in governance:
+- Article 39A: Equal justice and free legal aid.
+- Article 40: Organization of village panchayats.
+- Article 44: Uniform Civil Code for the citizens throughout India.
+- Article 48A: Protection and improvement of environment and safeguarding of forests and wild life.
+- Article 50: Separation of judiciary from executive.
+
+PART IVA: FUNDAMENTAL DUTIES (ARTICLE 51A)
+Added by 42nd Amendment 1976 (Swaran Singh Committee): 11 Fundamental Duties for every citizen of India.
+
+PART XX: AMENDMENT OF THE CONSTITUTION (ARTICLE 368) & BASIC STRUCTURE DOCTRINE
+Article 368. Power of Parliament to amend the Constitution and procedure therefor.
+Parliament may amend any provision of the Constitution by Special Majority (and ratification by half of state legislatures for federal provisions).
+BASIC STRUCTURE DOCTRINE (Kesavananda Bharati v. State of Kerala, 1973):
+Parliament's power under Article 368 is limited. Parliament cannot amend, alter, or destroy the "Basic Structure" of the Constitution.
+Core elements of Basic Structure include:
+1. Supremacy of the Constitution
+2. Republican and Democratic form of Government
+3. Secular character of the Constitution
+4. Separation of Powers between Legislature, Executive and Judiciary
+5. Federal character of the Constitution
+6. Rule of Law and Judicial Review (Articles 32, 226, 136)
+7. Free and Fair Elections
+8. Fundamental Rights (Articles 14, 19, 21 balance with DPSPs)
+9. Independence of Judiciary
+
+PART XVIII: EMERGENCY PROVISIONS (ARTICLES 352 TO 360)
+Article 352. Proclamation of National Emergency (War, External Aggression, Armed Rebellion).
+Article 356. President's Rule in States on failure of constitutional machinery (S.R. Bommai guidelines).
+Article 358 & 359. Suspension of rights during emergency.
+(44th Constitutional Amendment 1978): Articles 20 and 21 CAN NEVER BE SUSPENDED even during an Emergency.

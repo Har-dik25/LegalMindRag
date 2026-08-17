@@ -17,5 +17,13 @@ logs/
 data/*
 !data/*.dvc
 !data/.gitignore
-SamvidhanAI Dataset/
-/SamvidhanAI Dataset
+
+# Ignore raw massive datasets, but include core statute files
+SamvidhanAI Dataset/*
+!SamvidhanAI Dataset/Bharatiya_Nyaya_Sanhita_2023.txt
+!SamvidhanAI Dataset/Bharatiya_Nagarik_Suraksha_Sanhita_2023.txt
+!SamvidhanAI Dataset/Bharatiya_Sakshya_Adhiniyam_2023.txt
+!SamvidhanAI Dataset/Constitution_of_India_Compilation.txt
+!SamvidhanAI Dataset/Indian_Penal_Code_and_CrPC_Comparison.txt
+!SamvidhanAI Dataset/Indian_Commercial_Cyber_Special_Laws.txt
+!SamvidhanAI Dataset/Legal_Maxims_Principles_Doctrines.txt

@@ -9,6 +9,7 @@ from sentence_transformers import CrossEncoder
 from embeddings.embedder import Embedder
 from vectorstore.chroma_store import ChromaStore
 from vectorstore.bm25_store import BM25Store
+from retrieval.query_preprocessor import extract_query_section_ref
 import config
 
 logger = logging.getLogger(__name__)
@@ -30,7 +31,7 @@ class CoreHybridRetriever:
     Core Python Retrieval Pipeline (No LangChain):
     1. Direct ChromaDB semantic search (dense)
     2. Direct BM25 keyword search (sparse)
-    3. Reciprocal Rank Fusion (RRF)
+    3. Reciprocal Rank Fusion (RRF) with Section Boosting
     4. Optional Cross-encoder re-ranking
     """
 
@@ -51,8 +52,12 @@ class CoreHybridRetriever:
         if load_reranker:
             model_name = reranker_model or config.CROSS_ENCODER_MODEL
             logger.info(f"Loading cross-encoder reranker: {model_name}")
-            self.reranker = CrossEncoder(model_name)
-            logger.info("Reranker loaded successfully")
+            try:
+                self.reranker = CrossEncoder(model_name)
+                logger.info("Reranker loaded successfully")
+            except Exception as e:
+                logger.warning(f"Could not load cross-encoder ({e}), falling back to RRF.")
+                self.reranker = None
 
     def retrieve(
         self,
@@ -82,7 +87,7 @@ class CoreHybridRetriever:
                 text=r["text"],
                 score=r["score"],
                 source="dense",
-                metadata=r["metadata"],
+                metadata=r.get("metadata", {}),
             ))
 
         # 2. Sparse retrieval: BM25 keyword search
@@ -98,8 +103,11 @@ class CoreHybridRetriever:
                 metadata=r.get("metadata", {}),
             ))
 
+        # Extract target section for section-boosted fusion
+        target_section = extract_query_section_ref(query)
+
         # 3. RRF Fusion
-        fused = self._reciprocal_rank_fusion(dense_items, sparse_items)
+        fused = self._reciprocal_rank_fusion(dense_items, sparse_items, target_section=target_section)
 
         # 4. Re-rank (optional)
         if use_reranker and self.reranker and fused:
@@ -114,10 +122,10 @@ class CoreHybridRetriever:
         dense_results: list[RetrievalResult],
         sparse_results: list[RetrievalResult],
         k: int = None,
+        target_section: str = None,
     ) -> list[RetrievalResult]:
         """
-        Reciprocal Rank Fusion — merge dense and sparse results.
-        RRF_score(doc) = sum(1 / (k + rank)) across all lists.
+        Reciprocal Rank Fusion — merge dense and sparse results with section priority boost.
         """
         k = k or config.RRF_K
         scores: dict[str, float] = {}
@@ -126,7 +134,16 @@ class CoreHybridRetriever:
         def process_results(results: list[RetrievalResult]):
             for rank, result in enumerate(results):
                 cid = result.chunk_id
-                scores[cid] = scores.get(cid, 0) + 1.0 / (k + rank + 1)
+                base_score = 1.0 / (k + rank + 1)
+                
+                # Section match bonus
+                if target_section:
+                    sec_ref = result.metadata.get("section_ref", "") or ""
+                    content_start = result.text[:150]
+                    if target_section.lower() in sec_ref.lower() or target_section.lower() in content_start.lower():
+                        base_score *= 1.8
+
+                scores[cid] = scores.get(cid, 0) + base_score
                 if cid not in result_map:
                     result_map[cid] = RetrievalResult(
                         chunk_id=cid,
@@ -135,6 +152,10 @@ class CoreHybridRetriever:
                         source="hybrid",
                         metadata=result.metadata,
                     )
+                else:
+                    for key, val in result.metadata.items():
+                        if val and not result_map[cid].metadata.get(key):
+                            result_map[cid].metadata[key] = val
 
         process_results(dense_results)
         process_results(sparse_results)
@@ -158,10 +179,13 @@ class CoreHybridRetriever:
             return []
 
         pairs = [(query, r.text) for r in results]
-        scores = self.reranker.predict(pairs)
+        try:
+            scores = self.reranker.predict(pairs)
+            for result, score in zip(results, scores):
+                result.rerank_score = float(score)
 
-        for result, score in zip(results, scores):
-            result.rerank_score = float(score)
+            results.sort(key=lambda r: r.rerank_score, reverse=True)
+        except Exception as e:
+            logger.error(f"Core re-ranking failed ({e}), keeping RRF order.")
 
-        results.sort(key=lambda r: r.rerank_score, reverse=True)
         return results[:top_k]

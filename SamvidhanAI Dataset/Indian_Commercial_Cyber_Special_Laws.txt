@@ -1,0 +1,88 @@
+DOCUMENT: Indian Commercial, Cyber, Family, Property and Special Laws Compilation
+ACT NAME: Indian Special Statutes Reference Compilation
+CATEGORY: commercial_civil_special_law
+JURISDICTION: India
+YEAR: 1882-2024
+
+1. DIGITAL PERSONAL DATA PROTECTION ACT, 2023 (DPDP ACT 2023)
+- Purpose: Regulates processing of digital personal data respecting individual privacy rights and lawful processing needs.
+- Rights of Data Principal (Section 11):
+  (a) Right to access information about personal data;
+  (b) Right to correction and erasure of personal data;
+  (c) Right of grievance redressal (Data Fiduciary -> Data Protection Board);
+  (d) Right to nominate in case of death or incapacity.
+- Obligations of Data Fiduciary (Section 8): Reasonable security safeguards, prompt notification to Board and Data Principals in event of data breach.
+- Penalties for Data Breach (Section 33 / Schedule):
+  (a) Failure to take reasonable security safeguards to prevent data breach: Penalty up to Rs. 250 CRORE (Section 33(a));
+  (b) Failure to notify Data Protection Board and affected Data Principals of data breach: Penalty up to Rs. 200 CRORE (Section 33(b));
+  (c) Breach in observance of additional obligations in relation to children: Up to Rs. 200 CRORE (Section 33(c));
+  (d) Non-compliance by Significant Data Fiduciary with specific obligations: Up to Rs. 150 CRORE (Section 33(d)).
+
+2. INFORMATION TECHNOLOGY ACT, 2000 (IT ACT)
+- Section 43A: Compensation for failure to protect data (reasonable security practices).
+- Section 66: Computer related offences / hacking (imprisonment up to 3 years or fine up to Rs 5 lakh).
+- Section 66A: Struck down as unconstitutional by Supreme Court in Shreya Singhal v. Union of India (2015) for violating Article 19(1)(a).
+- Section 66E: Punishment for violation of privacy (capturing/publishing private images without consent) — imprisonment up to 3 years or fine up to Rs 2 lakh.
+- Section 67 & 67A: Publishing obscene or sexually explicit material electronically (imprisonment up to 5 years, second conviction up to 7 years).
+- Section 69A: Power to issue directions for blocking for public access of information in interest of sovereignty/security of India.
+
+3. REAL ESTATE (REGULATION AND DEVELOPMENT) ACT, 2016 (RERA 2016)
+- Section 3: Mandatory RERA registration for all commercial and residential real estate projects where the area of land exceeds 500 square meters or number of apartments exceeds 8.
+- Section 11(4)(l) / Section 4(2)(l)(D): 70% of amounts realized from allottees for the real estate project must be deposited in a separate escrow account in a scheduled bank to cover the cost of construction and land cost.
+- Section 14: Adherence to sanctioned plans — no additions or alterations without written consent of at least two-thirds of allottees.
+- Section 18: Return of amount and compensation: If developer fails to deliver possession within agreed timeline, allottee is entitled to full refund with interest (at SBI highest MCLR + 2%), OR monthly interest for every month of delay until possession is handed over.
+
+4. INSOLVENCY AND BANKRUPTCY CODE, 2016 (IBC 2016)
+- CIRP Threshold: Minimum default of Rs. 1 CRORE required to initiate Corporate Insolvency Resolution Process (CIRP under Section 4).
+- CIRP Timeline: Must be completed within 180 days, extendable by 90 days, maximum cap 330 days including litigation (Section 12).
+- Waterfall Mechanism on Liquidation (Section 53 Priority of Claims):
+  1. FIRST: Insolvency resolution process costs and liquidation costs paid in full.
+  2. SECOND: Workmen's dues (for preceding 24 months) and debts owed to secured creditors (equal ranking, pari passu).
+  3. THIRD: Wages and unpaid dues owed to employees (other than workmen) for preceding 12 months.
+  4. FOURTH: Financial debts owed to unsecured creditors.
+  5. FIFTH: Government dues (Central and State Government taxes) and remaining unpaid secured creditor balance.
+  6. SIXTH: Any remaining debts and dues.
+  7. SEVENTH: Preference shareholders.
+  8. EIGHTH: Equity shareholders.
+
+5. ARBITRATION AND CONCILIATION ACT, 1996
+- Section 29A: Time limit for arbitral award — Award must be made within 12 MONTHS from the date the arbitral tribunal enters upon reference. May be extended by 6 months by mutual consent of parties (total 18 months). Beyond 18 months, only Court can extend on sufficient cause. Fast track procedure (Section 29B) requires award within 6 months.
+- Section 34: Setting aside arbitral award — Application must be made within 3 MONTHS (extendable by maximum 30 days) on strict grounds: incapacity, invalid agreement, lack of notice, dispute beyond scope, tribunal improper, conflict with public policy of India / patent illegality. Court cannot re-appreciate evidence on merits.
+
+6. PROTECTION OF WOMEN FROM DOMESTIC VIOLENCE ACT, 2005 (DV ACT 2005)
+- Applicable only to aggrieved women in a domestic relationship.
+- Reliefs available from Magistrate:
+  - Section 18: Protection Orders (restraining respondent from committing DV, entering workplace, communicating).
+  - Section 19: Residence Orders (restraining from dispossessing or directing alternate accommodation).
+  - Section 20: Monetary Reliefs (loss of earnings, medical expenses, maintenance).
+  - Section 21: Custody Orders (temporary custody of children).
+  - Section 22: Compensation Orders (damages for injuries and emotional distress).
+  - Section 31: Penalty for breach of protection order — imprisonment up to 1 year or fine up to Rs 20,000 or both (cognizable and non-bailable).
+
+7. HINDU MARRIAGE ACT, 1955 (HMA 1955)
+- Section 13(1): Grounds for divorce available to either spouse:
+  (i) Adultery; (ia) Cruelty; (ib) Desertion for a continuous period of not less than 2 years; (ii) Ceased to be a Hindu by conversion; (iii) Incurable unsoundness of mind; (iv) Virulent and incurable leprosy; (v) Venereal disease in communicable form; (vi) Renounced world (sanyas); (vii) Not heard alive for 7 years.
+- Section 13B: Divorce by Mutual Consent — Joint petition on ground of living separately for 1 year or more, 6-month cooling off period (waivable by Court in exceptional circumstances per Amardeep Singh v. Harveen Kaur).
+
+8. TRANSFER OF PROPERTY ACT, 1882 (TPA 1882)
+- Section 54: Sale and Agreement to Sell. A sale transfers ownership; an agreement to sell is a promise to transfer on satisfaction of conditions and does not create an interest in the property.
+- Section 58: Six Types of Mortgages:
+  1. Simple Mortgage (mortgagor binds personally, property sold on default without possession transfer);
+  2. Mortgage by Conditional Sale (ostensible sale with condition to reconvey on payment);
+  3. Usufructuary Mortgage (possession delivered, mortgagee receives rents/profits in lieu of interest);
+  4. English Mortgage (absolute transfer with agreement to re-transfer on payment on fixed date);
+  5. Mortgage by Deposit of Title Deeds / Equitable Mortgage (delivery of title deeds with intent to create security);
+  6. Anomalous Mortgage (composite mortgage not falling in other five categories).
+- Section 60: Right of mortgagor to redeem — "Once a mortgage, always a mortgage."
+
+9. INCOME TAX REGIMES (SECTION 115BAC)
+- New Tax Regime (Section 115BAC, default from AY 2024-25): Lower tax slabs (0-3L Nil, 3-7L 5%, 7-10L 10%, 10-12L 15%, 12-15L 20%, >15L 30%), standard deduction Rs. 75,000, but major chapter VI-A deductions (80C, 80D, HRA) foregone.
+- Old Tax Regime: Higher slabs (0-2.5L Nil, 2.5-5L 5%, 5-10L 20%, >10L 30%), allows deductions under 80C (Rs 1.5L), 80D (health insurance), 80CCD (NPS Rs 50k), HRA exemption, and home loan interest under Section 24(b) (Rs 2L).
+
+10. CONSUMER PROTECTION ACT, 2019
+- Pecuniary Jurisdictions:
+  - District Consumer Commission: Claims up to Rs. 50 LAKH;
+  - State Consumer Commission: Claims from Rs. 50 LAKH to Rs. 2 CRORE;
+  - National Consumer Disputes Redressal Commission (NCDRC): Claims exceeding Rs. 2 CRORE.
+- e-Daakhil: Facility for filing online consumer complaints.
+- Limitation Period: 2 years from date of cause of action.

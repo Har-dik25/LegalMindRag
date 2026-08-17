@@ -1,0 +1,45 @@
+DOCUMENT: Legal Maxims, Principles, Doctrines and Landmark Jurisprudence
+ACT NAME: Indian Legal Maxims and Jurisprudential Doctrines
+CATEGORY: legal_principles
+JURISDICTION: India
+YEAR: 2024
+
+1. AUDI ALTERAM PARTEM ("Hear the other side")
+- Meaning: No person should be judged unheard. It is the cornerstone of Natural Justice.
+- Application in Indian Law: Every authority making a judicial, quasi-judicial, or administrative decision affecting civil rights must provide a fair and reasonable opportunity of hearing to the affected party.
+- Key Case Law:
+  - Maneka Gandhi v. Union of India (1978): Article 21 incorporates procedural fairness and natural justice. Any procedure depriving life or liberty without hearing is void.
+  - A.K. Kraipak v. Union of India (1969): Rules of natural justice operate in administrative as well as quasi-judicial inquiries.
+  - Ridge v. Baldwin (1964): The duty to act judicially is implicit in the duty to act fairly.
+
+2. NEMO JUDEX IN CAUSA SUA ("No one should be a judge in their own cause")
+- Meaning: Rule against bias (Pecuniary, Personal, or Subject-matter bias).
+- Key Case Law:
+  - A.K. Kraipak v. Union of India: A member of the selection board was himself a candidate for selection — whole selection was quashed for bias.
+  - Gullapalli Nageswara Rao v. APSRTC: The Secretary who heard the objections was the one who framed the nationalization scheme — scheme quashed for official bias.
+
+3. BASIC STRUCTURE DOCTRINE
+- Established in: Kesavananda Bharati v. State of Kerala (1973) by a 13-Judge Constitutional Bench.
+- Principle: Parliament has amending powers under Article 368 but cannot alter, abrogate, or destroy the core framework or basic structure of the Constitution.
+- Re-affirmed in:
+  - Indira Nehru Gandhi v. Raj Narain (1975): Free and fair elections and Rule of Law are basic structure.
+  - Minerva Mills v. Union of India (1980): Limited amending power and balance between Fundamental Rights and DPSPs are basic structure.
+  - S.R. Bommai v. Union of India (1994): Secularism and Federalism are basic structure.
+  - I.R. Coelho v. State of Tamil Nadu (2007): Laws in the Ninth Schedule are subject to judicial review if they violate Part III basic structure.
+
+4. RATIO DECIDENDI AND OBITER DICTA
+- Ratio Decidendi: "The reason for the decision" — the rule of law on which the judgment is founded, which forms binding precedent under Article 141 of the Constitution.
+- Obiter Dicta: "Things said by the way" — passing observations or opinions by judges not essential to the determination of the legal issue, holding persuasive value but not binding precedent.
+
+5. RES JUDICATA (Section 11, Code of Civil Procedure 1908)
+- Meaning: A matter that has been finally adjudicated by a competent court cannot be relitigated between the same parties on the same cause of action.
+- Maxim: Interest reipublicae ut sit finis litium (It is in the interest of the State that there should be an end to litigation) and Nemo debet bis vexari pro una et eadem causa (No person should be vexed twice for the same cause).
+- Constructive Res Judicata (Explanation IV to Section 11 CPC): Any matter which might and ought to have been made ground of defence or attack in the former suit shall be deemed to have been a matter directly and substantially in issue.
+
+6. STARE DECISIS (Article 141 of the Constitution of India)
+- Meaning: "To stand by things decided." The law declared by the Supreme Court shall be binding on all courts within the territory of India.
+
+7. ELECTORAL BONDS VERDICT (2024 LANDMARK)
+- Case: Association for Democratic Reforms (ADR) v. Union of India (2024).
+- 5-Judge Constitution Bench unanimously struck down the Electoral Bonds Scheme as unconstitutional.
+- Violative of voters' right to information under Article 19(1)(a). Directed SBI to disclose all donor and recipient details to the Election Commission of India.

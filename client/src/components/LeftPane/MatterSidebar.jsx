@@ -1,130 +1,194 @@
 import React, { useState } from 'react';
-import { useDropzone } from 'react-dropzone';
 import { motion, AnimatePresence } from 'framer-motion';
-import {
-  FolderOpen, FolderClosed, Plus, Clock, Scale,
-  Upload, CheckCircle2, Loader2, File, Trash2, X
-} from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import toast from 'react-hot-toast';
 
-const RECENT_QUERIES = [
-  'BNS Section 103 – Murder', 'Kesavananda Bharati judgment',
-  'Bail in non-bailable offences', 'Article 21 – Right to Life',
-];
-
 export default function MatterSidebar() {
-  const { matters, activeMatter, setActiveMatter, addMatter, removeMatter } = useApp();
-  const [uploadedFiles, setUploadedFiles] = useState([]);
+  const {
+    matters,
+    activeMatter,
+    setActiveMatter,
+    addMatter,
+    removeMatter,
+    setCaseIntakeOpen,
+    sidebarCollapsed,
+    toggleSidebar,
+    engine,
+    setEngine,
+  } = useApp();
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    accept: { 'application/pdf': ['.pdf'], 'text/plain': ['.txt'] },
-    multiple: true,
-    onDrop: (files) => {
-      const newFiles = files.map(f => ({ name: f.name, status: 'processing', size: f.size }));
-      setUploadedFiles(p => [...p, ...newFiles]);
-      toast.loading(`Vectorizing ${files.length} file(s)...`, { duration: 2500 });
-      setTimeout(() => {
-        setUploadedFiles(p => p.map(f =>
-          newFiles.find(nf => nf.name === f.name) ? { ...f, status: 'done' } : f
-        ));
-        toast.success('✅ Files vectorized locally!');
-      }, 2500);
-    },
-  });
+  const [activeTab, setActiveTab] = useState('library');
 
   return (
-    <div className="h-full flex flex-col overflow-hidden bg-zinc-900/40 dark:bg-zinc-900/40 light:bg-slate-100/80">
-      {/* Header */}
-      <div className="px-4 pt-5 pb-3 border-b border-white/5 dark:border-white/5 light:border-zinc-200 flex-shrink-0">
-        <div className="flex items-center justify-between mb-3">
-          <span className="text-[10px] font-bold text-zinc-600 uppercase tracking-widest">Matters</span>
-          <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} onClick={addMatter}
-            className="w-6 h-6 rounded-md bg-zinc-800 hover:bg-amber-900/40 flex items-center justify-center text-zinc-500 hover:text-amber-400 transition-all" title="New Matter">
-            <Plus className="w-3.5 h-3.5" />
-          </motion.button>
-        </div>
-
-        <div className="space-y-1">
-          {matters.map(m => (
-            <div key={m.id} className="group flex items-center gap-2">
-              <motion.button layout onClick={() => setActiveMatter(m.id)}
-                className={`flex-1 flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium transition-all ${
-                  activeMatter === m.id
-                    ? 'bg-gradient-to-r from-amber-900/30 to-orange-900/20 text-amber-300 border border-amber-500/20'
-                    : 'text-zinc-500 hover:bg-zinc-800/50 hover:text-zinc-300'
-                }`}>
-                {activeMatter === m.id ? <FolderOpen className="w-3.5 h-3.5 flex-shrink-0" /> : <FolderClosed className="w-3.5 h-3.5 flex-shrink-0 opacity-50" />}
-                <span className="truncate">{m.name}</span>
-              </motion.button>
-              {m.id !== 'default' && (
-                <button onClick={() => removeMatter(m.id)}
-                  className="opacity-0 group-hover:opacity-100 p-1 rounded-md text-zinc-700 hover:text-red-400 hover:bg-red-900/20 transition-all">
-                  <Trash2 className="w-3 h-3" />
-                </button>
-              )}
-            </div>
-          ))}
-        </div>
+    <aside
+      className={`bg-panel-slate h-full ${
+        sidebarCollapsed ? 'w-20' : 'w-64'
+      } border-r border-brass/10 flex flex-col py-6 flex-shrink-0 transition-all duration-220 ease-out z-30 select-none`}
+    >
+      {/* New Matter Button */}
+      <div className="px-4 mb-6">
+        <button
+          onClick={() => setCaseIntakeOpen ? setCaseIntakeOpen(true) : addMatter()}
+          className="brass-button w-full py-2.5 px-3 rounded font-label-sm text-[12px] font-semibold flex items-center justify-center gap-2 cursor-pointer active:scale-[0.98] transition-all"
+        >
+          <span className="material-symbols-outlined text-[18px]">add</span>
+          {!sidebarCollapsed && <span>New Matter</span>}
+        </button>
       </div>
 
-      {/* Recent queries */}
-      <div className="px-4 py-3 border-b border-white/5 dark:border-white/5 light:border-zinc-200 flex-shrink-0">
-        <span className="text-[10px] font-bold text-zinc-700 uppercase tracking-widest block mb-2">Recent</span>
-        {RECENT_QUERIES.map((q, i) => (
-          <div key={i} className="flex items-center gap-2 px-2 py-1.5 rounded-lg text-xs text-zinc-600 hover:text-zinc-400 hover:bg-zinc-800/40 cursor-pointer transition-all">
-            <Clock className="w-3 h-3 flex-shrink-0" />
-            <span className="truncate">{q}</span>
+      {/* Main Navigation List */}
+      <div className="flex-1 overflow-y-auto custom-scroll px-3 flex flex-col gap-1">
+        {!sidebarCollapsed && (
+          <p className="font-label-sm text-[10px] text-on-surface-variant/50 mb-2 px-3 uppercase tracking-widest">
+            Library
+          </p>
+        )}
+
+        <button
+          onClick={() => setActiveTab('library')}
+          className={`w-full flex items-center gap-3 py-2 px-3 rounded text-left transition-colors duration-200 ${
+            activeTab === 'library'
+              ? 'text-primary font-bold bg-primary/5 border-r-2 border-primary'
+              : 'text-on-surface-variant hover:bg-primary/5 hover:text-primary'
+          }`}
+          title="Matter Library"
+        >
+          <span
+            className="material-symbols-outlined text-[20px]"
+            style={{ fontVariationSettings: activeTab === 'library' ? "'FILL' 1" : "'FILL' 0" }}
+          >
+            folder_special
+          </span>
+          {!sidebarCollapsed && <span className="font-body-md text-[13.5px] truncate">Matter Library</span>}
+        </button>
+
+        {/* Existing Matters */}
+        {matters.map((m) => (
+          <div key={m.id} className="group flex items-center gap-1 pl-4">
+            <button
+              onClick={() => setActiveMatter(m.id)}
+              className={`w-full flex items-center gap-2.5 py-1.5 px-2 rounded text-left transition-colors duration-150 ${
+                activeMatter === m.id
+                  ? 'text-brass font-medium bg-brass/10'
+                  : 'text-on-surface-variant/70 hover:text-on-surface hover:bg-white/[0.02]'
+              }`}
+              title={m.name}
+            >
+              <span className="material-symbols-outlined text-[16px] opacity-70">
+                {activeMatter === m.id ? 'folder_open' : 'folder'}
+              </span>
+              {!sidebarCollapsed && <span className="text-[12.5px] truncate">{m.name}</span>}
+            </button>
+            {m.id !== 'default' && !sidebarCollapsed && (
+              <button
+                onClick={() => removeMatter(m.id)}
+                className="opacity-0 group-hover:opacity-100 p-1 text-on-surface-variant/40 hover:text-error transition-opacity"
+                title="Delete Matter"
+              >
+                <span className="material-symbols-outlined text-[14px]">delete</span>
+              </button>
+            )}
           </div>
         ))}
+
+        <button
+          onClick={() => setActiveTab('active')}
+          className={`w-full flex items-center gap-3 py-2 px-3 rounded text-left transition-colors duration-200 mt-2 ${
+            activeTab === 'active'
+              ? 'text-primary font-bold bg-primary/5 border-r-2 border-primary'
+              : 'text-on-surface-variant hover:bg-primary/5 hover:text-primary'
+          }`}
+          title="Active Research"
+        >
+          <span className="material-symbols-outlined text-[20px]">neurology</span>
+          {!sidebarCollapsed && <span className="font-body-md text-[13.5px] truncate">Active Research</span>}
+        </button>
+
+        <button
+          onClick={() => setActiveTab('drafts')}
+          className={`w-full flex items-center gap-3 py-2 px-3 rounded text-left transition-colors duration-200 ${
+            activeTab === 'drafts'
+              ? 'text-primary font-bold bg-primary/5 border-r-2 border-primary'
+              : 'text-on-surface-variant hover:bg-primary/5 hover:text-primary'
+          }`}
+          title="Drafts"
+        >
+          <span className="material-symbols-outlined text-[20px]">history_edu</span>
+          {!sidebarCollapsed && <span className="font-body-md text-[13.5px] truncate">Drafts</span>}
+        </button>
+
+        <button
+          onClick={() => setActiveTab('archive')}
+          className={`w-full flex items-center gap-3 py-2 px-3 rounded text-left transition-colors duration-200 ${
+            activeTab === 'archive'
+              ? 'text-primary font-bold bg-primary/5 border-r-2 border-primary'
+              : 'text-on-surface-variant hover:bg-primary/5 hover:text-primary'
+          }`}
+          title="Archive"
+        >
+          <span className="material-symbols-outlined text-[20px]">inventory_2</span>
+          {!sidebarCollapsed && <span className="font-body-md text-[13.5px] truncate">Archive</span>}
+        </button>
       </div>
 
-      {/* Document Vault */}
-      <div className="flex-1 overflow-y-auto px-4 py-4 scrollbar-thin scrollbar-thumb-zinc-800">
-        <div className="flex items-center justify-between mb-2">
-          <span className="text-[10px] font-bold text-zinc-600 uppercase tracking-widest">Document Vault</span>
-          <span className="text-[10px] text-zinc-700">🔒 Local only</span>
-        </div>
-        <p className="text-[11px] text-zinc-700 leading-relaxed mb-3">
-          Drop PDF case files. Vectorized <strong className="text-zinc-600">on-device</strong>, never uploaded.
-        </p>
+      {/* Footer Area with Dataset Health & Model Selector */}
+      <div className="mt-auto px-4 pt-4 border-t border-brass/10 flex flex-col gap-2">
+        {!sidebarCollapsed && (
+          <div className="flex flex-col gap-2 p-2.5 mb-2 rounded bg-surface/60 border border-brass/10">
+            <div className="flex items-center justify-between">
+              <span className="font-citation text-[10px] text-on-surface-variant uppercase tracking-wider">
+                Dataset Health
+              </span>
+              <div className="flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+                <span className="font-citation text-[10.5px] text-green-400 font-medium">3,837+ Chunks</span>
+              </div>
+            </div>
 
-        {/* Dropzone */}
-        <div {...getRootProps()}
-          className={`border-2 border-dashed rounded-xl p-4 text-center cursor-pointer transition-all ${
-            isDragActive ? 'border-amber-500/60 bg-amber-900/10 scale-[1.02]' : 'border-zinc-700 hover:border-zinc-600 hover:bg-zinc-800/20'
-          }`}>
-          <input {...getInputProps()} />
-          <Upload className={`w-5 h-5 mx-auto mb-2 ${isDragActive ? 'text-amber-400' : 'text-zinc-700'}`} />
-          {isDragActive
-            ? <p className="text-xs text-amber-400 font-medium">Drop to vectorize locally</p>
-            : <><p className="text-xs text-zinc-600 font-medium">Drag & Drop</p><p className="text-[10px] text-zinc-700 mt-0.5">PDF or TXT files</p></>
-          }
+            <div className="flex items-center justify-between border-t border-brass/5 pt-2 mt-1">
+              <span className="font-citation text-[10px] text-on-surface-variant">Mode</span>
+              <select
+                value={engine}
+                onChange={(e) => setEngine(e.target.value)}
+                className="bg-panel-slate border border-brass/20 text-primary font-citation text-[11px] py-0.5 px-2 rounded focus:ring-0 focus:outline-none cursor-pointer"
+              >
+                <option value="langchain">Llama 3.2 (LangChain)</option>
+                <option value="core_python">Mistral (Core Python)</option>
+                <option value="extractive">Extractive (Zero-LLM)</option>
+              </select>
+            </div>
+          </div>
+        )}
+
+        <div className="flex items-center justify-between">
+          <button
+            onClick={toggleSidebar}
+            className="text-on-surface-variant/60 hover:text-brass transition-colors p-1"
+            title={sidebarCollapsed ? 'Expand Sidebar' : 'Collapse Sidebar'}
+          >
+            <span className="material-symbols-outlined text-[18px]">
+              {sidebarCollapsed ? 'dock_to_right' : 'dock_to_left'}
+            </span>
+          </button>
         </div>
 
-        {/* Uploaded files */}
-        <AnimatePresence>
-          {uploadedFiles.map((f, i) => (
-            <motion.div key={i} initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }}
-              className="flex items-center gap-2 mt-2 px-3 py-2 rounded-lg bg-zinc-900 border border-white/5">
-              <File className="w-3 h-3 text-zinc-600 flex-shrink-0" />
-              <span className="text-[11px] text-zinc-500 truncate flex-1">{f.name}</span>
-              {f.status === 'processing'
-                ? <div className="flex items-center gap-1 text-amber-400"><Loader2 className="w-3 h-3 animate-spin" /></div>
-                : <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 flex-shrink-0" />
-              }
-            </motion.div>
-          ))}
-        </AnimatePresence>
+        {/* User Account / Counsel Badge */}
+        {!sidebarCollapsed && (
+          <div className="mt-2 flex items-center gap-3 pt-2 border-t border-brass/5">
+            <div className="w-8 h-8 rounded-full bg-surface-bright flex items-center justify-center overflow-hidden border border-brass/20 flex-shrink-0">
+              <span className="material-symbols-outlined text-on-surface-variant text-[20px]">person</span>
+            </div>
+            <div className="min-w-0">
+              <p className="font-label-sm text-[12px] font-semibold text-on-surface truncate">
+                Samvidhan AI
+              </p>
+              <p className="font-citation text-[10px] text-on-surface-variant/70 tracking-wider">
+                Senior Counsel
+              </p>
+            </div>
+          </div>
+        )}
       </div>
-
-      {/* Footer brand */}
-      <div className="px-4 py-3 border-t border-white/5 flex-shrink-0">
-        <div className="flex items-center gap-1.5 text-[10px] text-zinc-700">
-          <Scale className="w-3 h-3 text-amber-900" />
-          Samvidhan AI · सम्विधान
-        </div>
-      </div>
-    </div>
+    </aside>
   );
 }

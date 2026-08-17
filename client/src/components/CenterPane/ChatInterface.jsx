@@ -2,475 +2,582 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { motion, AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
-import {
-  Send, Mic, MicOff, Scale, GitBranch, User, Bot,
-  Shield, Copy, Check, Pin, ChevronDown, Sparkles,
-  BookOpen, FileText, Zap, ArrowUp, Volume2,
-  ThumbsUp, ThumbsDown, RotateCcw, Sun, Moon,
-  BarChart2, Keyboard, Globe, X
-} from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 
 const API_URL = 'http://localhost:8000';
 
-const SUGGESTIONS = {
-  en: [
-    { q: 'What is Section 103 of BNS 2023 (Murder)?', label: 'BNS Murder', icon: Scale },
-    { q: 'Explain the Basic Structure doctrine of the Indian Constitution.', label: 'Basic Structure', icon: BookOpen },
-    { q: 'What are the bail provisions for non-bailable offences in India?', label: 'Bail Law', icon: FileText },
-    { q: 'Explain Fundamental Rights under Article 12-35 of the Constitution.', label: 'Fundamental Rights', icon: Zap },
-  ],
-  hi: [
-    { q: 'BNS 2023 की धारा 103 (हत्या) क्या है?', label: 'BNS धारा 103', icon: Scale },
-    { q: 'भारतीय संविधान की मूल संरचना सिद्धांत की व्याख्या करें।', label: 'मूल संरचना', icon: BookOpen },
-    { q: 'जमानत के क्या प्रावधान हैं?', label: 'जमानत कानून', icon: FileText },
-    { q: 'अनुच्छेद 12-35 के तहत मौलिक अधिकार क्या हैं?', label: 'मौलिक अधिकार', icon: Zap },
-  ],
-};
-
-const PERSONAS = [
-  { id: 'judge', label: 'Supreme Court Judge', icon: '⚖️', desc: 'Formal, heavily cited, judicial tone' },
-  { id: 'citizen', label: 'Citizen Mode (ELI5)', icon: '🧑‍💼', desc: 'Simple English, no jargon' },
-  { id: 'advocate', label: 'Advocate Mode', icon: '📋', desc: 'Argumentative, precedent-focused' },
+const SUGGESTED_QUERIES = [
+  { q: "What is Section 103 of BNS 2023 (Murder & Mob Lynching)?", label: "BNS §103 Murder & Lynching" },
+  { q: "Explain the burden of proof in Section 302 IPC circumstantial evidence cases.", label: "Precedents on Burden of Proof" },
+  { q: "What is a Zero FIR under BNSS 2023?", label: "BNSS §173 Zero FIR Procedure" },
+  { q: "How does BSA 2023 treat WhatsApp messages and electronic evidence?", label: "BSA §61/63 Digital Evidence" },
 ];
-
-const LANG_LABELS = { en: 'EN', hi: 'हि', ta: 'த', te: 'తె' };
-const LANGUAGES = [
-  { code: 'en', label: 'English' },
-  { code: 'hi', label: 'हिंदी (Hindi)' },
-  { code: 'ta', label: 'தமிழ் (Tamil)' },
-  { code: 'te', label: 'తెలుగు (Telugu)' },
-];
-
-function ConfidenceShield({ score }) {
-  if (score == null) return null;
-  const level = score > 0.75 ? 'high' : score > 0.4 ? 'medium' : 'low';
-  const cfg = {
-    high:   { cls: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/30', label: 'Verified' },
-    medium: { cls: 'text-amber-400 bg-amber-500/10 border-amber-500/30', label: 'Partial' },
-    low:    { cls: 'text-red-400 bg-red-500/10 border-red-500/30 border-dashed', label: 'Low Confidence' },
-  }[level];
-  return (
-    <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full border text-[10px] font-semibold ${cfg.cls}`} title={`Retrieval confidence: ${Math.round(score * 100)}%`}>
-      <Shield className="w-2.5 h-2.5" />{cfg.label}
-    </span>
-  );
-}
-
-function MessageBubble({ msg, onOpenSource }) {
-  const { pinArgument } = useApp();
-  const [copied, setCopied] = useState(false);
-  const [feedback, setFeedback] = useState(null); // 'up' | 'down'
-  const [isSpeaking, setIsSpeaking] = useState(false);
-
-  const handleCopy = () => {
-    navigator.clipboard.writeText(msg.content);
-    setCopied(true); setTimeout(() => setCopied(false), 2000);
-    toast.success('Copied to clipboard');
-  };
-
-  const handleSpeak = () => {
-    if (isSpeaking) { speechSynthesis.cancel(); setIsSpeaking(false); return; }
-    const utt = new SpeechSynthesisUtterance(msg.content.replace(/[#*`]/g, ''));
-    utt.lang = 'en-IN';
-    utt.onend = () => setIsSpeaking(false);
-    speechSynthesis.speak(utt);
-    setIsSpeaking(true);
-  };
-
-  const handleFeedback = (type) => {
-    setFeedback(type);
-    toast.success(type === 'up' ? '👍 Thanks for the feedback!' : '👎 Feedback noted — we\'ll improve');
-  };
-
-  if (msg.role === 'user') {
-    return (
-      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="flex justify-end">
-        <div className="flex items-start gap-2.5 max-w-[78%]">
-          <div className="bg-gradient-to-br from-zinc-800 to-zinc-700 dark:from-zinc-800 dark:to-zinc-700 light:from-blue-50 light:to-indigo-50 border border-white/10 rounded-2xl rounded-tr-sm px-5 py-3.5 shadow-md">
-            <p className="text-zinc-100 dark:text-zinc-100 light:text-zinc-800 text-sm leading-relaxed">{msg.content}</p>
-          </div>
-          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center flex-shrink-0 mt-1 shadow-md ring-1 ring-white/10">
-            <User className="w-4 h-4 text-white" />
-          </div>
-        </div>
-      </motion.div>
-    );
-  }
-
-  return (
-    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="flex justify-start">
-      <div className="flex items-start gap-2.5 max-w-[90%]">
-        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-600 to-cyan-700 flex items-center justify-center flex-shrink-0 mt-1 shadow-md ring-1 ring-white/10">
-          <Bot className="w-4 h-4 text-white" />
-        </div>
-        <div className="flex-1 min-w-0">
-          {/* Meta row */}
-          <div className="flex items-center flex-wrap gap-1.5 mb-2">
-            <ConfidenceShield score={msg.confidence} />
-            {msg.approach && (
-              <span className={`text-[10px] px-2 py-0.5 rounded-full font-semibold ${msg.approach === 'langchain' ? 'bg-cyan-900/30 text-cyan-400' : 'bg-emerald-900/30 text-emerald-400'}`}>
-                {msg.approach === 'langchain' ? '⚡ LangChain' : '⚙️ Core Python'}
-              </span>
-            )}
-            {msg.time && <span className="text-[10px] text-zinc-600">{msg.time}s</span>}
-            {msg.persona && <span className="text-[10px] text-zinc-600">{PERSONAS.find(p => p.id === msg.persona)?.icon}</span>}
-          </div>
-
-          {/* Bubble */}
-          <div className="bg-zinc-900/70 border border-white/8 rounded-2xl rounded-tl-sm px-5 py-4 shadow-lg backdrop-blur-sm">
-            {msg.streaming ? (
-              <div className="flex items-center gap-2">
-                <p className="text-zinc-300 text-sm leading-relaxed whitespace-pre-wrap">{msg.content}</p>
-                <span className="animate-pulse text-amber-400 text-lg">▋</span>
-              </div>
-            ) : (
-              <div className="prose prose-invert prose-sm max-w-none
-                prose-p:text-zinc-300 prose-p:leading-relaxed
-                prose-headings:text-zinc-100 prose-headings:font-bold
-                prose-strong:text-zinc-100
-                prose-code:text-cyan-300 prose-code:bg-zinc-800/80 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-xs
-                prose-pre:bg-zinc-800 prose-pre:rounded-xl prose-pre:border prose-pre:border-white/8
-                prose-li:text-zinc-300 prose-a:text-cyan-400 prose-blockquote:border-l-amber-500 prose-blockquote:text-zinc-400">
-                <ReactMarkdown>{msg.content}</ReactMarkdown>
-              </div>
-            )}
-
-            {/* Sources */}
-            {msg.sources?.length > 0 && (
-              <div className="mt-3 pt-3 border-t border-white/5 flex flex-wrap gap-1.5">
-                <span className="text-[10px] text-zinc-600 self-center font-medium">SOURCES</span>
-                {msg.sources.map((src, i) => (
-                  <button key={i} onClick={() => onOpenSource(src)}
-                    className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-cyan-900/20 border border-cyan-500/20 text-cyan-400 text-[10px] font-mono hover:bg-cyan-900/40 transition-all">
-                    [{i + 1}] {(src.title ?? src.document_name ?? 'Source').substring(0, 20)}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* Actions */}
-          {!msg.streaming && (
-            <div className="flex items-center gap-0.5 mt-1.5 ml-1">
-              <button onClick={handleCopy} className="flex items-center gap-1 px-2 py-1 rounded-md text-[11px] text-zinc-600 hover:text-zinc-300 hover:bg-white/5 transition-all">
-                {copied ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
-                {copied ? 'Copied' : 'Copy'}
-              </button>
-              <button onClick={() => pinArgument(msg.content)} className="flex items-center gap-1 px-2 py-1 rounded-md text-[11px] text-zinc-600 hover:text-zinc-300 hover:bg-white/5 transition-all">
-                <Pin className="w-3 h-3" /> Pin
-              </button>
-              <button onClick={handleSpeak} className={`flex items-center gap-1 px-2 py-1 rounded-md text-[11px] transition-all ${isSpeaking ? 'text-amber-400 bg-amber-900/20' : 'text-zinc-600 hover:text-zinc-300 hover:bg-white/5'}`}>
-                <Volume2 className="w-3 h-3" /> {isSpeaking ? 'Stop' : 'Read'}
-              </button>
-              <div className="ml-1 flex items-center gap-0.5">
-                <button onClick={() => handleFeedback('up')} className={`p-1 rounded-md transition-all ${feedback === 'up' ? 'text-emerald-400' : 'text-zinc-700 hover:text-zinc-400'}`}>
-                  <ThumbsUp className="w-3 h-3" />
-                </button>
-                <button onClick={() => handleFeedback('down')} className={`p-1 rounded-md transition-all ${feedback === 'down' ? 'text-red-400' : 'text-zinc-700 hover:text-zinc-400'}`}>
-                  <ThumbsDown className="w-3 h-3" />
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-    </motion.div>
-  );
-}
-
-function TypingIndicator() {
-  return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex justify-start">
-      <div className="flex items-start gap-2.5">
-        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-600 to-cyan-700 flex items-center justify-center flex-shrink-0 mt-1 ring-1 ring-white/10">
-          <Bot className="w-4 h-4 text-white" />
-        </div>
-        <div className="bg-zinc-900/70 border border-white/8 rounded-2xl rounded-tl-sm px-5 py-4">
-          <div className="flex items-center gap-2">
-            {[0,1,2].map(i => (
-              <motion.div key={i} className="w-1.5 h-1.5 rounded-full bg-zinc-500"
-                animate={{ scale: [1, 1.5, 1], opacity: [0.4, 1, 0.4] }}
-                transition={{ duration: 1.2, repeat: Infinity, delay: i * 0.2 }} />
-            ))}
-            <span className="text-[11px] text-zinc-600 ml-1">Searching Indian legal corpus...</span>
-          </div>
-        </div>
-      </div>
-    </motion.div>
-  );
-}
 
 export default function ChatInterface({ onOpenSource }) {
-  const { engine, setEngine, pinArgument, isDark, toggleTheme, language, setLanguage,
-          setCommandOpen, setIpcBnsOpen, setGraphOpen, setStatsOpen, setShortcutsOpen } = useApp();
+  const {
+    engine,
+    setEngine,
+    language,
+    setLanguage,
+    setCommandOpen,
+    setIpcBnsOpen,
+    setGraphOpen,
+    setStatsOpen,
+    setShortcutsOpen,
+    isDevilsAdvocate,
+    toggleDevilsAdvocate,
+    pinArgument,
+  } = useApp();
 
   const [messages, setMessages] = useState(() => {
-    try { return JSON.parse(localStorage.getItem('samvidhan_messages') || '[]'); } catch { return []; }
+    try {
+      return JSON.parse(localStorage.getItem('lmr_messages') || '[]');
+    } catch {
+      return [];
+    }
   });
+
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isListening, setIsListening] = useState(false);
-  const [persona, setPersona] = useState('judge');
-  const [personaOpen, setPersonaOpen] = useState(false);
-  const [langOpen, setLangOpen] = useState(false);
-  const [queryStats, setQueryStats] = useState({ count: 0, avgTime: 0 });
-  const bottomRef = useRef(null);
-  const inputRef = useRef(null);
-  const abortRef = useRef(null);
+  const [activeNavTab, setActiveNavTab] = useState('research');
+  const [currentRetrievalStep, setCurrentRetrievalStep] = useState(0); // 0: Searching, 1: Reranking, 2: Drafting
 
-  // Persist messages
+  const bottomRef = useRef(null);
+  const abortRef = useRef(null);
+  const textareaRef = useRef(null);
+
   useEffect(() => {
-    localStorage.setItem('samvidhan_messages', JSON.stringify(messages.slice(-50)));
+    localStorage.setItem('lmr_messages', JSON.stringify(messages.slice(-50)));
   }, [messages]);
 
-  useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [messages, isLoading]);
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages, isLoading]);
 
-  const currentPersona = PERSONAS.find(p => p.id === persona);
-  const suggestions = SUGGESTIONS[language] || SUGGESTIONS.en;
-
-  const sendMessage = useCallback(async (text) => {
-    const query = text ?? input.trim();
-    if (!query || isLoading) return;
-    setInput('');
-    const userMsg = { id: Date.now(), role: 'user', content: query };
-    setMessages(prev => [...prev, userMsg]);
-    setIsLoading(true);
-
-    // Streaming placeholder
-    const aiId = Date.now() + 1;
-    const aiMsg = { id: aiId, role: 'assistant', content: '', streaming: true, sources: [], confidence: null, approach: engine, persona };
-    setMessages(prev => [...prev, aiMsg]);
-
-    const params = new URLSearchParams({ query, approach: engine });
-    const startTime = Date.now();
-
-    try {
-      const es = new EventSource(`${API_URL}/stream?${params.toString()}`);
-      abortRef.current = es;
-
-      es.onmessage = (event) => {
-        const data = JSON.parse(event.data);
-        if (data.type === 'token') {
-          setMessages(prev => prev.map(m => m.id === aiId ? { ...m, content: m.content + data.content } : m));
-        } else if (data.type === 'sources') {
-          setMessages(prev => prev.map(m => m.id === aiId ? { ...m, sources: data.data } : m));
-        } else if (data.type === 'done') {
-          const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
-          setMessages(prev => prev.map(m => m.id === aiId ? { ...m, streaming: false, time: elapsed, confidence: 0.85 } : m));
-          setQueryStats(prev => ({ count: prev.count + 1, avgTime: ((prev.avgTime * prev.count + parseFloat(elapsed)) / (prev.count + 1)).toFixed(1) }));
-          es.close();
-          setIsLoading(false);
-        }
-      };
-
-      es.onerror = () => {
-        // Fallback to non-streaming
-        es.close();
-        fetch(`${API_URL}/query`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ query, approach: engine, persona }),
-        })
-        .then(r => r.json())
-        .then(data => {
-          const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
-          setMessages(prev => prev.map(m => m.id === aiId ? {
-            ...m, content: data.answer ?? 'No answer returned.', sources: data.sources ?? [],
-            streaming: false, time: elapsed, confidence: 0.75, approach: data.metrics?.approach ?? engine,
-          } : m));
-          setQueryStats(prev => ({ count: prev.count + 1, avgTime: ((prev.avgTime * prev.count + parseFloat(elapsed)) / (prev.count + 1)).toFixed(1) }));
-        })
-        .catch(err => {
-          setMessages(prev => prev.map(m => m.id === aiId ? {
-            ...m, content: `**Backend connection failed.**\n\nMake sure Uvicorn is running:\n\`\`\`bash\npython -m uvicorn api.main:app --reload\n\`\`\`\n*${err.message}*`,
-            streaming: false, confidence: 0,
-          } : m));
-          toast.error('Could not reach backend');
-        })
-        .finally(() => setIsLoading(false));
-      };
-    } catch (err) {
-      setIsLoading(false);
-      toast.error('Connection failed');
+  // Dynamic retrieval progress simulation while generating
+  useEffect(() => {
+    if (!isLoading) {
+      setCurrentRetrievalStep(0);
+      return;
     }
-  }, [input, isLoading, engine, persona]);
+    const t1 = setTimeout(() => setCurrentRetrievalStep(1), 600);
+    const t2 = setTimeout(() => setCurrentRetrievalStep(2), 1400);
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+    };
+  }, [isLoading]);
 
-  const clearChat = () => {
-    if (!messages.length) return;
-    setMessages([]);
-    localStorage.removeItem('samvidhan_messages');
-    toast.success('Chat cleared');
-  };
+  // Auto-resize input
+  useEffect(() => {
+    if (!textareaRef.current) return;
+    textareaRef.current.style.height = 'auto';
+    textareaRef.current.style.height = Math.min(textareaRef.current.scrollHeight, 160) + 'px';
+  }, [input]);
+
+  const sendMessage = useCallback(
+    async (text) => {
+      const query = (text ?? input).trim();
+      if (!query || isLoading) return;
+      setInput('');
+
+      const userMsg = { id: Date.now(), role: 'user', content: query };
+      setMessages((prev) => [...prev, userMsg]);
+      setIsLoading(true);
+
+      const aiId = Date.now() + 1;
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: aiId,
+          role: 'assistant',
+          content: '',
+          streaming: true,
+          sources: [],
+          approach: engine,
+          isDevilsAdvocate,
+        },
+      ]);
+
+      const qs = new URLSearchParams({ query, approach: engine });
+      if (isDevilsAdvocate) qs.append('devils_advocate', 'true');
+      const t0 = Date.now();
+
+      try {
+        const es = new EventSource(`${API_URL}/stream?${qs}`);
+        abortRef.current = es;
+
+        es.onmessage = (e) => {
+          const d = JSON.parse(e.data);
+          if (d.type === 'token') {
+            setMessages((prev) =>
+              prev.map((m) => (m.id === aiId ? { ...m, content: m.content + d.content } : m))
+            );
+          } else if (d.type === 'sources') {
+            setMessages((prev) =>
+              prev.map((m) => (m.id === aiId ? { ...m, sources: d.data } : m))
+            );
+          } else if (d.type === 'done') {
+            const elapsed = ((Date.now() - t0) / 1000).toFixed(1);
+            setMessages((prev) =>
+              prev.map((m) => (m.id === aiId ? { ...m, streaming: false, time: elapsed } : m))
+            );
+            es.close();
+            setIsLoading(false);
+          }
+        };
+
+        es.onerror = () => {
+          es.close();
+          // Fallback to /query POST endpoint
+          fetch(`${API_URL}/query`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ query, approach: engine }),
+          })
+            .then((r) => r.json())
+            .then((d) => {
+              const elapsed = ((Date.now() - t0) / 1000).toFixed(1);
+              setMessages((prev) =>
+                prev.map((m) =>
+                  m.id === aiId
+                    ? {
+                        ...m,
+                        content: d.answer ?? 'No answer returned.',
+                        sources: d.sources ?? [],
+                        streaming: false,
+                        time: elapsed,
+                        approach: d.metrics?.approach ?? engine,
+                      }
+                    : m
+                )
+              );
+            })
+            .catch((err) => {
+              setMessages((prev) =>
+                prev.map((m) =>
+                  m.id === aiId
+                    ? {
+                        ...m,
+                        content: `**Query Processing Error**\n\n${err.message}\n\nPlease check server connection.`,
+                        streaming: false,
+                      }
+                    : m
+                )
+              );
+            })
+            .finally(() => setIsLoading(false));
+        };
+      } catch {
+        setIsLoading(false);
+        toast.error('Connection failed');
+      }
+    },
+    [input, isLoading, engine, isDevilsAdvocate]
+  );
 
   const toggleVoice = () => {
-    const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (!Recognition) { toast.error('Voice not supported in this browser'); return; }
-    if (isListening) { setIsListening(false); return; }
-    const r = new Recognition();
+    const Rec = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!Rec) {
+      toast.error('Voice input not supported in this browser');
+      return;
+    }
+    if (isListening) {
+      setIsListening(false);
+      return;
+    }
+    const r = new Rec();
     r.lang = language === 'hi' ? 'hi-IN' : 'en-IN';
-    r.onresult = e => { setInput(e.results[0][0].transcript); setIsListening(false); };
+    r.onresult = (e) => {
+      setInput(e.results[0][0].transcript);
+      setIsListening(false);
+    };
     r.onend = () => setIsListening(false);
     r.onerror = () => setIsListening(false);
     setIsListening(true);
     r.start();
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  };
+
+  const handleExportPDF = (content) => {
+    const printWin = window.open('', '_blank');
+    if (!printWin) {
+      toast.error('Popup blocked');
+      return;
+    }
+    printWin.document.write(`
+      <html>
+        <head>
+          <title>Legal Opinion — Samvidhan AI</title>
+          <style>
+            body { font-family: 'Times New Roman', serif; padding: 40px; color: #111; line-height: 1.6; }
+            h1, h2, h3 { color: #8A6B38; }
+            .header { text-align: center; border-bottom: 2px solid #8A6B38; padding-bottom: 12px; margin-bottom: 24px; }
+            .citation { background: #f0f0f0; padding: 2px 6px; border-radius: 4px; font-family: monospace; }
+          </style>
+        </head>
+        <body>
+          <div class="header">
+            <h2>SAMVIDHAN AI — LEGAL INTELLIGENCE OPINION</h2>
+            <p>Generated: ${new Date().toLocaleDateString()}</p>
+          </div>
+          <div>${content.replace(/\n/g, '<br/>')}</div>
+        </body>
+      </html>
+    `);
+    printWin.document.close();
+    printWin.print();
+  };
+
   return (
-    <div className="flex flex-col h-full bg-zinc-950 dark:bg-zinc-950 light:bg-slate-50 transition-colors">
-      {/* ─── Top Nav ─── */}
-      <div className="flex items-center justify-between px-5 py-3 border-b border-white/5 bg-zinc-950/90 dark:bg-zinc-950/90 light:bg-white/90 backdrop-blur-xl flex-shrink-0">
-        {/* Brand */}
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center shadow-lg shadow-amber-900/40">
-            <Scale className="w-4 h-4 text-white" />
+    <div className="flex-1 flex flex-col h-full bg-obsidian text-on-surface relative overflow-hidden select-text">
+      {/* ══ TOP APP BAR ════════════════════════════════════════════ */}
+      <nav className="bg-obsidian/80 backdrop-blur-xl border-b border-brass/10 flex justify-between items-center h-16 px-6 w-full z-40 flex-shrink-0">
+        <div className="flex items-center gap-6">
+          <span className="font-headline-md text-[24px] text-primary tracking-tight font-fraunces">
+            Samvidhan AI
+          </span>
+          <div className="hidden md:flex gap-4 ml-6">
+            <button
+              onClick={() => setActiveNavTab('research')}
+              className={`pb-1 font-label-sm text-[12px] uppercase tracking-wider transition-colors ${
+                activeNavTab === 'research'
+                  ? 'text-primary border-b-2 border-primary font-bold'
+                  : 'text-on-surface-variant hover:text-primary'
+              }`}
+            >
+              Research
+            </button>
+            <button
+              onClick={() => setActiveNavTab('documents')}
+              className={`pb-1 font-label-sm text-[12px] uppercase tracking-wider transition-colors ${
+                activeNavTab === 'documents'
+                  ? 'text-primary border-b-2 border-primary font-bold'
+                  : 'text-on-surface-variant hover:text-primary'
+              }`}
+            >
+              Documents
+            </button>
+            <button
+              onClick={() => setActiveNavTab('analytics')}
+              className={`pb-1 font-label-sm text-[12px] uppercase tracking-wider transition-colors ${
+                activeNavTab === 'analytics'
+                  ? 'text-primary border-b-2 border-primary font-bold'
+                  : 'text-on-surface-variant hover:text-primary'
+              }`}
+            >
+              Analytics
+            </button>
           </div>
-          <div>
-            <div className="font-bold text-sm tracking-tight text-zinc-100">Samvidhan AI</div>
-            <div className="text-[10px] text-zinc-600">सम्विधान · Indian Legal Intelligence</div>
-          </div>
-          <button onClick={() => setCommandOpen(true)} className="ml-1 text-[10px] px-2 py-0.5 rounded-full bg-zinc-800 text-zinc-600 font-mono hover:text-zinc-400 transition-all">⌘K</button>
         </div>
 
-        {/* Right controls */}
-        <div className="flex items-center gap-1.5">
-          {/* Language picker */}
-          <div className="relative">
-            <button onClick={() => setLangOpen(p => !p)} className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-zinc-900 border border-white/5 text-xs text-zinc-400 hover:bg-zinc-800 transition-all">
-              <Globe className="w-3.5 h-3.5" /> {LANG_LABELS[language]} <ChevronDown className={`w-3 h-3 transition-transform ${langOpen ? 'rotate-180' : ''}`} />
-            </button>
-            <AnimatePresence>
-              {langOpen && (
-                <motion.div initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }}
-                  className="absolute right-0 top-full mt-1.5 w-44 bg-zinc-900 border border-white/10 rounded-xl shadow-2xl overflow-hidden z-30">
-                  {LANGUAGES.map(l => (
-                    <button key={l.code} onClick={() => { setLanguage(l.code); setLangOpen(false); toast.success(`Language: ${l.label}`); }}
-                      className={`w-full flex items-center gap-2 px-3 py-2.5 text-left text-sm hover:bg-white/5 transition-colors ${language === l.code ? 'text-amber-400' : 'text-zinc-300'}`}>
-                      {language === l.code && <Check className="w-3 h-3" />}
-                      <span className={language === l.code ? '' : 'ml-5'}>{l.label}</span>
-                    </button>
-                  ))}
-                </motion.div>
-              )}
-            </AnimatePresence>
+        {/* Right tools and actions */}
+        <div className="flex items-center gap-4">
+          <div className="relative hidden lg:block">
+            <span className="material-symbols-outlined absolute left-2.5 top-1/2 -translate-y-1/2 text-on-surface-variant/50 text-[18px]">
+              search
+            </span>
+            <input
+              type="text"
+              placeholder="Search precedents or ⌘K..."
+              onClick={() => setCommandOpen(true)}
+              className="input-ghost pl-8 pr-4 py-1 text-on-surface font-body-md text-[13.5px] w-60 placeholder:text-on-surface-variant/40 cursor-pointer"
+              readOnly
+            />
           </div>
 
-          {/* Persona */}
-          <div className="relative">
-            <button onClick={() => setPersonaOpen(p => !p)} className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-zinc-900 border border-white/5 text-xs text-zinc-400 hover:bg-zinc-800 transition-all">
-              <span>{currentPersona.icon}</span>
-              <ChevronDown className={`w-3 h-3 transition-transform ${personaOpen ? 'rotate-180' : ''}`} />
-            </button>
-            <AnimatePresence>
-              {personaOpen && (
-                <motion.div initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }}
-                  className="absolute right-0 top-full mt-1.5 w-60 bg-zinc-900 border border-white/10 rounded-xl shadow-2xl overflow-hidden z-30">
-                  {PERSONAS.map(p => (
-                    <button key={p.id} onClick={() => { setPersona(p.id); setPersonaOpen(false); }}
-                      className={`w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-white/5 transition-colors ${persona === p.id ? 'bg-white/5' : ''}`}>
-                      <span className="text-lg">{p.icon}</span>
-                      <div><div className="text-sm font-medium text-zinc-200">{p.label}</div><div className="text-xs text-zinc-500">{p.desc}</div></div>
-                    </button>
-                  ))}
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-
-          {/* Engine toggle */}
-          <div className="flex bg-zinc-900 rounded-lg p-0.5 border border-white/5">
-            <button onClick={() => setEngine('langchain')} className={`px-2.5 py-1 text-xs rounded-md font-medium transition-all ${engine === 'langchain' ? 'bg-cyan-500/20 text-cyan-400' : 'text-zinc-500 hover:text-zinc-300'}`}>⚡ LC</button>
-            <button onClick={() => setEngine('core_python')} className={`px-2.5 py-1 text-xs rounded-md font-medium transition-all ${engine === 'core_python' ? 'bg-emerald-500/20 text-emerald-400' : 'text-zinc-500 hover:text-zinc-300'}`}>⚙️ PY</button>
-          </div>
-
-          {/* Tool buttons */}
-          <button onClick={() => setIpcBnsOpen(true)} className="p-1.5 rounded-lg text-zinc-500 hover:text-amber-400 hover:bg-amber-900/10 transition-all" title="IPC ↔ BNS Comparator"><Scale className="w-4 h-4" /></button>
-          <button onClick={() => setGraphOpen(true)} className="p-1.5 rounded-lg text-zinc-500 hover:text-purple-400 hover:bg-purple-900/10 transition-all" title="Precedent Graph"><GitBranch className="w-4 h-4" /></button>
-          <button onClick={() => setStatsOpen(true)} className="p-1.5 rounded-lg text-zinc-500 hover:text-blue-400 hover:bg-blue-900/10 transition-all" title="Statistics"><BarChart2 className="w-4 h-4" /></button>
-          <button onClick={toggleTheme} className="p-1.5 rounded-lg text-zinc-500 hover:text-zinc-300 hover:bg-white/5 transition-all" title="Toggle Theme">{isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}</button>
-          <button onClick={() => setShortcutsOpen(true)} className="p-1.5 rounded-lg text-zinc-500 hover:text-zinc-300 hover:bg-white/5 transition-all" title="Keyboard Shortcuts"><Keyboard className="w-4 h-4" /></button>
-          {messages.length > 0 && (
-            <button onClick={clearChat} className="p-1.5 rounded-lg text-zinc-600 hover:text-red-400 hover:bg-red-900/10 transition-all" title="Clear chat"><X className="w-4 h-4" /></button>
-          )}
-        </div>
-      </div>
-
-      {/* ─── Messages ─── */}
-      <div className="flex-1 overflow-y-auto px-5 py-6 space-y-5 scrollbar-thin scrollbar-thumb-zinc-800">
-        {/* Empty state */}
-        {messages.length === 0 && !isLoading && (
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-            className="flex flex-col items-center justify-center h-full min-h-[55vh] text-center px-4">
-            <motion.div initial={{ scale: 0.8 }} animate={{ scale: 1 }} transition={{ type: 'spring', bounce: 0.4 }}
-              className="w-20 h-20 rounded-3xl bg-gradient-to-br from-amber-500/20 to-orange-700/20 border border-amber-500/20 flex items-center justify-center mb-5 shadow-2xl shadow-amber-900/20">
-              <Scale className="w-10 h-10 text-amber-400" />
-            </motion.div>
-            <h1 className="text-3xl font-bold text-zinc-100 mb-1 tracking-tight">Samvidhan AI</h1>
-            <p className="text-zinc-400 mb-1">सम्विधान — Indian Legal Intelligence</p>
-            <p className="text-zinc-600 text-sm max-w-md mb-8">
-              Explore Indian law, Supreme Court judgments, BNS, Constitution and more.<br />
-              <span className="text-zinc-700">All data stays on your machine. 100% private.</span>
-            </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full max-w-2xl">
-              {suggestions.map((s, i) => (
-                <motion.button key={i} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.1 + i * 0.07 }} onClick={() => sendMessage(s.q)}
-                  className="flex items-center gap-3 p-4 rounded-xl bg-zinc-900/60 border border-white/5 text-left hover:border-amber-500/25 hover:bg-amber-900/5 transition-all group">
-                  <div className="w-9 h-9 rounded-lg bg-zinc-800 group-hover:bg-amber-900/30 flex items-center justify-center flex-shrink-0 transition-colors">
-                    <s.icon className="w-4.5 h-4.5 text-zinc-500 group-hover:text-amber-400 transition-colors" />
-                  </div>
-                  <div>
-                    <div className="text-xs font-semibold text-zinc-500 group-hover:text-amber-400 mb-0.5 transition-colors">{s.label}</div>
-                    <div className="text-xs text-zinc-600 leading-snug">{s.q}</div>
-                  </div>
-                </motion.button>
-              ))}
-            </div>
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }}
-              className="mt-8 flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-900/20 border border-emerald-500/20 text-xs text-emerald-500">
-              <Shield className="w-3.5 h-3.5" /> Privacy-first · Runs fully offline · No data leaves your machine
-            </motion.div>
-          </motion.div>
-        )}
-
-        {messages.map(msg => (
-          <MessageBubble key={msg.id} msg={msg} onOpenSource={onOpenSource} />
-        ))}
-        {isLoading && messages[messages.length - 1]?.role !== 'assistant' && <TypingIndicator />}
-        <div ref={bottomRef} />
-      </div>
-
-      {/* ─── Input bar ─── */}
-      <div className="px-5 pb-4 pt-2 flex-shrink-0 bg-zinc-950/90 backdrop-blur-xl">
-        <div className={`flex items-end gap-2 rounded-2xl border px-4 py-2.5 transition-all shadow-lg
-          ${isListening ? 'border-red-500/40 bg-red-900/10' : 'border-white/8 bg-zinc-900/80 hover:border-white/12'}`}>
-          {/* Voice */}
-          <button onClick={toggleVoice}
-            className={`p-2 rounded-xl transition-all flex-shrink-0 mb-0.5 ${isListening ? 'bg-red-500/20 text-red-400 animate-pulse' : 'text-zinc-600 hover:text-zinc-300 hover:bg-white/5'}`}>
-            {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
+          <button
+            onClick={() => setIpcBnsOpen(true)}
+            className="brass-outline-button px-3 py-1 rounded text-xs flex items-center gap-1.5 font-label-sm font-semibold"
+            title="IPC ↔ BNS Converter"
+          >
+            <span className="material-symbols-outlined text-[16px]">balance</span>
+            <span>IPC ↔ BNS</span>
           </button>
 
-          {/* Text input */}
-          <textarea ref={inputRef} rows={1} value={input}
-            onChange={e => { setInput(e.target.value); e.target.style.height = 'auto'; e.target.style.height = Math.min(e.target.scrollHeight, 150) + 'px'; }}
-            onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } }}
-            placeholder={isListening ? '🎙️ Listening...' : `Ask about Indian Law... (${currentPersona.icon})`}
-            className="flex-1 bg-transparent border-none outline-none resize-none text-sm text-zinc-200 placeholder:text-zinc-600 leading-relaxed max-h-[150px] scrollbar-none py-1" />
+          <button
+            onClick={toggleDevilsAdvocate}
+            className={`px-3 py-1 rounded text-xs flex items-center gap-1.5 font-label-sm transition-all ${
+              isDevilsAdvocate
+                ? 'bg-error-container/30 border border-error text-error font-bold'
+                : 'brass-outline-button'
+            }`}
+            title="Devil's Advocate Counter-argument mode"
+          >
+            <span className="material-symbols-outlined text-[16px]">swords</span>
+            <span className="hidden sm:inline">Advocate</span>
+          </button>
 
-          {/* Send */}
-          <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={() => sendMessage()}
-            disabled={!input.trim() || isLoading}
-            className={`p-2.5 rounded-xl flex-shrink-0 mb-0.5 transition-all ${input.trim() && !isLoading ? 'bg-gradient-to-br from-amber-500 to-orange-600 text-white shadow-lg shadow-amber-900/30' : 'bg-zinc-800 text-zinc-600 cursor-not-allowed'}`}>
-            {isLoading ? <RotateCcw className="w-4 h-4 animate-spin" /> : <ArrowUp className="w-4 h-4" />}
-          </motion.button>
+          <div className="flex items-center gap-2 text-on-surface-variant">
+            <button
+              onClick={() => setGraphOpen(true)}
+              className="hover:text-primary transition-colors p-1"
+              title="Precedent Graph"
+            >
+              <span className="material-symbols-outlined text-[20px]">hub</span>
+            </button>
+            <button
+              onClick={() => setStatsOpen(true)}
+              className="hover:text-primary transition-colors p-1"
+              title="System Statistics"
+            >
+              <span className="material-symbols-outlined text-[20px]">bar_chart</span>
+            </button>
+            <button
+              onClick={() => setShortcutsOpen(true)}
+              className="hover:text-primary transition-colors p-1"
+              title="Keyboard Shortcuts (?)"
+            >
+              <span className="material-symbols-outlined text-[20px]">keyboard</span>
+            </button>
+          </div>
         </div>
-        <p className="text-center text-[10px] text-zinc-700 mt-2">
-          <kbd className="bg-zinc-800 px-1 py-0.5 rounded text-[9px]">Enter</kbd> send &nbsp;·&nbsp;
-          <kbd className="bg-zinc-800 px-1 py-0.5 rounded text-[9px]">Shift+Enter</kbd> new line &nbsp;·&nbsp;
-          <kbd className="bg-zinc-800 px-1 py-0.5 rounded text-[9px]">⌘K</kbd> commands &nbsp;·&nbsp;
-          <kbd className="bg-zinc-800 px-1 py-0.5 rounded text-[9px]">?</kbd> shortcuts
-        </p>
-      </div>
+      </nav>
+
+      {/* ══ CHAT SCROLL CONTAINER ═════════════════════════════════ */}
+      <main className="flex-1 flex flex-col relative h-full bg-obsidian overflow-hidden">
+        {/* Subtle background atmosphere glow */}
+        <div
+          className="absolute inset-0 pointer-events-none opacity-[0.03]"
+          style={{
+            backgroundImage:
+              'radial-gradient(circle at 50% 0%, #B08D57, transparent 70%)',
+          }}
+        />
+
+        <div className="flex-1 overflow-y-auto custom-scroll p-6 flex flex-col gap-6 z-10 max-w-4xl mx-auto w-full pb-36">
+          {/* Empty state / Suggested questions */}
+          {messages.length === 0 && !isLoading && (
+            <div className="flex flex-col items-center justify-center my-auto py-10">
+              <span className="material-symbols-outlined text-[48px] text-primary/20 mb-3">
+                gavel
+              </span>
+              <h2 className="font-headline-lg text-[26px] text-on-surface mb-2 font-fraunces">
+                Chamber Research
+              </h2>
+              <p className="font-body-md text-[14px] text-on-surface-variant mb-8 max-w-md text-center">
+                Query case law, draft arguments, or analyze precedent with high precision grounded in Indian statutes.
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 w-full">
+                {SUGGESTED_QUERIES.map((item, idx) => (
+                  <div
+                    key={idx}
+                    onClick={() => sendMessage(item.q)}
+                    className="glass-panel rounded-lg p-4 cursor-pointer hover:glass-panel-active transition-all group"
+                  >
+                    <p className="font-body-md text-[14px] text-on-surface group-hover:text-primary transition-colors font-medium">
+                      "{item.q}"
+                    </p>
+                    <span className="font-citation text-[11px] text-on-surface-variant/60 mt-1 block">
+                      {item.label}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Chat Messages */}
+          <div className="flex flex-col gap-6 w-full">
+            {messages.map((msg) => {
+              if (msg.role === 'user') {
+                return (
+                  <div key={msg.id} className="flex justify-end w-full">
+                    <div className="bg-surface-container-high rounded-xl rounded-tr-sm p-4 max-w-[82%] border border-white/5 shadow-md">
+                      <p className="font-body-md text-[14.5px] leading-relaxed text-on-surface">
+                        {msg.content}
+                      </p>
+                    </div>
+                  </div>
+                );
+              }
+
+              // AI Assistant Response Card
+              return (
+                <div key={msg.id} className="flex w-full">
+                  {/* Vertical rule denoting official guidance */}
+                  <div className="w-[2px] bg-primary/20 mr-4 self-stretch rounded-full mt-2 mb-2 shadow-[0_0_8px_rgba(176,141,87,0.3)]" />
+
+                  <div className="glass-panel rounded-xl rounded-tl-sm p-6 max-w-full flex-1 relative overflow-hidden">
+                    {/* Subtle gold glow in top left */}
+                    <div className="absolute -top-10 -left-10 w-20 h-20 bg-primary/10 blur-[35px] rounded-full pointer-events-none" />
+
+                    {/* Card Header Badge */}
+                    <div className="flex items-center gap-2 mb-4 text-primary">
+                      <span className="material-symbols-outlined text-[18px]">
+                        account_balance
+                      </span>
+                      <span className="font-label-sm text-[11px] uppercase tracking-wider font-semibold">
+                        Official Guidance
+                      </span>
+                      {msg.approach && (
+                        <span className="font-citation text-[10px] px-2 py-0.5 rounded bg-primary/10 text-primary/80 border border-primary/20">
+                          {msg.approach === 'extractive' ? '⚡ Extractive AI Overview' : msg.approach}
+                        </span>
+                      )}
+                      <span className="ml-auto font-citation text-[10px] text-on-surface-variant/70">
+                        Grounded in 3,837+ indexed chunks
+                      </span>
+                    </div>
+
+                    {/* Markdown Content with citations */}
+                    <div className="prose prose-invert max-w-none font-body-md text-[14.5px] leading-relaxed text-on-surface/90 space-y-4">
+                      <ReactMarkdown>{msg.content || '...'}</ReactMarkdown>
+                    </div>
+
+                    {/* Interactive Citation Chips */}
+                    {msg.sources && msg.sources.length > 0 && (
+                      <div className="mt-5 pt-3 border-t border-white/5 flex flex-wrap gap-2 items-center">
+                        <span className="font-citation text-[10px] uppercase text-on-surface-variant/60 mr-1">
+                          Citations:
+                        </span>
+                        {msg.sources.map((src, i) => (
+                          <button
+                            key={i}
+                            onClick={() => onOpenSource(src)}
+                            className="citation-chip px-2 py-1 rounded text-[11px] font-citation inline-flex items-center gap-1.5 cursor-pointer hover:bg-secondary/20 transition-colors"
+                            title="Click to view full statutory / case document"
+                          >
+                            <span className="material-symbols-outlined text-[13px]">
+                              {src.doc_type === 'Act' ? 'gavel' : 'menu_book'}
+                            </span>
+                            <span>
+                              {src.title ? src.title.slice(0, 32) + (src.title.length > 32 ? '…' : '') : `Source ${i + 1}`}
+                            </span>
+                          </button>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* Suggested Action Buttons */}
+                    {!msg.streaming && msg.content && (
+                      <div className="mt-6 pt-4 border-t border-white/5 flex flex-wrap justify-between items-center gap-3">
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => pinArgument(msg.content)}
+                            className="brass-outline-button px-3 py-1 rounded text-xs flex items-center gap-1.5"
+                          >
+                            <span className="material-symbols-outlined text-[14px]">add_box</span>
+                            <span>Add to Argument</span>
+                          </button>
+                          {msg.sources?.[0] && (
+                            <button
+                              onClick={() => onOpenSource(msg.sources[0])}
+                              className="brass-outline-button px-3 py-1 rounded text-xs flex items-center gap-1.5"
+                            >
+                              <span className="material-symbols-outlined text-[14px]">find_in_page</span>
+                              <span>View Full Judgement</span>
+                            </button>
+                          )}
+                        </div>
+
+                        <div className="flex gap-3">
+                          <button
+                            onClick={() => {
+                              navigator.clipboard.writeText(msg.content);
+                              toast.success('Citation copied');
+                            }}
+                            className="text-on-surface-variant hover:text-primary transition-colors flex items-center gap-1 text-[11px] font-citation uppercase"
+                          >
+                            <span className="material-symbols-outlined text-[14px]">content_copy</span>
+                            <span>Copy Citation</span>
+                          </button>
+                          <button
+                            onClick={() => handleExportPDF(msg.content)}
+                            className="text-on-surface-variant hover:text-primary transition-colors flex items-center gap-1 text-[11px] font-citation uppercase"
+                          >
+                            <span className="material-symbols-outlined text-[14px]">picture_as_pdf</span>
+                            <span>Export PDF</span>
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+
+            {/* Progress Thread (Active during streaming/retrieval) */}
+            {isLoading && (
+              <div className="flex items-center gap-3 text-primary/80 ml-5 mt-2 animate-[subtle-pulse_3s_ease-in-out_infinite]">
+                <span className="material-symbols-outlined text-[16px] animate-spin">
+                  sync
+                </span>
+                <div className="font-citation text-citation text-[11px] uppercase tracking-wider flex items-center gap-2">
+                  <span className={currentRetrievalStep >= 0 ? 'text-primary font-bold' : 'opacity-40'}>
+                    Searching
+                  </span>
+                  <span className="material-symbols-outlined text-[10px]">arrow_forward_ios</span>
+                  <span className={currentRetrievalStep >= 1 ? 'text-primary font-bold' : 'opacity-40'}>
+                    Re-ranking
+                  </span>
+                  <span className="material-symbols-outlined text-[10px]">arrow_forward_ios</span>
+                  <span className={currentRetrievalStep >= 2 ? 'text-primary font-bold' : 'opacity-40'}>
+                    Drafting
+                  </span>
+                </div>
+                <div className="h-[2px] flex-1 bg-primary/20 progress-thread ml-2 rounded-full" />
+              </div>
+            )}
+
+            <div ref={bottomRef} />
+          </div>
+        </div>
+
+        {/* ══ BOTTOM INPUT AREA ═══════════════════════════════════ */}
+        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-brass/10 bg-surface/80 backdrop-blur-xl z-20">
+          <div className="max-w-4xl mx-auto relative flex items-end bg-surface-container-high rounded-lg border border-brass/10 focus-within:border-brass/40 focus-within:shadow-[0_0_12px_rgba(176,141,87,0.15)] transition-all p-2">
+            <button
+              onClick={toggleVoice}
+              className={`p-2 transition-colors rounded ${
+                isListening ? 'text-error bg-error/10 animate-pulse' : 'text-on-surface-variant hover:text-primary'
+              }`}
+              title="Voice Input (Speech to Text)"
+            >
+              <span className="material-symbols-outlined text-[20px]">
+                {isListening ? 'mic' : 'mic_none'}
+              </span>
+            </button>
+
+            <textarea
+              ref={textareaRef}
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={handleKeyDown}
+              rows={1}
+              placeholder="Ask a legal question, analyze a section, or specify a drafting task..."
+              className="flex-1 bg-transparent border-none focus:ring-0 text-on-surface font-body-md text-[14.5px] resize-none py-2 px-2 custom-scroll max-h-32 placeholder:text-on-surface-variant/40 outline-none"
+            />
+
+            <button
+              onClick={() => sendMessage()}
+              disabled={!input.trim() || isLoading}
+              className="p-2 text-surface-dim bg-primary rounded-md hover:bg-primary-fixed-dim transition-colors ml-2 self-end mb-0.5 cursor-pointer disabled:opacity-40"
+              title="Send Query"
+            >
+              <span
+                className="material-symbols-outlined text-[20px]"
+                style={{ fontVariationSettings: "'FILL' 1" }}
+              >
+                send
+              </span>
+            </button>
+          </div>
+
+          <div className="text-center mt-2">
+            <span className="font-citation text-citation text-[10px] text-on-surface-variant/50">
+              AI responses are for research purposes. Verify critical statutory provisions with primary sources.
+            </span>
+          </div>
+        </div>
+      </main>
     </div>
   );
 }

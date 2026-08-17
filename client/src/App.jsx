@@ -1,44 +1,95 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Toaster } from 'react-hot-toast';
 import { AppProvider, useApp } from './context/AppContext';
+import LoginSignup from './LoginSignup';
 import TriPaneLayout from './components/Layout/TriPaneLayout';
 import CommandPalette from './components/Overlays/CommandPalette';
 import IpcBnsComparator from './components/Overlays/IpcBnsComparator';
 import PrecedentGraph from './components/Overlays/PrecedentGraph';
 import StatsModal from './components/Overlays/StatsModal';
 import ShortcutsModal from './components/Overlays/ShortcutsModal';
+import StrategySimulator from './components/Overlays/StrategySimulator';
+import CaseIntakeWizard from './components/Overlays/CaseIntakeWizard';
 import MatterSidebar from './components/LeftPane/MatterSidebar';
 import ChatInterface from './components/CenterPane/ChatInterface';
 import SourceDossier from './components/RightPane/SourceDossier';
 import ArgumentBuilder from './components/BottomDock/ArgumentBuilder';
 
 function AppShell() {
-  const { isDossierOpen, openDossier, statsOpen, setStatsOpen, shortcutsOpen, setShortcutsOpen } = useApp();
+  const {
+    openDossier,
+    statsOpen,
+    setStatsOpen,
+    shortcutsOpen,
+    setShortcutsOpen,
+    strategySimulatorOpen,
+    setStrategySimulatorOpen,
+    caseIntakeOpen,
+    setCaseIntakeOpen,
+  } = useApp();
+
+  const [auth, setAuth] = useState(() => {
+    try {
+      const saved = localStorage.getItem('lmr_auth');
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
+  });
+
+  const handleLogin = (authData) => {
+    setAuth(authData);
+    localStorage.setItem('lmr_auth', JSON.stringify(authData));
+  };
+
+  const handleLogout = () => {
+    setAuth(null);
+    localStorage.removeItem('lmr_auth');
+  };
+
+  // If not logged in, display the shader login screen
+  if (!auth) {
+    return <LoginSignup onLogin={handleLogin} />;
+  }
 
   return (
     <>
-      {/* ─── Toast Notifications ─── */}
+      {/* Toast notifications */}
       <Toaster
         position="top-center"
         toastOptions={{
-          style: { background: '#18181b', color: '#e4e4e7', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '12px', fontSize: '13px', fontWeight: '500' },
-          success: { iconTheme: { primary: '#10b981', secondary: '#18181b' } },
-          error: { iconTheme: { primary: '#ef4444', secondary: '#18181b' } },
+          style: {
+            background: '#16181D',
+            color: '#C8C4BA',
+            border: '1px solid rgba(176,141,87,0.2)',
+            borderRadius: '8px',
+            fontSize: '13px',
+            fontWeight: '500',
+            fontFamily: 'Inter, system-ui, sans-serif',
+            boxShadow: '0 8px 32px rgba(0,0,0,0.55)',
+            padding: '10px 16px',
+          },
+          success: { iconTheme: { primary: '#6F8F82', secondary: '#16181D' } },
+          error: { iconTheme: { primary: '#A2503C', secondary: '#16181D' } },
+          loading: { iconTheme: { primary: '#B08D57', secondary: '#16181D' } },
         }}
       />
 
-      {/* ─── All Overlays ─── */}
+      {/* Interactive Overlays */}
       <CommandPalette />
       <IpcBnsComparator />
       <PrecedentGraph />
       {statsOpen && <StatsModal onClose={() => setStatsOpen(false)} />}
       {shortcutsOpen && <ShortcutsModal onClose={() => setShortcutsOpen(false)} />}
+      {strategySimulatorOpen && (
+        <StrategySimulator onClose={() => setStrategySimulatorOpen(false)} />
+      )}
+      {caseIntakeOpen && <CaseIntakeWizard onClose={() => setCaseIntakeOpen(false)} />}
 
-      {/* ─── Main Tri-Pane Layout ─── */}
+      {/* Main TriPane Layout */}
       <TriPaneLayout
-        isRightPaneOpen={isDossierOpen}
-        leftPane={<MatterSidebar />}
-        centerPane={<ChatInterface onOpenSource={openDossier} />}
+        leftPane={<MatterSidebar onLogout={handleLogout} />}
+        centerPane={<ChatInterface onOpenSource={openDossier} onLogout={handleLogout} />}
         rightPane={<SourceDossier />}
         bottomDock={<ArgumentBuilder />}
       />

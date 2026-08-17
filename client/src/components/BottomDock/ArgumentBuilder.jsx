@@ -1,79 +1,207 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronUp, Pin, Trash2, Download, X, FileText } from 'lucide-react';
+import { ChevronUp, Pin, Download, X, FileText, Wand2 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 
 export default function ArgumentBuilder() {
   const { pinnedArguments, removePin } = useApp();
   const [isOpen, setIsOpen] = useState(false);
+  const [wordCount, setWordCount] = useState(0);
+
+  const totalWords = pinnedArguments.reduce(
+    (acc, a) => acc + a.text.split(/\s+/).filter(Boolean).length, 0
+  );
 
   const exportBrief = () => {
     if (!pinnedArguments.length) return;
-    const content = pinnedArguments
+    const body = pinnedArguments
       .map((a, i) => `## Argument ${i + 1}\n*Pinned: ${a.timestamp}*\n\n${a.text}\n\n---`)
       .join('\n\n');
-    const blob = new Blob([`# Legal Brief — Samvidhan AI\n*Generated: ${new Date().toLocaleString()}*\n\n${content}`], { type: 'text/markdown' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url; link.download = 'samvidhan_legal_brief.md'; link.click();
+    const md = `# Legal Brief — LegalMindRag\n*Generated: ${new Date().toLocaleString()}*\n\n${body}`;
+    const blob = new Blob([md], { type: 'text/markdown' });
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
+    a.href = url; a.download = 'legalmindrag_brief.md'; a.click();
     URL.revokeObjectURL(url);
   };
 
   return (
-    <div className="w-full bg-zinc-950/95 border-t border-white/5 backdrop-blur-xl">
-      {/* Handle */}
-      <div className="flex items-center justify-between px-5 py-2.5 cursor-pointer hover:bg-white/2 transition-colors select-none"
-        onClick={() => setIsOpen(p => !p)}>
-        <div className="flex items-center gap-2.5">
-          <div className="w-5 h-5 rounded-md bg-purple-900/40 border border-purple-500/20 flex items-center justify-center">
-            <Pin className="w-3 h-3 text-purple-400" />
+    <div
+      className="w-full relative"
+      style={{
+        background: '#16181D',
+        borderTop: '1px solid rgba(176,141,87,0.12)',
+        boxShadow: '0 -8px 32px rgba(0,0,0,0.4)',
+        zIndex: 50,
+      }}
+    >
+      {/* Top brass thread */}
+      <div className="absolute top-0 left-0 right-0 h-px pointer-events-none"
+        style={{ background: 'linear-gradient(90deg, transparent, rgba(176,141,87,0.3), transparent)' }} />
+
+      {/* ── Handle ── */}
+      <button
+        onClick={() => setIsOpen(p => !p)}
+        className="w-full flex items-center justify-between px-5 py-3.5 group transition-all"
+        onMouseEnter={e => e.currentTarget.style.background = 'rgba(176,141,87,0.03)'}
+        onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+      >
+        <div className="flex items-center gap-3">
+          {/* Brass-outlined icon */}
+          <div className="w-7 h-7 flex items-center justify-center rounded-lg"
+            style={{
+              background: 'transparent',
+              border: '1px solid rgba(176,141,87,0.25)',
+            }}>
+            <Pin className="w-3.5 h-3.5" style={{ color: '#B08D57' }} />
           </div>
-          <span className="text-xs font-semibold text-zinc-400">Argument Builder</span>
-          {pinnedArguments.length > 0 && (
-            <motion.span initial={{ scale: 0 }} animate={{ scale: 1 }}
-              className="text-[10px] font-bold bg-purple-900/40 border border-purple-500/20 text-purple-400 px-1.5 py-0.5 rounded-full">
-              {pinnedArguments.length}
-            </motion.span>
+
+          <span className="font-display text-sm font-medium" style={{ color: '#8A8778' }}>
+            Argument Builder
+          </span>
+
+          <AnimatePresence>
+            {pinnedArguments.length > 0 && (
+              <motion.span
+                initial={{ scale: 0, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0, opacity: 0 }}
+                className="font-mono text-[10px] px-2 py-0.5 rounded"
+                style={{
+                  background: 'rgba(176,141,87,0.1)',
+                  border: '1px solid rgba(176,141,87,0.2)',
+                  color: '#B08D57',
+                }}
+              >
+                {pinnedArguments.length}
+              </motion.span>
+            )}
+          </AnimatePresence>
+
+          {/* Live word count */}
+          {isOpen && totalWords > 0 && (
+            <span className="font-mono text-[10px]" style={{ color: '#4A4840' }}>
+              {totalWords} words
+            </span>
           )}
         </div>
+
         <div className="flex items-center gap-2">
-          {isOpen && pinnedArguments.length > 0 && (
-            <button onClick={e => { e.stopPropagation(); exportBrief(); }}
-              className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-[11px] text-zinc-400 hover:text-zinc-200 transition-all">
-              <Download className="w-3 h-3" /> Export .md
-            </button>
-          )}
-          <motion.div animate={{ rotate: isOpen ? 180 : 0 }} transition={{ duration: 0.2 }}>
-            <ChevronUp className="w-4 h-4 text-zinc-600" />
+          <AnimatePresence>
+            {isOpen && pinnedArguments.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0, x: 10 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 10 }}
+                className="flex items-center gap-2"
+              >
+                {/* Generate Draft */}
+                <button
+                  onClick={e => { e.stopPropagation(); exportBrief(); }}
+                  className="btn-brass flex items-center gap-1.5 px-3 py-1.5 text-xs"
+                >
+                  <Wand2 className="w-3.5 h-3.5" />
+                  Generate Draft
+                </button>
+                {/* Export MD */}
+                <button
+                  onClick={e => { e.stopPropagation(); exportBrief(); }}
+                  className="btn-brass-outline flex items-center gap-1.5 px-3 py-1.5 text-xs"
+                >
+                  <Download className="w-3.5 h-3.5" />
+                  Export
+                </button>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          <motion.div
+            animate={{ rotate: isOpen ? 180 : 0 }}
+            transition={{ duration: 0.22, ease: [0.25, 0, 0.15, 1] }}
+          >
+            <ChevronUp className="w-4 h-4" style={{ color: '#4A4840' }} />
           </motion.div>
         </div>
-      </div>
+      </button>
 
-      {/* Content */}
+      {/* ── Expanded panel ── */}
       <AnimatePresence>
         {isOpen && (
-          <motion.div initial={{ height: 0 }} animate={{ height: 180 }} exit={{ height: 0 }}
-            transition={{ type: 'spring', bounce: 0, duration: 0.3 }} className="overflow-hidden">
-            <div className="h-[180px] overflow-y-auto px-5 pb-4 scrollbar-thin scrollbar-thumb-zinc-800">
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 260, opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.28, ease: [0.25, 0, 0.15, 1] }}
+            className="overflow-hidden"
+            style={{ background: '#0E0F12' }}
+          >
+            <div className="h-full overflow-y-auto px-5 py-4 scrollbar-chambers">
               {pinnedArguments.length === 0 ? (
                 <div className="h-full flex flex-col items-center justify-center text-center">
-                  <FileText className="w-7 h-7 text-zinc-800 mb-2" />
-                  <p className="text-xs text-zinc-600">No arguments pinned yet.</p>
-                  <p className="text-[11px] text-zinc-700 mt-0.5">Click <strong className="text-zinc-600">Pin</strong> on any AI response.</p>
+                  <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-4"
+                    style={{
+                      background: 'transparent',
+                      border: '1px dashed rgba(176,141,87,0.2)',
+                    }}>
+                    <FileText className="w-5 h-5" style={{ color: '#4A4840' }} />
+                  </div>
+                  <p className="font-display text-sm mb-1.5" style={{ color: '#8A8778' }}>
+                    Dock is empty
+                  </p>
+                  <p className="text-xs leading-relaxed max-w-[200px]" style={{ color: '#4A4840' }}>
+                    Click the pin icon on any response to add it here. Drag citation chips directly.
+                  </p>
                 </div>
               ) : (
-                <div className="space-y-2 pt-2">
-                  {pinnedArguments.map((arg) => (
-                    <motion.div key={arg.id} initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }}
-                      className="flex items-start gap-2.5 p-3 rounded-xl bg-zinc-900 border border-white/5">
-                      <div className="flex-1 min-w-0">
-                        <p className="text-[11px] text-zinc-400 leading-relaxed line-clamp-2">{arg.text}</p>
-                        <p className="text-[10px] text-zinc-700 mt-1">{arg.timestamp}</p>
-                      </div>
-                      <button onClick={() => removePin(arg.id)}
-                        className="p-1 rounded-md hover:bg-zinc-800 text-zinc-700 hover:text-red-400 transition-all flex-shrink-0">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                  {pinnedArguments.map((arg, i) => (
+                    <motion.div
+                      key={arg.id}
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: i * 0.04 }}
+                      className="group relative flex flex-col p-4 rounded-xl transition-all duration-150"
+                      style={{
+                        background: '#16181D',
+                        border: '1px solid rgba(176,141,87,0.1)',
+                      }}
+                      onMouseEnter={e => {
+                        e.currentTarget.style.borderColor = 'rgba(176,141,87,0.25)';
+                        e.currentTarget.style.boxShadow = '0 4px 16px rgba(0,0,0,0.3)';
+                      }}
+                      onMouseLeave={e => {
+                        e.currentTarget.style.borderColor = 'rgba(176,141,87,0.1)';
+                        e.currentTarget.style.boxShadow = 'none';
+                      }}
+                    >
+                      {/* Remove */}
+                      <button
+                        onClick={() => removePin(arg.id)}
+                        className="absolute top-2.5 right-2.5 w-5 h-5 flex items-center justify-center rounded opacity-0 group-hover:opacity-100 transition-all"
+                        style={{ background: 'rgba(162,80,60,0.12)', color: '#A2503C' }}
+                      >
                         <X className="w-3 h-3" />
                       </button>
+
+                      {/* Index */}
+                      <span className="font-mono text-[9px] mb-2" style={{ color: '#4A4840' }}>
+                        #{String(i + 1).padStart(2, '0')}
+                      </span>
+
+                      {/* Sage citation chips inline */}
+                      <p className="text-xs leading-relaxed flex-1 mb-3 line-clamp-4"
+                        style={{ color: '#8A8778' }}>
+                        {arg.text}
+                      </p>
+
+                      {/* Timestamp */}
+                      <p className="font-mono text-[9px] pt-2"
+                        style={{
+                          color: '#4A4840',
+                          borderTop: '1px solid rgba(176,141,87,0.08)',
+                        }}>
+                        {arg.timestamp}
+                      </p>
                     </motion.div>
                   ))}
                 </div>

@@ -27,6 +27,12 @@ from retrieval.hybrid_retriever_core import CoreHybridRetriever
 from generation.llm_client_core import CoreLLMClient
 from generation.prompt_builder_core import get_system_prompt, build_rag_prompt, format_docs_core
 
+# ── Extractive / Zero-LLM AI Overview Summarizer ──
+from generation.extractive_summarizer import generate_extractive_summary
+
+# ── Query Preprocessing ──
+from retrieval.query_preprocessor import preprocess_query
+
 import auth_db
 
 # ─── Logging ───
@@ -146,8 +152,8 @@ def get_approach():
 @app.post("/config/approach")
 def set_approach(req: ApproachRequest):
     """Switch the active approach globally."""
-    if req.approach not in ("langchain", "core_python"):
-        raise HTTPException(status_code=400, detail="Invalid approach. Use 'langchain' or 'core_python'.")
+    if req.approach not in ("langchain", "core_python", "extractive"):
+        raise HTTPException(status_code=400, detail="Invalid approach. Use 'langchain', 'core_python', or 'extractive'.")
     rag.active_approach = req.approach
     logger.info(f"🔄 Switched active approach to: {req.approach}")
     return {"approach": rag.active_approach}
@@ -161,14 +167,36 @@ def query_rag(request: QueryRequest):
     
     filters = {"category": request.category} if request.category else None
 
-    if approach == "langchain":
-        return _query_langchain(request.query, filters, start_time)
+    # Expand legal abbreviations before retrieval
+    processed_query = preprocess_query(request.query)
+
+    if approach == "extractive":
+        return _query_extractive(processed_query, filters, start_time)
+    elif approach == "langchain":
+        return _query_langchain(processed_query, filters, start_time)
     else:
-        return _query_core_python(request.query, filters, start_time)
+        return _query_core_python(processed_query, filters, start_time)
+
+
+def _query_extractive(query: str, filters: dict, start_time: float):
+    """Extractive Search Mode — Gemini / Google AI Overview style structured synthesis without LLM."""
+    retriever = rag.core_retriever or rag.lc_retriever
+    results = retriever.retrieve(
+        query=query, top_k=config.TOP_K_RERANK,
+        filters=filters, use_reranker=config.USE_RERANKER
+    )
+    if not results:
+        return {
+            "answer": "[ERR_NO_DATA_FOUND]", "sources": [],
+            "metrics": {"time": round(time.time() - start_time, 2), "approach": "extractive"}
+        }
+
+    answer = generate_extractive_summary(query, results)
+    return _format_response(answer, results, start_time, "extractive")
 
 
 def _query_langchain(query: str, filters: dict, start_time: float):
-    """Approach 1: LangChain LCEL Chain."""
+    """Approach 1: LangChain LCEL Chain with Extractive fallback."""
     results = rag.lc_retriever.retrieve(
         query=query, top_k=config.TOP_K_RERANK,
         filters=filters, use_reranker=config.USE_RERANKER
@@ -179,19 +207,24 @@ def _query_langchain(query: str, filters: dict, start_time: float):
             "metrics": {"time": round(time.time() - start_time, 2), "approach": "langchain"}
         }
 
-    prompt = get_rag_prompt_template()
-    chain = (
-        {"context": lambda x: format_docs(results), "query": RunnablePassthrough()}
-        | prompt
-        | rag.lc_llm.llm
-        | StrOutputParser()
-    )
-    answer = chain.invoke(query)
+    try:
+        prompt = get_rag_prompt_template()
+        chain = (
+            {"context": lambda x: format_docs(results), "query": RunnablePassthrough()}
+            | prompt
+            | rag.lc_llm.llm
+            | StrOutputParser()
+        )
+        answer = chain.invoke(query)
+    except Exception as e:
+        logger.warning(f"LangChain generation failed ({e}), falling back to Extractive AI Overview.")
+        answer = generate_extractive_summary(query, results)
+
     return _format_response(answer, results, start_time, "langchain")
 
 
 def _query_core_python(query: str, filters: dict, start_time: float):
-    """Approach 2: Core Python — direct Ollama REST API."""
+    """Approach 2: Core Python — direct Ollama REST API with Extractive fallback."""
     results = rag.core_retriever.retrieve(
         query=query, top_k=config.TOP_K_RERANK,
         filters=filters, use_reranker=config.USE_RERANKER
@@ -205,6 +238,11 @@ def _query_core_python(query: str, filters: dict, start_time: float):
     system_prompt = get_system_prompt()
     user_prompt = build_rag_prompt(query, results)
     answer = rag.core_llm.generate(system_prompt, user_prompt)
+    
+    if answer.startswith("Error: Could not generate response"):
+        logger.warning("Ollama unreachable, falling back to Extractive AI Overview.")
+        answer = generate_extractive_summary(query, results)
+
     return _format_response(answer, results, start_time, "core_python")
 
 
@@ -228,17 +266,53 @@ def _format_response(answer, results, start_time, approach):
 
 
 @app.get("/stream")
-def stream_rag(query: str, category: str = None, approach: str = None):
+def stream_rag(query: str, category: str = None, approach: str = None, devils_advocate: bool = False):
     """Streaming endpoint — routes to the selected approach."""
     effective_approach = _get_approach(approach)
+
+    # Expand legal abbreviations before retrieval
+    processed_query = preprocess_query(query)
     
-    if effective_approach == "langchain":
-        return StreamingResponse(_stream_langchain(query, category), media_type="text/event-stream")
+    if effective_approach == "extractive":
+        return StreamingResponse(_stream_extractive(processed_query, category), media_type="text/event-stream")
+    elif effective_approach == "langchain":
+        return StreamingResponse(_stream_langchain(processed_query, category, devils_advocate), media_type="text/event-stream")
     else:
-        return StreamingResponse(_stream_core_python(query, category), media_type="text/event-stream")
+        return StreamingResponse(_stream_core_python(processed_query, category, devils_advocate), media_type="text/event-stream")
 
 
-def _stream_langchain(query: str, category: str = None):
+def _stream_extractive(query: str, category: str = None):
+    """Extractive Search streaming."""
+    start_time = time.time()
+    filters = {"category": category} if category else None
+    
+    retriever = rag.core_retriever or rag.lc_retriever
+    results = retriever.retrieve(
+        query=query, top_k=config.TOP_K_RERANK,
+        filters=filters, use_reranker=config.USE_RERANKER
+    )
+    
+    yield f"data: {json.dumps({'type': 'approach', 'data': 'extractive'})}\n\n"
+    sources_data = _build_sources_data(results)
+    yield f"data: {json.dumps({'type': 'sources', 'data': sources_data})}\n\n"
+    
+    if not results:
+        yield f"data: {json.dumps({'type': 'token', 'content': '[ERR_NO_DATA_FOUND]'})}\n\n"
+        yield f"data: {json.dumps({'type': 'done', 'time': round(time.time() - start_time, 2)})}\n\n"
+        return
+        
+    summary = generate_extractive_summary(query, results)
+    # Stream in small words/tokens
+    words = summary.split(" ")
+    for w in words:
+        yield f"data: {json.dumps({'type': 'token', 'content': w + ' '})}\n\n"
+        time.sleep(0.01)
+        
+    total_time = time.time() - start_time
+    yield f"data: {json.dumps({'type': 'done', 'time': round(total_time, 2)})}\n\n"
+
+
+def _stream_langchain(query: str, category: str = None, devils_advocate: bool = False):
     """Approach 1: LangChain LCEL streaming."""
     start_time = time.time()
     filters = {"category": category} if category else None
@@ -262,6 +336,10 @@ def _stream_langchain(query: str, category: str = None):
     
     # Build LCEL Chain
     prompt = get_rag_prompt_template()
+    if devils_advocate:
+        # In a real app we'd swap the prompt template entirely. We'll simulate by appending instruction to query
+        query = "PLAY DEVIL'S ADVOCATE. Challenge my argument, find loopholes, and present counter-risks.\n\n" + query
+
     chain = (
         {"context": lambda x: format_docs(results), "query": RunnablePassthrough()}
         | prompt
@@ -277,7 +355,7 @@ def _stream_langchain(query: str, category: str = None):
     yield f"data: {json.dumps({'type': 'done', 'time': round(total_time, 2)})}\n\n"
 
 
-def _stream_core_python(query: str, category: str = None):
+def _stream_core_python(query: str, category: str = None, devils_advocate: bool = False):
     """Approach 2: Core Python streaming via raw Ollama HTTP."""
     start_time = time.time()
     filters = {"category": category} if category else None
@@ -301,6 +379,9 @@ def _stream_core_python(query: str, category: str = None):
     
     # Build prompt strings
     system_prompt = get_system_prompt()
+    if devils_advocate:
+        system_prompt += "\n\nCRITICAL INSTRUCTION: You are playing DEVIL'S ADVOCATE. Your ONLY job is to challenge the user's argument, find legal loopholes, and present opposing counter-risks. Do not agree with the user. Format the output to highlight these counter-risks clearly."
+        
     user_prompt = build_rag_prompt(query, results)
     
     # Stream tokens via raw Ollama HTTP
