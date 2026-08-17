@@ -63,6 +63,8 @@ LEGAL_CONCEPT_HINTS = [
      ' Zero FIR Section 173 Bharatiya Nagarik Suraksha Sanhita BNSS 2023'),
     (r'\bbasic structure\b',
      ' Basic Structure Doctrine Kesavananda Bharati Article 368 Constitution of India'),
+    (r'\bunsoundness of mind\b|\blegal insanity\b|\binsane delusion\b',
+     ' Section 84 Indian Penal Code Section 22 Bharatiya Nyaya Sanhita Legal Insanity Dahyabhai Thakkar'),
 ]
 
 
