@@ -1,5 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+
+const QUOTE_TEXT = "Justice is the constant and perpetual will to allot to every man his due.";
 
 export default function LoginSignup({ onLogin }) {
   const [isLogin, setIsLogin] = useState(true);
@@ -8,117 +10,6 @@ export default function LoginSignup({ onLogin }) {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
-  const canvasRef = useRef(null);
-
-  // WebGL Shader Effect matching user's spec
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    function syncSize() {
-      if (!canvas) return;
-      const w = canvas.clientWidth || 1280;
-      const h = canvas.clientHeight || 720;
-      if (canvas.width !== w || canvas.height !== h) {
-        canvas.width = w;
-        canvas.height = h;
-      }
-    }
-    syncSize();
-
-    let resizeObs;
-    if (typeof ResizeObserver !== 'undefined') {
-      resizeObs = new ResizeObserver(syncSize);
-      resizeObs.observe(canvas);
-    }
-
-    const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-    if (!gl) return;
-
-    const vs = `attribute vec2 a_position;
-    varying vec2 v_texCoord;
-    void main() {
-      v_texCoord = a_position * 0.5 + 0.5;
-      gl_Position = vec4(a_position, 0.0, 1.0);
-    }`;
-
-    const fs = `precision highp float;
-    uniform float u_time;
-    uniform vec2 u_resolution;
-    uniform vec2 u_mouse;
-
-    void main() {
-        vec2 uv = gl_FragCoord.xy / u_resolution.xy;
-        uv.x *= u_resolution.x / u_resolution.y;
-
-        // Slow drifting columns effect
-        float columns = abs(sin(uv.x * 8.0 + sin(u_time * 0.2) * 0.5));
-        float mask = smoothstep(0.48, 0.5, columns);
-        
-        // Brass color components
-        vec3 brass = vec3(0.69, 0.55, 0.34); // #B08D57
-        vec3 dark = vec3(0.055, 0.059, 0.07); // #0E0F12
-        
-        float pattern = mask * (0.05 + 0.02 * sin(u_time * 0.5));
-        vec3 finalColor = mix(dark, brass, pattern);
-        
-        gl_FragColor = vec4(finalColor, 1.0);
-    }`;
-
-    function compileShader(type, src) {
-      const s = gl.createShader(type);
-      gl.shaderSource(s, src);
-      gl.compileShader(s);
-      return s;
-    }
-
-    const prog = gl.createProgram();
-    gl.attachShader(prog, compileShader(gl.VERTEX_SHADER, vs));
-    gl.attachShader(prog, compileShader(gl.FRAGMENT_SHADER, fs));
-    gl.linkProgram(prog);
-    gl.useProgram(prog);
-
-    const buf = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, buf);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
-
-    const pos = gl.getAttribLocation(prog, 'a_position');
-    gl.enableVertexAttribArray(pos);
-    gl.vertexAttribPointer(pos, 2, gl.FLOAT, false, 0, 0);
-
-    const uTime = gl.getUniformLocation(prog, 'u_time');
-    const uRes = gl.getUniformLocation(prog, 'u_resolution');
-    const uMouse = gl.getUniformLocation(prog, 'u_mouse');
-
-    let mouse = { x: canvas.width / 2, y: canvas.height / 2 };
-    const handleMouseMove = (event) => {
-      const rect = canvas.getBoundingClientRect();
-      if (rect.width && rect.height) {
-        const nx = (event.clientX - rect.left) / rect.width;
-        const ny = 1.0 - (event.clientY - rect.top) / rect.height;
-        mouse.x = nx * canvas.width;
-        mouse.y = ny * canvas.height;
-      }
-    };
-    window.addEventListener('mousemove', handleMouseMove);
-
-    let animId;
-    function render(t) {
-      gl.viewport(0, 0, canvas.width, canvas.height);
-      if (uTime) gl.uniform1f(uTime, t * 0.001);
-      if (uRes) gl.uniform2f(uRes, canvas.width, canvas.height);
-      if (uMouse) gl.uniform2f(uMouse, mouse.x, mouse.y);
-      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-      animId = requestAnimationFrame(render);
-    }
-    animId = requestAnimationFrame(render);
-
-    return () => {
-      cancelAnimationFrame(animId);
-      window.removeEventListener('mousemove', handleMouseMove);
-      if (resizeObs) resizeObs.disconnect();
-    };
-  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -138,7 +29,7 @@ export default function LoginSignup({ onLogin }) {
       if (!res.ok) throw new Error(data.detail || 'Authorization failed');
       onLogin(data);
     } catch (err) {
-      // Fallback guest login if backend auth fails or is in extractive mode
+      // Fallback guest login if backend auth fails
       if (err.message.includes('Failed to fetch')) {
         onLogin({ access_token: 'local_token', token_type: 'bearer', username: username.trim() });
       } else {
@@ -154,180 +45,189 @@ export default function LoginSignup({ onLogin }) {
   };
 
   return (
-    <div className="bg-obsidian text-on-surface h-screen w-full flex overflow-hidden font-inter">
-      {/* Left Panel: Brand & Shader */}
-      <div className="hidden md:flex relative w-1/2 h-full bg-obsidian items-center justify-center p-16 overflow-hidden">
-        {/* Shader Animation Background */}
-        <div className="absolute inset-0 w-full h-full">
-          <canvas ref={canvasRef} style={{ display: 'block', width: '100%', height: '100%' }} />
-        </div>
+    <div className="bg-[#0E0F12] text-[#e3e2e6] h-screen w-full flex overflow-hidden font-eb-garamond relative">
+      {/* Full Screen Cinematic Background with Ken Burns Effect */}
+      <div className="absolute inset-0 w-full h-full z-0 overflow-hidden">
+        <img
+          alt="Cinematic Supreme Court Chamber"
+          className="w-full h-full object-cover animate-ken-burns transform scale-105 opacity-40"
+          src="https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=2000&q=80"
+        />
+      </div>
 
-        {/* Subtle Gradient Overlay for Text Readability */}
-        <div className="absolute inset-0 bg-gradient-to-tr from-obsidian via-obsidian/60 to-transparent pointer-events-none" />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-obsidian/90 pointer-events-none" />
+      {/* Deep Obsidian Overlay */}
+      <div className="absolute inset-0 bg-gradient-to-tr from-[#0E0F12]/95 via-[#0E0F12]/80 to-[#0E0F12]/60 z-0 pointer-events-none" />
 
-        {/* Quote Content */}
-        <div className="relative z-10 max-w-2xl text-center space-y-8">
-          <span className="material-symbols-outlined text-brass/50 text-[48px] drop-shadow-[0_0_8px_rgba(232,192,134,0.3)]">
-            balance
-          </span>
-          <p className="font-fraunces text-[36px] lg:text-[48px] leading-tight text-tertiary-fixed italic drop-shadow-[0_0_12px_rgba(247,224,180,0.2)]">
-            "Justice is the constant and perpetual will to allot to every man his due."
+      {/* Left Panel: Brand & Quote */}
+      <div className="hidden md:flex relative w-1/2 h-full items-center justify-center p-16 z-10">
+        <div className="relative z-10 max-w-2xl text-center space-y-8 drop-shadow-2xl">
+          <div className="flex justify-center mb-6">
+            <span className="material-symbols-outlined text-[#B08D57] text-[54px] drop-shadow-[0_0_15px_rgba(176,141,87,0.5)]">
+              balance
+            </span>
+          </div>
+
+          <p className="font-eb-garamond text-[42px] lg:text-[54px] leading-tight text-liquid-gold italic">
+            {QUOTE_TEXT.split('').map((char, index) => (
+              <span
+                key={index}
+                className="char-reveal"
+                style={{ animationDelay: `${index * 0.035}s` }}
+              >
+                {char === ' ' ? '\u00A0' : char}
+              </span>
+            ))}
           </p>
-          <div className="h-px w-16 bg-brass/40 mx-auto mt-8 shadow-[0_0_8px_rgba(232,192,134,0.4)]" />
-          <p className="font-citation text-xs tracking-widest text-on-surface-variant/60 uppercase">
-            Samvidhan AI · Indian Legal Intelligence
+
+          <div className="h-px w-20 bg-[#B08D57]/40 mx-auto mt-6 shadow-[0_0_8px_rgba(176,141,87,0.4)]" />
+          <p className="font-inter text-xs tracking-widest text-[#d1c5b6]/60 uppercase">
+            Samvidhan AI · Republic of India Legal Intelligence
           </p>
         </div>
       </div>
 
-      {/* Right Panel: Login Form */}
-      <div className="w-full md:w-1/2 h-full flex flex-col justify-center px-6 md:px-16 bg-obsidian relative">
-        <div className="max-w-md w-full mx-auto space-y-8">
-          {/* Header */}
-          <div className="space-y-2 text-center md:text-left mb-8">
-            <h1 className="font-fraunces text-[28px] md:text-[34px] text-brass tracking-tight">
-              Samvidhan AI
-            </h1>
-            <p className="text-[15px] text-on-surface-variant">
-              {isLogin ? 'Sign in to your private legal chamber' : 'Open your private legal workspace'}
-            </p>
-          </div>
-
-          {/* Error message */}
-          <AnimatePresence>
-            {error && (
-              <motion.div
-                initial={{ opacity: 0, y: -6 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0 }}
-                className="bg-error-container/20 border border-error/30 text-error px-4 py-2.5 rounded text-xs flex items-center gap-2"
-              >
-                <span className="material-symbols-outlined text-sm">warning</span>
-                <span>{error}</span>
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Identifier / Email Field */}
-            <div className="relative flex items-center">
-              <span className="material-symbols-outlined absolute left-0 text-on-surface-variant/40 pointer-events-none text-[20px]">
-                mail
-              </span>
-              <input
-                id="username"
-                type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                placeholder=" "
-                className="ghost-input w-full text-[15px] peer pl-8 pr-2 focus:border-brass"
-                autoComplete="username"
-              />
-              <label
-                htmlFor="username"
-                className="absolute left-8 text-on-surface-variant text-[14px] transition-all pointer-events-none
-                peer-placeholder-shown:top-2 peer-placeholder-shown:text-[14px] peer-placeholder-shown:text-on-surface-variant/60
-                peer-focus:-top-3.5 peer-focus:left-0 peer-focus:text-[11px] peer-focus:font-semibold peer-focus:text-brass
-                peer-[:not(:placeholder-shown)]:-top-3.5 peer-[:not(:placeholder-shown)]:left-0 peer-[:not(:placeholder-shown)]:text-[11px] peer-[:not(:placeholder-shown)]:text-brass"
-              >
-                Username or Chamber ID
-              </label>
-            </div>
-
-            {/* Password Field */}
-            <div className="relative flex items-center">
-              <span className="material-symbols-outlined absolute left-0 text-on-surface-variant/40 pointer-events-none text-[20px]">
-                lock
-              </span>
-              <input
-                id="password"
-                type={showPassword ? 'text' : 'password'}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder=" "
-                className="ghost-input w-full text-[15px] peer pl-8 pr-10 focus:border-brass"
-                autoComplete={isLogin ? 'current-password' : 'new-password'}
-              />
-              <label
-                htmlFor="password"
-                className="absolute left-8 text-on-surface-variant text-[14px] transition-all pointer-events-none
-                peer-placeholder-shown:top-2 peer-placeholder-shown:text-[14px] peer-placeholder-shown:text-on-surface-variant/60
-                peer-focus:-top-3.5 peer-focus:left-0 peer-focus:text-[11px] peer-focus:font-semibold peer-focus:text-brass
-                peer-[:not(:placeholder-shown)]:-top-3.5 peer-[:not(:placeholder-shown)]:left-0 peer-[:not(:placeholder-shown)]:text-[11px] peer-[:not(:placeholder-shown)]:text-brass"
-              >
-                Password
-              </label>
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-0 text-on-surface-variant/40 hover:text-brass transition-colors p-1"
-                title={showPassword ? 'Hide Password' : 'Show Password'}
-              >
-                <span className="material-symbols-outlined text-[20px]">
-                  {showPassword ? 'visibility_off' : 'visibility'}
+      {/* Right Panel: Login Form Slab */}
+      <div className="w-full md:w-1/2 h-full flex flex-col justify-center px-5 md:px-16 relative z-10">
+        <div className="glass-slab max-w-md w-full mx-auto p-8 md:p-10 rounded-2xl transition-all duration-700">
+          <div className="relative z-10">
+            {/* Header */}
+            <div className="flex flex-col items-center space-y-3 mb-8">
+              <div className="flex items-center gap-2">
+                <span className="material-symbols-outlined text-[#B08D57] text-[32px]">
+                  gavel
                 </span>
-              </button>
+                <h1 className="font-fraunces text-[28px] md:text-[32px] text-[#B08D57] tracking-tight font-medium">
+                  Samvidhan AI
+                </h1>
+              </div>
+              <p className="text-[16px] text-[#d1c5b6]/80 font-eb-garamond text-center">
+                {isLogin ? 'Sign in to your private legal chamber' : 'Create your private chamber account'}
+              </p>
             </div>
 
-            {/* Forgot Password / Guest demo link */}
-            <div className="flex justify-between items-center text-xs">
+            {/* Error Message */}
+            <AnimatePresence>
+              {error && (
+                <motion.div
+                  initial={{ opacity: 0, y: -8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0 }}
+                  className="bg-red-950/40 border border-red-500/30 text-red-300 px-4 py-2.5 rounded-lg text-xs flex items-center gap-2 mb-6 font-inter"
+                >
+                  <span className="material-symbols-outlined text-sm text-red-400">warning</span>
+                  <span>{error}</span>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {/* Form */}
+            <form onSubmit={handleSubmit} className="space-y-5">
+              {/* Email / Username Field */}
+              <div className="relative">
+                <label className="sr-only" htmlFor="username">Email or Chamber ID</label>
+                <div className="relative flex items-center">
+                  <span className="material-symbols-outlined absolute left-3.5 text-[#d1c5b6]/40 pointer-events-none" style={{ fontSize: '20px' }}>
+                    mail
+                  </span>
+                  <input
+                    id="username"
+                    name="username"
+                    type="text"
+                    required
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    placeholder="Chamber ID or Email address"
+                    className="carved-input font-inter text-[15px] pl-11"
+                    autoComplete="username"
+                  />
+                </div>
+              </div>
+
+              {/* Password Field */}
+              <div className="relative">
+                <label className="sr-only" htmlFor="password">Password</label>
+                <div className="relative flex items-center">
+                  <span className="material-symbols-outlined absolute left-3.5 text-[#d1c5b6]/40 pointer-events-none" style={{ fontSize: '20px' }}>
+                    lock
+                  </span>
+                  <input
+                    id="password"
+                    name="password"
+                    type={showPassword ? 'text' : 'password'}
+                    required
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="Chamber Password"
+                    className="carved-input font-inter text-[15px] pl-11 pr-11"
+                    autoComplete="current-password"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 text-[#d1c5b6]/40 hover:text-[#B08D57] transition-colors p-1"
+                    title={showPassword ? 'Hide Password' : 'Show Password'}
+                  >
+                    <span className="material-symbols-outlined" style={{ fontSize: '20px' }}>
+                      {showPassword ? 'visibility_off' : 'visibility'}
+                    </span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Actions & Forgot Password */}
+              <div className="flex items-center justify-between font-inter text-xs pt-1">
+                <button
+                  type="button"
+                  onClick={() => { setIsLogin(!isLogin); setError(null); }}
+                  className="text-[#d1c5b6]/70 hover:text-[#B08D57] transition-colors underline underline-offset-4"
+                >
+                  {isLogin ? "Need a chamber? Register" : "Already have a chamber? Sign in"}
+                </button>
+                <button
+                  type="button"
+                  onClick={handleDemoGuest}
+                  className="text-[#B08D57] hover:underline font-medium"
+                >
+                  Quick Demo Access
+                </button>
+              </div>
+
+              {/* Sign In Button */}
+              <div className="pt-2">
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full bg-gradient-to-r from-[#B08D57] to-[#775928] text-[#0E0F12] text-[15px] font-semibold py-3.5 px-4 rounded-lg shadow-[0_0_20px_rgba(176,141,87,0.3)] hover:shadow-[0_0_30px_rgba(176,141,87,0.6)] transition-all duration-300 ease-out active:scale-[0.98] hover-pulse font-inter uppercase tracking-wider disabled:opacity-50 flex items-center justify-center gap-2"
+                >
+                  {loading && <span className="material-symbols-outlined animate-spin text-sm">progress_activity</span>}
+                  <span>{isLogin ? 'Enter Chamber' : 'Create Chamber Account'}</span>
+                </button>
+              </div>
+            </form>
+
+            {/* Divider */}
+            <div className="relative flex items-center py-5">
+              <div className="flex-grow border-t border-[#B08D57]/20 shadow-[0_1px_0_rgba(255,255,255,0.05)]"></div>
+              <span className="flex-shrink-0 mx-4 text-[11px] text-[#d1c5b6]/60 font-inter tracking-widest uppercase">
+                Offline Mode
+              </span>
+              <div className="flex-grow border-t border-[#B08D57]/20 shadow-[0_1px_0_rgba(255,255,255,0.05)]"></div>
+            </div>
+
+            {/* Guest / Direct Entry */}
+            <div>
               <button
                 type="button"
                 onClick={handleDemoGuest}
-                className="text-secondary hover:text-secondary-fixed transition-colors font-citation"
+                className="w-full flex items-center justify-center gap-2.5 border border-[#B08D57]/30 bg-black/25 text-[#B08D57] text-[14px] font-medium py-3 px-4 rounded-lg hover:bg-[#B08D57]/10 hover:border-[#B08D57]/60 hover:shadow-[0_0_20px_rgba(176,141,87,0.15)] transition-all duration-300 ease-out font-inter backdrop-blur-sm"
               >
-                ⚡ Fast Enter as Guest Counsel
-              </button>
-              <a href="#" className="text-on-surface-variant/70 hover:text-brass transition-colors">
-                Forgot password?
-              </a>
-            </div>
-
-            {/* Submit button */}
-            <button
-              type="submit"
-              disabled={loading}
-              className="brass-button w-full text-[14px] font-semibold py-3 px-4 rounded-sm flex items-center justify-center gap-2 cursor-pointer active:scale-[0.98] transition-all"
-            >
-              {loading ? (
-                <span className="flex items-center gap-2">
-                  <span className="material-symbols-outlined text-sm animate-spin">sync</span>
-                  Authenticating...
+                <span className="material-symbols-outlined" style={{ fontSize: '20px' }}>
+                  lock_open
                 </span>
-              ) : (
-                <>
-                  <span>{isLogin ? 'Sign in' : 'Create Account'}</span>
-                  <span className="material-symbols-outlined text-sm">arrow_forward</span>
-                </>
-              )}
-            </button>
-          </form>
-
-          {/* Divider */}
-          <div className="relative flex items-center py-2">
-            <div className="flex-grow border-t border-brass/15" />
-            <span className="flex-shrink-0 mx-4 text-[12px] font-citation text-on-surface-variant/60">
-              OR
-            </span>
-            <div className="flex-grow border-t border-brass/15" />
+                Continue as Senior Counsel (Offline)
+              </button>
+            </div>
           </div>
-
-          {/* Switch mode */}
-          <button
-            type="button"
-            onClick={() => {
-              setIsLogin(!isLogin);
-              setError(null);
-            }}
-            className="brass-outline-button w-full flex items-center justify-center gap-2 text-[13px] font-medium py-2.5 px-4 rounded-sm"
-          >
-            <span className="material-symbols-outlined text-[18px]">
-              {isLogin ? 'person_add' : 'login'}
-            </span>
-            {isLogin ? 'Create a new Chamber Account' : 'Sign in to existing Chamber'}
-          </button>
         </div>
       </div>
     </div>

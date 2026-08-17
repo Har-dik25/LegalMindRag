@@ -51,6 +51,98 @@
   --glass-border-raised: rgba(176, 141, 87, 0.12);
 }
 
+/* ─── Luxury Cinematic & Glass Slab Styling ──────────────────── */
+@keyframes kenBurns {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.08); }
+}
+.animate-ken-burns {
+  animation: kenBurns 25s ease-in-out infinite alternate;
+}
+
+.glass-slab {
+  background: rgba(18, 19, 22, 0.45);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  border-top: 1px solid rgba(176, 141, 87, 0.35);
+  border-left: 1px solid rgba(176, 141, 87, 0.2);
+  border-right: 1px solid rgba(14, 15, 18, 0.85);
+  border-bottom: 1px solid rgba(14, 15, 18, 0.95);
+  box-shadow: 
+      20px 20px 45px rgba(0, 0, 0, 0.85),
+      inset 1px 1px 2px rgba(255, 255, 255, 0.06),
+      inset -1px -1px 2px rgba(0, 0, 0, 0.5);
+  position: relative;
+  overflow: hidden;
+}
+
+@keyframes shimmerGlint {
+  0% { transform: translateX(-150%) skewX(-45deg); }
+  20% { transform: translateX(200%) skewX(-45deg); }
+  100% { transform: translateX(200%) skewX(-45deg); }
+}
+.glass-slab::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+      to right,
+      rgba(176, 141, 87, 0) 0%,
+      rgba(176, 141, 87, 0.06) 50%,
+      rgba(176, 141, 87, 0) 100%
+  );
+  transform: skewX(-45deg);
+  animation: shimmerGlint 8s infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.carved-input {
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.45);
+  color: #e3e2e6;
+  border: 1px solid rgba(176, 141, 87, 0.22);
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+  transition: all 300ms ease;
+  box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.8), inset -1px -1px 2px rgba(255, 255, 255, 0.02);
+}
+.carved-input:focus {
+  border-color: #B08D57;
+  outline: none;
+  box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.8), 0 0 12px rgba(176, 141, 87, 0.35);
+}
+
+.text-liquid-gold {
+  background: linear-gradient(135deg, #f7e0b4 0%, #b08d57 50%, #775928 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 14px rgba(176, 141, 87, 0.45));
+}
+
+@keyframes pulseGlow {
+  0% { box-shadow: 0 0 0 0 rgba(176, 141, 87, 0.4); }
+  70% { box-shadow: 0 0 0 12px rgba(176, 141, 87, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(176, 141, 87, 0); }
+}
+.hover-pulse:hover { animation: pulseGlow 1.5s infinite; }
+
+.char-reveal {
+  opacity: 0;
+  display: inline-block;
+  animation: charFadeIn 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  transform-origin: bottom center;
+}
+
+@keyframes charFadeIn {
+  0% { opacity: 0; transform: translateY(10px) scale(0.95); filter: blur(4px); }
+  100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+}
+
 /* ─── Base reset ─────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; }
 
