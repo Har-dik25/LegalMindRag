@@ -146,16 +146,11 @@ export default function MatterSidebar() {
             </div>
 
             <div className="flex items-center justify-between border-t border-brass/5 pt-2 mt-1">
-              <span className="font-citation text-[10px] text-on-surface-variant">Mode</span>
-              <select
-                value={engine}
-                onChange={(e) => setEngine(e.target.value)}
-                className="bg-panel-slate border border-brass/20 text-primary font-citation text-[11px] py-0.5 px-2 rounded focus:ring-0 focus:outline-none cursor-pointer"
-              >
-                <option value="langchain">Llama 3.2 (LangChain)</option>
-                <option value="core_python">Mistral (Core Python)</option>
-                <option value="extractive">Extractive (Zero-LLM)</option>
-              </select>
+              <span className="font-citation text-[10px] text-on-surface-variant">Engine</span>
+              <span className="font-citation text-[10.5px] text-primary font-semibold flex items-center gap-1">
+                <span className="material-symbols-outlined text-[13px]">bolt</span>
+                Extractive AI Overview
+              </span>
             </div>
           </div>
         )}

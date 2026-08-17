@@ -1,5 +1,5 @@
 DOCUMENT: Bharatiya Sakshya Adhiniyam, 2023 (Act No. 47 of 2023)
-ACT NAME: Bharatiya Sakshya Adhiniyam, 2023 (BSA)
+ACT NAME: Bharatiya Sakshya Adhiniyam, 2023 (BSA) & Indian Evidence Act, 1872 (IEA)
 CATEGORY: evidence_law
 JURISDICTION: India
 YEAR: 2023
@@ -25,11 +25,8 @@ No confession made by any person whilst he is in the custody of a police officer
 Section 24. How much of information received from accused may be proved (Discovery of Fact). (Equivalent to Section 27 IEA).
 Provided that, when any fact is deposed to as discovered in consequence of information received from a person accused of any offence, in the custody of a police officer, so much of such information, whether it amounts to a confession or not, as relates distinctly to the fact thereby discovered, may be proved.
 
-Section 26. Confession made after removal of impression caused by inducement, threat or promise relevant. (Equivalent to Section 28 IEA).
-If such a confession is made after the impression caused by any such inducement, threat or promise has, in the opinion of the Court, been fully removed, it is relevant.
-
-Section 32. Dying Declaration. (Equivalent to Section 32(1) IEA).
-Statements, written or verbal, of relevant facts made by a person who is dead, or who cannot be found, or who has become incapable of giving evidence, are themselves relevant when the statement is made by a person as to the cause of his death, or as to any of the circumstances of the transaction which resulted in his death.
+Section 26. Dying Declaration. (Equivalent to Section 32(1) IEA).
+Statements, written or verbal, of relevant facts made by a person who is dead, or who cannot be found, or who has become incapable of giving evidence, are themselves relevant when the statement is made by a person as to the cause of his death, or as to any of the circumstances of the transaction which resulted in his death, in cases in which the cause of that person's death comes into question.
 
 PART II: ON PROOF (ELECTRONIC AND DIGITAL EVIDENCE)
 Section 57. Certificate for Admissibility of Electronic Records. (Equivalent to Section 65B IEA).
@@ -60,15 +57,38 @@ Conditions for admissibility of computer output and electronic records:
 (c) The computer was operating properly, or if not, the defect did not affect the accuracy of the record;
 (d) The information contained in the electronic record reproduces or is derived from such information supplied to the computer in the ordinary course.
 
-PART III: PRODUCTION AND EFFECT OF EVIDENCE
+PART III: PRODUCTION AND EFFECT OF EVIDENCE & BURDEN OF PROOF
 Section 104. Burden of proof. (Equivalent to Section 101 IEA).
 Whoever desires any Court to give judgment as to any legal right or liability dependent on the existence of facts which he asserts, must prove that those facts exist.
 
 Section 108. Burden of proving that case of accused comes within exceptions. (Equivalent to Section 105 IEA).
 When a person is accused of any offence, the burden of proving the existence of circumstances bringing the case within any of the General Exceptions in the Bharatiya Nyaya Sanhita, 2023, is upon him, and the Court shall presume the absence of such circumstances.
 
+Section 110. Burden of proving death of person known to have been alive within thirty years (Presumption of Life). (Equivalent to Section 107 IEA).
+When the question is whether a man is alive or dead, and it is shown that he was alive within thirty years, the burden of proving that he is dead is on the person who affirms it. This creates a statutory Presumption of Life for 30 years.
+
+Section 111. Burden of proving that person is alive who has not been heard of for seven years (Presumption of Death / Civil Death). (Equivalent to Section 108 IEA).
+Provided that when the question is whether a man is alive or dead, and it is proved that he has not been heard of for SEVEN YEARS by those who would naturally have heard of him if he had been alive, the burden of proving that he is alive is shifted to the person who affirms it.
+LEGAL DOCTRINE OF CIVIL DEATH:
+1. Under Section 108 of the Indian Evidence Act, 1872 and Section 111 of the Bharatiya Sakshya Adhiniyam, 2023 (BSA), "Civil Death" of a person is legally presumed if they have not been heard of for 7 (SEVEN) YEARS by family, friends, or persons who would naturally have heard of them.
+2. The presumption applies only to the FACT of death (that the person is dead after 7 years), and NOT to the exact date, time, or place of death (Landmark Precedent: LIC of India v. Anuradha, (2004) 10 SCC 131).
+3. If anyone asserts that the missing person is still alive after 7 years of absence, the legal burden of proof lies entirely on the person asserting they are alive.
+4. Consequence of Civil Death: Enables legal succession, inheritance of property, claim of life insurance policies, dissolution of marriage, and execution of will.
+
 Section 116. Presumption as to abetment of suicide by a married woman. (Equivalent to Section 113A IEA).
 If a married woman commits suicide within seven years from the date of her marriage and it is shown that her husband or his relative subjected her to cruelty, the Court may presume that such suicide had been abetted by her husband or relative.
 
 Section 117. Presumption as to dowry death. (Equivalent to Section 113B IEA).
 When the question is whether a person has committed the dowry death of a woman and it is shown that soon before her death such woman had been subjected by such person to cruelty or harassment for, or in connection with, any demand for dowry, the Court SHALL presume that such person had caused the dowry death.
+
+Section 121. Estoppel. (Equivalent to Section 115 IEA).
+When one person has, by his declaration, act or omission, intentionally caused or permitted another person to believe a thing to be true and to act upon such belief, neither he nor his representative shall be allowed, in any suit or proceeding, to deny the truth of that thing.
+
+Section 138. Accomplice. (Equivalent to Section 133 IEA).
+An accomplice shall be a competent witness against an accused person; and a conviction is not illegal merely because it proceeds upon the uncorroborated testimony of an accomplice, subject to Section 119 illustration (b) regarding prudence of corroboration in material particulars.
+
+Section 145. Questioning by party to his own witness (Hostile Witness). (Equivalent to Section 154 IEA).
+The Court may, in its discretion, permit the person who calls a witness to put any questions to him which might be put in cross-examination by the adverse party.
+
+Section 146. Leading questions. (Equivalent to Sections 141-143 IEA).
+Any question suggesting the answer which the person putting it wishes or expects to receive is called a leading question. Leading questions must not, if objected to by the adverse party, be asked in an examination-in-chief, or in a re-examination, except with the permission of the Court, but they may be asked in cross-examination.

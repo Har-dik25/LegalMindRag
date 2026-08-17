@@ -1,8 +1,8 @@
-DOCUMENT: Indian Penal Code 1860 & Code of Criminal Procedure 1973 (Cross-Comparison to BNS & BNSS 2023)
-ACT NAME: IPC 1860 and CrPC 1973 Comparative Legal Reference
-CATEGORY: criminal_law
+DOCUMENT: Indian Penal Code 1860, CrPC 1973 & Indian Evidence Act 1872 (Cross-Comparison to BNS, BNSS & BSA 2023)
+ACT NAME: IPC 1860, CrPC 1973 and IEA 1872 Comparative Legal Reference
+CATEGORY: criminal_and_evidence_law
 JURISDICTION: India
-YEAR: 1860 / 1973 / 2023
+YEAR: 1860 / 1872 / 1973 / 2023
 
 SECTION MAPPING: INDIAN PENAL CODE (IPC) TO BHARATIYA NYAYA SANHITA (BNS 2023)
 1. Section 302 IPC (Punishment for Murder) → Maps to Section 103 BNS 2023.
@@ -45,3 +45,20 @@ SECTION MAPPING: CODE OF CRIMINAL PROCEDURE (CrPC) TO BNSS 2023
 11. Section 438 CrPC (Anticipatory Bail) → Maps to Section 482 BNSS 2023.
 12. Section 439 CrPC (Special powers of Sessions Court / High Court for bail) → Maps to Section 483 BNSS 2023.
 13. Section 482 CrPC (Inherent powers of High Court / Quashing) → Maps to Section 528 BNSS 2023.
+
+SECTION MAPPING: INDIAN EVIDENCE ACT (IEA 1872) TO BHARATIYA SAKSHYA ADHINIYAM (BSA 2023)
+1. Section 108 IEA (Presumption of Civil Death after 7 Years) → Maps to Section 111 BSA 2023.
+   Rule: A person is legally presumed dead (Civil Death) if not heard of for 7 (seven) years by those who would naturally have heard of them.
+2. Section 107 IEA (Presumption of Life within 30 Years) → Maps to Section 110 BSA 2023.
+3. Section 32(1) IEA (Dying Declaration) → Maps to Section 26(a) BSA 2023.
+4. Section 25 IEA (Confession to police inadmissible) → Maps to Section 22 BSA 2023.
+5. Section 26 IEA (Confession in police custody inadmissible unless before Magistrate) → Maps to Section 23 BSA 2023.
+6. Section 27 IEA (Information leading to discovery of fact) → Maps to Section 24 BSA 2023.
+7. Section 65B IEA (Admissibility of Electronic Evidence Certificate) → Maps to Section 57 & Section 63 BSA 2023.
+8. Section 101 IEA (Burden of Proof) → Maps to Section 104 BSA 2023.
+9. Section 105 IEA (Burden of proving general exceptions) → Maps to Section 108 BSA 2023.
+10. Section 113A IEA (Presumption as to abetment of suicide of married woman) → Maps to Section 116 BSA 2023.
+11. Section 113B IEA (Presumption as to Dowry Death) → Maps to Section 117 BSA 2023.
+12. Section 115 IEA (Estoppel) → Maps to Section 121 BSA 2023.
+13. Section 133 IEA (Accomplice testimony) → Maps to Section 138 BSA 2023.
+14. Section 154 IEA (Hostile Witness) → Maps to Section 145 BSA 2023.

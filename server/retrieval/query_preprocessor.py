@@ -1,10 +1,6 @@
 """
-Query Preprocessor — Expands legal abbreviations and normalizes queries
-before they hit the embedding model and BM25 search.
-
-Legal queries often use shorthand ("S. 302", "Art. 21", "IPC", "u/s 103 BNS") which
-embedding models and BM25 don't handle well. This module expands them
-to their full forms with dual acronyms for maximum retrieval precision.
+Query Preprocessor — Expands legal abbreviations and maps legal doctrines
+to exact statutory references before hitting the embedding model and BM25 search.
 """
 import re
 import logging
@@ -12,7 +8,6 @@ import logging
 logger = logging.getLogger(__name__)
 
 # ─── Legal Abbreviation Mappings ────────────────────────────────
-# Order matters: longer and more specific patterns first
 ABBREVIATIONS = [
     # Notation references: u/s, u/sec, S., Sec., Art., etc.
     (r'\bu/sec\.?\s*(\d+[a-zA-Z]?)', r'Section \1'),
@@ -56,13 +51,26 @@ ABBREVIATIONS = [
     (r'\bHC\b', 'High Court'),
 ]
 
+# Legal doctrine keywords that should be enriched for retrieval
+LEGAL_CONCEPT_HINTS = [
+    (r'\bcivil death\b|\bpresumption of death\b|\bheard of for how many years\b|\bnot been heard of\b',
+     ' Civil Death 7 years Section 108 Indian Evidence Act Section 111 Bharatiya Sakshya Adhiniyam'),
+    (r'\bpresumption of life\b',
+     ' Presumption of Life 30 years Section 107 Indian Evidence Act Section 110 Bharatiya Sakshya Adhiniyam'),
+    (r'\bdying declaration\b',
+     ' Dying Declaration Section 32 Indian Evidence Act Section 26 Bharatiya Sakshya Adhiniyam'),
+    (r'\bzero fir\b',
+     ' Zero FIR Section 173 Bharatiya Nagarik Suraksha Sanhita BNSS 2023'),
+    (r'\bbasic structure\b',
+     ' Basic Structure Doctrine Kesavananda Bharati Article 368 Constitution of India'),
+]
+
 
 def extract_query_section_ref(query: str) -> str | None:
     """Extract target section or article reference from query (e.g. 'Section 103', 'Article 21')."""
     match = re.search(r'\b(Section\s+\d+[a-zA-Z]?|Article\s+\d+[a-zA-Z]?|Order\s+[IVXLCDM\d]+|Rule\s+\d+)\b', query, re.IGNORECASE)
     if match:
         return match.group(1).title()
-    # Shorthand fallback
     match_s = re.search(r'\b(?:s|sec|u/s)\.?\s*(\d+[a-zA-Z]?)\b', query, re.IGNORECASE)
     if match_s:
         return f"Section {match_s.group(1).upper()}"
@@ -75,12 +83,6 @@ def extract_query_section_ref(query: str) -> str | None:
 def preprocess_query(query: str) -> str:
     """
     Preprocess a legal query by expanding abbreviations and normalizing text.
-    
-    Args:
-        query: Raw user query string
-    
-    Returns:
-        Expanded and normalized query string
     """
     if not query or not query.strip():
         return query
@@ -92,7 +94,13 @@ def preprocess_query(query: str) -> str:
     for pattern, replacement in ABBREVIATIONS:
         processed = re.sub(pattern, replacement, processed, flags=re.IGNORECASE)
 
-    # 2. Normalize whitespace (collapse multiple spaces)
+    # 2. Add concept hints for foundational doctrines if present
+    for pattern, hint in LEGAL_CONCEPT_HINTS:
+        if re.search(pattern, processed, re.IGNORECASE) and not re.search(r'Section\s+\d+', processed, re.IGNORECASE):
+            processed = f"{processed} {hint}"
+            break
+
+    # 3. Normalize whitespace
     processed = re.sub(r'\s+', ' ', processed).strip()
 
     if processed != original:
