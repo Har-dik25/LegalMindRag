@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 import { useApp } from '../../context/AppContext';
 
 export default function TriPaneLayout({ leftPane, centerPane, rightPane, bottomDock }) {

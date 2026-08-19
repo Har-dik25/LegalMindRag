@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 import { X, Search, Sliders, ArrowRight, ShieldAlert, Sparkles, BookOpen } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 

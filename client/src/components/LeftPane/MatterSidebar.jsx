@@ -1,8 +1,6 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React from 'react';
 import { useApp } from '../../context/AppContext';
-import toast from 'react-hot-toast';
-import { Sparkles, Crown, LogOut, Folder, FolderOpen, Trash2, Plus } from 'lucide-react';
+import { Crown, LogOut, Folder, FolderOpen, Trash2, Plus } from 'lucide-react';
 
 export default function MatterSidebar({ onLogout }) {
   const {
@@ -16,8 +14,6 @@ export default function MatterSidebar({ onLogout }) {
     toggleSidebar,
     setPricingOpen,
   } = useApp();
-
-  const [activeTab, setActiveTab] = useState('library');
 
   return (
     <aside

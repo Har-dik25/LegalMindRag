@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
+// eslint-disable-next-line no-unused-vars
 import { motion } from 'framer-motion';
 import { useApp } from '../../context/AppContext';
-import toast from 'react-hot-toast';
 
 export default function SourceDossier() {
   const { dossierSource, closeDossier, pinArgument } = useApp();

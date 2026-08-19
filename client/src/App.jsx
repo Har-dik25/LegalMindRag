@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Toaster } from 'react-hot-toast';
 import { AppProvider, useApp } from './context/AppContext';
 import LoginSignup from './LoginSignup';

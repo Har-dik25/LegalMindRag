@@ -6,7 +6,7 @@ import time
 import json
 import logging
 from typing import Optional
-from fastapi import FastAPI, HTTPException, Depends
+from fastapi import FastAPI, HTTPException, Depends, Header
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
@@ -36,7 +36,7 @@ app = FastAPI(title="Samvidhan AI — Legal Intelligence Engine", version="3.0.0
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=config.CORS_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -96,7 +96,6 @@ class AuthRequest(BaseModel):
 
 class ChatSaveRequest(BaseModel):
     chat_id: str
-    user_id: int
     title: str
     messages: list
 
@@ -117,6 +116,16 @@ def health_check():
         "jurisdiction": "Republic of India",
         "total_chunks": stats.get("total_chunks", 3837),
     }
+
+
+def get_current_user(authorization: Optional[str] = Header(default=None)) -> int:
+    """Extract and validate a bearer token from the request header."""
+    if not authorization or not authorization.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="Authentication required")
+    user_id = auth_db.validate_session(authorization.removeprefix("Bearer ").strip())
+    if not user_id:
+        raise HTTPException(status_code=401, detail="Invalid or expired session")
+    return user_id
 
 
 @app.get("/config/approach")
@@ -213,6 +222,8 @@ def stream_rag(
 ):
     """Streaming endpoint delivering live tokens and source records via Server-Sent Events (SSE)."""
     raw_query = query.strip()
+    if not raw_query:
+        raise HTTPException(status_code=400, detail="Query cannot be empty")
     processed_query = preprocess_query(raw_query)
     filters = {"category": category} if category else None
     is_da = str(devils_advocate).lower() in ("true", "1", "yes")
@@ -269,14 +280,14 @@ def stream_rag(
 def register(req: AuthRequest):
     user_id = auth_db.create_user(req.username, req.password)
     if not user_id:
-        raise HTTPException(status_code=400, detail="Username already exists")
+        raise HTTPException(status_code=400, detail="Username unavailable or password is shorter than 8 characters")
     token = auth_db.create_session(user_id)
     return {"access_token": token, "token_type": "bearer", "user_id": user_id, "username": req.username}
 
 
 @app.post("/auth/login")
 def login(req: AuthRequest):
-    user = auth_db.authenticate_user(req.username, req.password)
+    user, error = auth_db.authenticate_user(req.username.strip(), req.password)
     if not user:
         raise HTTPException(status_code=401, detail="Invalid username or password")
     token = auth_db.create_session(user["id"])
@@ -284,29 +295,26 @@ def login(req: AuthRequest):
 
 
 @app.get("/auth/me")
-def get_me(token: str):
-    user_id = auth_db.validate_session(token)
-    if not user_id:
-        raise HTTPException(status_code=401, detail="Invalid session token")
+def get_me(user_id: int = Depends(get_current_user)):
     user = auth_db.get_user(user_id)
     return {"user_id": user["id"], "username": user["username"]}
 
 
 # ─── Chat History Endpoints ───
 @app.post("/chats")
-def save_chat(req: ChatSaveRequest):
-    auth_db.save_chat(req.chat_id, req.user_id, req.title, req.messages)
+def save_chat(req: ChatSaveRequest, user_id: int = Depends(get_current_user)):
+    auth_db.save_chat(req.chat_id, user_id, req.title, req.messages)
     return {"status": "saved"}
 
 
 @app.get("/chats")
-def get_chats(user_id: int):
+def get_chats(user_id: int = Depends(get_current_user)):
     return {"chats": auth_db.get_user_chats(user_id)}
 
 
 @app.get("/chats/{chat_id}")
-def get_chat(chat_id: str):
-    chat = auth_db.get_chat(chat_id)
+def get_chat(chat_id: str, user_id: int = Depends(get_current_user)):
+    chat = auth_db.get_chat(chat_id, user_id)
     if not chat:
         raise HTTPException(status_code=404, detail="Chat not found")
     return chat

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+// eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   BarChart2, X, Zap, Clock, Database, MessageSquare,
@@ -6,6 +7,7 @@ import {
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 
+// eslint-disable-next-line no-unused-vars
 function StatCard({ label, value, sub, icon: Icon, color }) {
   return (
     <motion.div

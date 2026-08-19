@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 import { X, Check, Sparkles, Shield, Zap, Scale, Award } from 'lucide-react';
 import toast from 'react-hot-toast';
 

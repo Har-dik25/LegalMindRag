@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import ReactMarkdown from 'react-markdown';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
 import { useApp } from '../../context/AppContext';
 
@@ -16,9 +16,7 @@ const SUGGESTED_QUERIES = [
 export default function ChatInterface({ onOpenSource }) {
   const {
     engine,
-    setEngine,
     language,
-    setLanguage,
     setCommandOpen,
     setIpcBnsOpen,
     setGraphOpen,
@@ -58,10 +56,7 @@ export default function ChatInterface({ onOpenSource }) {
 
   // Dynamic retrieval progress simulation while generating
   useEffect(() => {
-    if (!isLoading) {
-      setCurrentRetrievalStep(0);
-      return;
-    }
+    if (!isLoading) return;
     const t1 = setTimeout(() => setCurrentRetrievalStep(1), 600);
     const t2 = setTimeout(() => setCurrentRetrievalStep(2), 1400);
     return () => {
@@ -82,6 +77,7 @@ export default function ChatInterface({ onOpenSource }) {
       const query = (text ?? input).trim();
       if (!query || isLoading) return;
       setInput('');
+      setCurrentRetrievalStep(0);
 
       const userMsg = { id: Date.now(), role: 'user', content: query };
       setMessages((prev) => [...prev, userMsg]);
@@ -180,7 +176,7 @@ export default function ChatInterface({ onOpenSource }) {
         toast.error('Connection failed');
       }
     },
-    [input, isLoading, engine, isDevilsAdvocate]
+    [input, isLoading, engine, isDevilsAdvocate, selectedCategory]
   );
 
   const toggleVoice = () => {

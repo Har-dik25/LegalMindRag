@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React from 'react';
 import {
   ReactFlow,
   Background,
@@ -8,6 +8,7 @@ import {
   useEdgesState,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
+// eslint-disable-next-line no-unused-vars
 import { motion } from 'framer-motion';
 import { X, Network } from 'lucide-react';
 

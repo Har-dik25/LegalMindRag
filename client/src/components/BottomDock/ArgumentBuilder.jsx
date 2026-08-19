@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+// eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronUp, Pin, Download, X, FileText, Wand2 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
@@ -6,7 +7,6 @@ import { useApp } from '../../context/AppContext';
 export default function ArgumentBuilder() {
   const { pinnedArguments, removePin } = useApp();
   const [isOpen, setIsOpen] = useState(false);
-  const [wordCount, setWordCount] = useState(0);
 
   const totalWords = pinnedArguments.reduce(
     (acc, a) => acc + a.text.split(/\s+/).filter(Boolean).length, 0

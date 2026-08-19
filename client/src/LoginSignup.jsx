@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 
 const QUOTE_TEXT = '"Justice is the constant and perpetual will to allot to every man his due."';
 

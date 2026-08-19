@@ -1,8 +1,10 @@
 import sqlite3
-import os
 import bcrypt
 import json
+import hashlib
+import secrets
 from pathlib import Path
+from datetime import datetime, timedelta, timezone
 import config
 
 DB_PATH = config.INDEX_PATH / "users.db"
@@ -38,6 +40,14 @@ def init_db():
             FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
         )
     """)
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS sessions (
+            token_hash TEXT PRIMARY KEY,
+            user_id INTEGER NOT NULL,
+            expires_at TEXT NOT NULL,
+            FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+        )
+    """)
     
     conn.commit()
     conn.close()
@@ -65,6 +75,62 @@ def register_user(username: str, password: str):
         return {"id": user_id, "username": username}, None
     except Exception as e:
         return None, str(e)
+    finally:
+        conn.close()
+
+
+def create_user(username: str, password: str):
+    """Create a user and return its id, or None when the username is unavailable."""
+    username = username.strip()
+    if not username or len(username) > 254 or len(password) < 8:
+        return None
+    user, error = register_user(username, password)
+    return user["id"] if not error else None
+
+
+def _token_hash(token: str) -> str:
+    return hashlib.sha256(token.encode("utf-8")).hexdigest()
+
+
+def create_session(user_id: int) -> str:
+    """Create a time-limited opaque session token without persisting the token itself."""
+    token = secrets.token_urlsafe(32)
+    expires_at = (datetime.now(timezone.utc) + timedelta(days=7)).isoformat()
+    conn = get_db()
+    try:
+        conn.execute(
+            "INSERT INTO sessions (token_hash, user_id, expires_at) VALUES (?, ?, ?)",
+            (_token_hash(token), user_id, expires_at),
+        )
+        conn.commit()
+        return token
+    finally:
+        conn.close()
+
+
+def validate_session(token: str) -> int | None:
+    if not token:
+        return None
+    conn = get_db()
+    try:
+        row = conn.execute(
+            "SELECT user_id, expires_at FROM sessions WHERE token_hash = ?", (_token_hash(token),)
+        ).fetchone()
+        if not row or datetime.fromisoformat(row["expires_at"]) <= datetime.now(timezone.utc):
+            if row:
+                conn.execute("DELETE FROM sessions WHERE token_hash = ?", (_token_hash(token),))
+                conn.commit()
+            return None
+        return row["user_id"]
+    finally:
+        conn.close()
+
+
+def get_user(user_id: int):
+    conn = get_db()
+    try:
+        row = conn.execute("SELECT id, username FROM users WHERE id = ?", (user_id,)).fetchone()
+        return {"id": row["id"], "username": row["username"]} if row else None
     finally:
         conn.close()
 
@@ -124,6 +190,27 @@ def load_user_chats(user_id: int):
                 "updated_at": row["updated_at"]
             })
         return chats
+    finally:
+        conn.close()
+
+
+def get_user_chats(user_id: int):
+    return load_user_chats(user_id)
+
+
+def get_chat(chat_id: str, user_id: int):
+    conn = get_db()
+    try:
+        row = conn.execute(
+            "SELECT id, title, messages, updated_at FROM chats WHERE id = ? AND user_id = ?",
+            (chat_id, user_id),
+        ).fetchone()
+        if not row:
+            return None
+        return {
+            "id": row["id"], "title": row["title"], "messages": json.loads(row["messages"]),
+            "updated_at": row["updated_at"],
+        }
     finally:
         conn.close()
 

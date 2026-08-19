@@ -1,13 +1,14 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Command } from 'cmdk';
 import { Search, Scale, Layers, Code, FolderOpen, BarChart2, GitBranch, Keyboard, Sun, Moon } from 'lucide-react';
+// eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from 'framer-motion';
 import { useApp } from '../../context/AppContext';
 
 export default function CommandPalette() {
   const {
     commandOpen, setCommandOpen,
-    engine, setEngine,
+    setEngine,
     addMatter,
     setIpcBnsOpen, setGraphOpen, setStatsOpen,
     isDark, toggleTheme,

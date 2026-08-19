@@ -37,7 +37,7 @@ export function AppProvider({ children }) {
 
   // ─── Engine ──────────────────────────────────────────────────
   const [engine, setEngineState] = useState('extractive');
-  const setEngine = useCallback((e) => {
+  const setEngine = useCallback(() => {
     setEngineState('extractive');
   }, []);
 
@@ -77,6 +77,7 @@ export function AppProvider({ children }) {
   }, [matters]);
 
   const [activeMatter, setActiveMatter] = useState('default');
+  const [caseIntakeOpen, setCaseIntakeOpen] = useState(false);
 
   const addMatter = useCallback((name, metadata) => {
     const matterName = name || prompt('New matter name:');
@@ -100,7 +101,6 @@ export function AppProvider({ children }) {
   const [statsOpen,             setStatsOpen]             = useState(false);
   const [shortcutsOpen,         setShortcutsOpen]         = useState(false);
   const [strategySimulatorOpen, setStrategySimulatorOpen] = useState(false);
-  const [caseIntakeOpen,        setCaseIntakeOpen]        = useState(false);
   const [pricingOpen,           setPricingOpen]           = useState(false);
 
   // ─── Devil's Advocate mode ────────────────────────────────────
@@ -178,6 +178,7 @@ export function AppProvider({ children }) {
   );
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useApp = () => {
   const ctx = useContext(AppContext);
   if (!ctx) throw new Error('useApp must be used inside AppProvider');
